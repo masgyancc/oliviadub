@@ -5,7 +5,13 @@
 > Deployment pertama yang sukses: commit `29bbc06` (Vercel Pro, mesin Standard
 > 8 GB, `experimental.cpus: 2` + typecheck/lint dilewati). Repo:
 > https://github.com/oliviaevergarden44-a11y/oliviadub (push ke `main` = deploy).
-> Belum diuji: login, buat link, redirect, analytics, upload gambar ke R2.
+> Update 30 Okt 2026 22:40: build `52f8c67` READY di mesin 8 GB. Fix penting:
+> `next.config` redirect `/api/*` sekarang mengizinkan domain sendiri (sebelumnya
+> semua /api termasuk NextAuth di-redirect ke `/`, login tidak mungkin). Login
+> provider aktif: GitHub, Google (OAuth client `oliviadub`, app In production,
+> tanpa verifikasi karena scope dasar). Halaman legal:
+> https://app.lilac-orbit.com/legal/privacy.html dan /legal/terms.html.
+> Belum diuji: login nyata, buat link, redirect, analytics, upload gambar ke R2.
 
 Status: repo sudah di-clone dan di-patch supaya domain bisa diatur lewat env.
 File `apps/web/.env` sudah dibuat dengan secret acak. Sisanya butuh akun di
@@ -177,6 +183,11 @@ pencarian docs/help center tidak dipakai di self-host.
   Settings → Build and Deployment → Build Machines → pilih Elastic/Enhanced.
 - Mitigasi kode: `experimental.cpus: 1`, `staticGenerationMaxConcurrency: 2`,
   `webpackBuildWorker: true`, `webpackMemoryOptimizations: true`.
+- Hasil uji 30 Okt 22:44: setelah team di-set Elastic, build dari Git push
+  (`e5f586b`) TETAP "Standard 8 GB", tapi READY. Dua build berturut-turut lolos
+  dengan mitigasi di atas → deploy normal cukup `git push origin main`.
+  Mesin besar tidak pernah diberikan ke akun ini; kalau OOM muncul lagi, pakai
+  plan B `vercel build` lokal + `vercel deploy --prebuilt --prod`.
 
 ## 6d. OOM di build Vercel (Hobby, mesin "basic")
 
@@ -205,6 +216,19 @@ Keputusan: DNS dipindah ke **Cloudflare**. Zone sudah dibuat via API
 3. Dashboard app.lilac-orbit.com → workspace → **Domains** → Add domain →
    `brewcc.online` → Verify. Dub mendaftarkannya ke project Vercel via API dan
    Vercel menerbitkan sertifikat.
+
+**SELESAI 30 Okt 2026 23:00**: NS aktif di Cloudflare, domain terdaftar di
+project Vercel (verified), HTTPS valid, status Active + Primary di workspace
+`olivia`. Link baru default ke `brewcc.online`.
+
+## 0c. Workspace master / admin (30 Okt 2026)
+
+Dub tidak punya flag admin per user. Anggota workspace ber-ID `DUB_WORKSPACE_ID`
+= admin platform (`lib/auth/admin.ts`), dan workspace itu dianggap pemilik
+default domain serta integrasi resmi. Dibuat env-driven:
+`NEXT_PUBLIC_DUB_WORKSPACE_ID=ws_1M671RGTYCY1R026FQVY8PSGQ` (workspace `olivia`)
+di `.env` dan Vercel. Cara menambah admin: undang user ke workspace `olivia`.
+Dashboard admin dub.co (ban/impersonate) tidak ada di repo open-source.
 
 ## 7a. DNS Cloudflare untuk Vercel (status 30 Okt 2026: belum dipasang)
 
