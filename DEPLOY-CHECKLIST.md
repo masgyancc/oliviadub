@@ -209,7 +209,7 @@ Cloudflare di atasnya memicu redirect loop/sertifikat gagal.
    dan domain pendek. Ikuti instruksi DNS Vercel.
 5. Isi `VERCEL_PROJECT_ID`, lalu **Redeploy**.
 
-Catatan: `apps/web/vercel.json` (cron jobs) sudah dihapus sesuai guide resmi.
+Catatan: `apps/web/vercel.json` (11 cron) **dikembalikan** setelah upgrade ke Pro (30 Okt 2026); Hobby hanya mengizinkan 2 cron/hari.
 Tanpa cron, statistik klik per link dan usage workspace tidak ter-update
 otomatis. Kalau nanti dibutuhkan, cron bisa dipasang ulang lewat QStash Schedules
 yang memanggil `https://app.lilac-orbit.com/api/cron/...` dengan header
