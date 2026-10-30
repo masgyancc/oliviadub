@@ -62,7 +62,7 @@ Remaining Dub references (intentional or low-visibility): internal identifiers (
 - Email delivery (no provider configured)
 
 ## Build result
-_(filled in below after the local build)_
+`next build` (production mode, Node 24, same flags as Vercel: type check and lint skipped in build, run separately) finished **successfully** (exit 0) on 2026-10-31. Compile time was 4.7 min. The new routes are present: `/admin`, `/admin/approvals`, `/admin/users`, `/admin/domains`, `/admin/audit-log`, `/pending`.
 
 ## Files
 New: `lib/auth/platform-access.ts`, `lib/actions/admin/admin-actions.ts`, `app/app.dub.co/(admin)/admin/**`, `app/app.dub.co/(pending)/pending/**`, `prisma/schema/admin.prisma`, `prisma/brewcc-migrations/**`, `public/brand/**`, `BREWCC_*.md`.

@@ -5,7 +5,7 @@ Status: **NOT DEPLOYED.** Production is untouched. Every step below needs the ow
 ## Pre-flight (done locally)
 - [x] Branch `feature/brewcc-platform-transformation` cut from production `HEAD` (`f7a097891a`)
 - [x] `tsc --noEmit` on apps/web: 0 errors
-- [x] `next build` (production mode) locally: see the result in `BREWCC_IMPLEMENTATION_REPORT.md`
+- [x] `next build` (production mode) locally: success
 - [x] Migration SQL generated with `prisma migrate diff` against production: additive only
 - [ ] Manual end-to-end test against a non-production database (needs a PlanetScale dev branch; see Staging)
 
