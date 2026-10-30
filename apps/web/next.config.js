@@ -43,6 +43,10 @@ module.exports = withPlausibleProxy({
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
   experimental: {
+    // Self-hosting: limit static-generation workers and trim webpack memory;
+    // the default worker count OOMs on 8 GB Vercel build machines.
+    cpus: 2,
+    webpackMemoryOptimizations: true,
     optimizePackageImports: [
       "@dub/email",
       "@dub/ui",
