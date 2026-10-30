@@ -50,7 +50,11 @@ module.exports = withPlausibleProxy({
   experimental: {
     // Self-hosting: limit static-generation workers and trim webpack memory;
     // the default worker count OOMs on 8 GB Vercel build machines.
-    cpus: 2,
+    cpus: 1,
+    staticGenerationMaxConcurrency: 2,
+    // run webpack in a separate process so its heap is released before the
+    // static-generation phase starts
+    webpackBuildWorker: true,
     webpackMemoryOptimizations: true,
     optimizePackageImports: [
       "@dub/email",

@@ -168,6 +168,16 @@ token kosong. Di `.env` sudah diisi placeholder
 `UPSTASH_VECTOR_REST_TOKEN=placeholder`). Paste yang sama ke Vercel. Fitur
 pencarian docs/help center tidak dipakai di self-host.
 
+## 6d-2. Catatan mesin build (30 Okt 2026, setelah Pro)
+
+- Build log selalu "4 cores, 8 GB (Standard Build Machine)" walau project di-set
+  Enhanced via API/dashboard. API create-deployment hanya menerima
+  `buildMachine: "turbo"`, dan itupun dibalas "Standard, overridden for this
+  deployment" → ada cap di level **team** (kemungkinan Pro trial). Cek Team
+  Settings → Build and Deployment → Build Machines → pilih Elastic/Enhanced.
+- Mitigasi kode: `experimental.cpus: 1`, `staticGenerationMaxConcurrency: 2`,
+  `webpackBuildWorker: true`, `webpackMemoryOptimizations: true`.
+
 ## 6d. OOM di build Vercel (Hobby, mesin "basic")
 
 Deploy pertama (30 Okt 2026) gagal: webpack selesai 6 menit, lalu tahap
