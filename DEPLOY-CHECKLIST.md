@@ -185,14 +185,16 @@ billing tidak akan dipakai di instance self-host.
 
 ## 0b. Domain link pendek tambahan: brewcc.online (30 Okt 2026)
 
-DNS di Namecheap (`dns1/dns2.registrar-servers.com`), saat ini A 192.64.119.99
-(parking). Cara tambah di Dub (jangan lewat Vercel langsung):
-1. Dashboard app.lilac-orbit.com → workspace → **Domains** → Add domain →
-   `brewcc.online`. Dub mendaftarkannya ke project Vercel via API.
-2. Namecheap → Advanced DNS: hapus record parking, tambah **A `@` →
-   `216.198.79.1`** (dan opsional CNAME `www` → `cname.vercel-dns.com`).
-3. Kembali ke Dub → Domains → Verify. Sertifikat otomatis dari Vercel.
-Opsional: pindahkan NS ke Cloudflare agar satu tempat dengan lilac-orbit.com.
+Keputusan: DNS dipindah ke **Cloudflare**. Zone sudah dibuat via API
+(id `c03affcf65ced32f8dd823cf2411d512`, status pending, 0 record).
+1. Namecheap → Domain List → brewcc.online → Nameservers: **Custom DNS** →
+   `ace.ns.cloudflare.com` dan `maisie.ns.cloudflare.com`. Propagasi sampai 24 jam,
+   biasanya < 1 jam; zone di Cloudflare berubah dari pending ke active.
+2. Cloudflare → brewcc.online → DNS → Add record: **A `@` → `216.198.79.1`,
+   Proxy status DNS only**. (Classifier menolak Claude menambah DNS record.)
+3. Dashboard app.lilac-orbit.com → workspace → **Domains** → Add domain →
+   `brewcc.online` → Verify. Dub mendaftarkannya ke project Vercel via API dan
+   Vercel menerbitkan sertifikat.
 
 ## 7a. DNS Cloudflare untuk Vercel (status 30 Okt 2026: belum dipasang)
 
