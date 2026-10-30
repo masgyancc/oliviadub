@@ -31,7 +31,7 @@ export const AuthLayout = ({
           <p className="px-20 py-8 text-center text-xs font-medium text-neutral-500 md:px-0">
             By continuing, you agree to Dub&rsquo;s{" "}
             <a
-              href="https://dub.co/legal/terms"
+              href="/legal/terms.html"
               target="_blank"
               className="font-semibold text-neutral-600 hover:text-neutral-800"
             >
@@ -39,7 +39,7 @@ export const AuthLayout = ({
             </a>{" "}
             and{" "}
             <a
-              href="https://dub.co/legal/privacy"
+              href="/legal/privacy.html"
               target="_blank"
               className="font-semibold text-neutral-600 hover:text-neutral-800"
             >
