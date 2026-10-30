@@ -6,6 +6,7 @@ import {
   isDubDomain,
   isReservedKeyGlobal,
   RESERVED_SLUGS,
+  SHORT_DOMAIN,
 } from "@dub/utils";
 import { Project } from "@prisma/client";
 
@@ -42,7 +43,7 @@ export async function keyChecks({
   }
 
   if (isDubDomain(domain)) {
-    if (domain === "dub.sh" || domain === "dub.link") {
+    if (domain === SHORT_DOMAIN || domain === "dub.link") {
       if (DEFAULT_REDIRECTS[key] || RESERVED_SLUGS.includes(key)) {
         return {
           error: "Duplicate key: This short link already exists.",

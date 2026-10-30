@@ -1,15 +1,17 @@
+import { APP_DOMAIN, WEBSITE_URL } from "./main";
+
 export const DEFAULT_REDIRECTS = {
-  home: "https://dub.co",
-  dub: "https://dub.co",
-  signin: "https://app.dub.co/login",
-  login: "https://app.dub.co/login",
-  register: "https://app.dub.co/register",
-  signup: "https://app.dub.co/register",
-  app: "https://app.dub.co",
-  dashboard: "https://app.dub.co",
-  links: "https://app.dub.co/links",
-  settings: "https://app.dub.co/settings",
-  welcome: "https://app.dub.co/onboarding/welcome",
+  home: WEBSITE_URL,
+  dub: WEBSITE_URL,
+  signin: `${APP_DOMAIN}/login`,
+  login: `${APP_DOMAIN}/login`,
+  register: `${APP_DOMAIN}/register`,
+  signup: `${APP_DOMAIN}/register`,
+  app: APP_DOMAIN,
+  dashboard: APP_DOMAIN,
+  links: `${APP_DOMAIN}/links`,
+  settings: `${APP_DOMAIN}/settings`,
+  welcome: `${APP_DOMAIN}/onboarding/welcome`,
   discord: "https://twitter.com/dubdotco", // placeholder for now
 };
 

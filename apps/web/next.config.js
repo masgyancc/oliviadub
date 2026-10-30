@@ -68,6 +68,10 @@ module.exports = withPlausibleProxy({
   },
   images: {
     remotePatterns: [
+      // self-hosting: allow images from the configured storage bucket
+      ...(process.env.STORAGE_BASE_URL
+        ? [{ hostname: new URL(process.env.STORAGE_BASE_URL).hostname }]
+        : []),
       {
         hostname: "assets.dub.co", // for Dub's static assets
       },

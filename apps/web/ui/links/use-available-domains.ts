@@ -60,7 +60,7 @@ export function useAvailableDomains(
         // If domain not found at all, return all active domains
         return [
           ...sortDomains(activeWorkspaceDomains || []),
-          ...sortDomains(activeDefaultDomains, "dub.sh"),
+          ...sortDomains(activeDefaultDomains, SHORT_DOMAIN),
         ];
       }
 
@@ -71,7 +71,7 @@ export function useAvailableDomains(
       return [
         ...sortDomains(activeWorkspaceDomains || []),
         ...(isDefaultDomain ? [] : [domain]),
-        ...sortDomains(activeDefaultDomains, "dub.sh"),
+        ...sortDomains(activeDefaultDomains, SHORT_DOMAIN),
         ...(isDefaultDomain ? [domain] : []),
       ];
     }
@@ -84,7 +84,7 @@ export function useAvailableDomains(
         isWorkspaceDomain: true,
       })),
       // Default domains next, with dub.sh first, then alphabetically
-      ...sortDomains(activeDefaultDomains, "dub.sh").map((domain) => ({
+      ...sortDomains(activeDefaultDomains, SHORT_DOMAIN).map((domain) => ({
         ...domain,
         isWorkspaceDomain: false,
       })),

@@ -3,7 +3,7 @@ import { PlanProps } from "@/lib/types";
 import Analytics from "@/ui/analytics";
 import { AuroraGradient } from "@/ui/shared/aurora-gradient";
 import { Footer, Grid, Nav, NavMobile, ShieldKeyhole, Wordmark } from "@dub/ui";
-import { APP_DOMAIN, cn, constructMetadata } from "@dub/utils";
+import { APP_DOMAIN, APP_HOSTNAME, cn, constructMetadata } from "@dub/utils";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -93,7 +93,7 @@ export default async function DashboardPage(props: {
     );
   }
 
-  const domain = data.link?.domain || "app.dub.co";
+  const domain = data.link?.domain || APP_HOSTNAME;
 
   return (
     <div className="flex min-h-screen flex-col justify-between bg-neutral-50/80">

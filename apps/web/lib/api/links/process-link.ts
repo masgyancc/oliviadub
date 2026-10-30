@@ -14,6 +14,7 @@ import {
   isValidUrl,
   parseDateTime,
   pluralize,
+  SHORT_DOMAIN,
 } from "@dub/utils";
 import { Project, WorkspaceRole } from "@prisma/client";
 import { combineTagIds } from "../tags/combine-tag-ids";
@@ -120,7 +121,7 @@ export async function processLink<T extends Record<string, any>>({
 
   // if domain is not defined, set it to the workspace's primary domain
   if (!domain) {
-    domain = domains?.find((d) => d.primary)?.slug || "dub.sh";
+    domain = domains?.find((d) => d.primary)?.slug || SHORT_DOMAIN;
   }
 
   // free plan restrictions
@@ -166,7 +167,7 @@ export async function processLink<T extends Record<string, any>>({
   }
 
   // checks for dub.sh and dub.link links
-  if (domain === "dub.sh" || domain === "dub.link") {
+  if (domain === SHORT_DOMAIN || domain === "dub.link") {
     // for dub.link: check if workspace plan is pro+
     if (domain === "dub.link" && (!workspace || workspace.plan === "free")) {
       return {
@@ -178,7 +179,7 @@ export async function processLink<T extends Record<string, any>>({
     }
 
     // for dub.sh: check if user exists (if userId is passed)
-    if (domain === "dub.sh" && userId) {
+    if (domain === SHORT_DOMAIN && userId) {
       const userExists = await checkIfUserExists(userId);
       if (!userExists) {
         return {

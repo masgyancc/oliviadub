@@ -1,6 +1,6 @@
-import { DUB_WORKSPACE_ID, SHORT_DOMAIN } from "./main";
+import { DUB_WORKSPACE_ID, IS_DUB_CO, SHORT_DOMAIN } from "./main";
 
-export const DUB_DOMAINS = [
+const ALL_DUB_DOMAINS = [
   {
     id: "clce1z7ch00j0rbstbjufva4j",
     slug: SHORT_DOMAIN,
@@ -132,6 +132,11 @@ export const DUB_DOMAINS = [
     projectId: DUB_WORKSPACE_ID,
   },
 ];
+
+// self-hosted instances only expose their own short domain; dub.co exposes all
+export const DUB_DOMAINS = IS_DUB_CO
+  ? ALL_DUB_DOMAINS
+  : ALL_DUB_DOMAINS.filter((d) => d.slug === SHORT_DOMAIN);
 
 export const DUB_DOMAINS_ARRAY = DUB_DOMAINS.map((domain) => domain.slug);
 

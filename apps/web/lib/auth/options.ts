@@ -8,7 +8,7 @@ import { assertRateLimit } from "@/lib/upstash/assert-rate-limit";
 import { RATELIMIT_POLICIES } from "@/lib/upstash/ratelimit-policies";
 import { sendEmail } from "@dub/email";
 import LoginLink from "@dub/email/templates/login-link";
-import { APP_DOMAIN } from "@dub/utils";
+import { APP_DOMAIN, COOKIE_DOMAIN } from "@dub/utils";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
@@ -346,7 +346,7 @@ export const authOptions: NextAuthOptions = {
         sameSite: "lax",
         path: "/",
         // When working on localhost, the cookie domain must be omitted entirely (https://stackoverflow.com/a/1188145)
-        domain: VERCEL_DEPLOYMENT ? ".dub.co" : undefined,
+        domain: VERCEL_DEPLOYMENT ? COOKIE_DOMAIN : undefined,
         secure: VERCEL_DEPLOYMENT,
       },
     },

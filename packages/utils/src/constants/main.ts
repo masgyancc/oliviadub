@@ -1,6 +1,35 @@
-export const SHORT_DOMAIN = "dub.sh";
+// ---------------------------------------------------------------------------
+// Self-hosting configuration
+//
+// Set these in .env (and in Vercel → Environment Variables):
+//   NEXT_PUBLIC_APP_DOMAIN        dashboard host, e.g. "app.acme.com"
+//   NEXT_PUBLIC_APP_SHORT_DOMAIN  default short-link domain, e.g. "ac.me"
+//   NEXT_PUBLIC_API_DOMAIN        (optional) API host, defaults to "api.<root>"
+//
+// When unset, every value falls back to dub.co's own hosts so upstream
+// behaviour is unchanged.
+// ---------------------------------------------------------------------------
+
+const IS_PRODUCTION = process.env.NEXT_PUBLIC_VERCEL_ENV === "production";
+const IS_PREVIEW = process.env.NEXT_PUBLIC_VERCEL_ENV === "preview";
+
+export const APP_HOSTNAME = process.env.NEXT_PUBLIC_APP_DOMAIN || "app.dub.co";
+export const SHORT_DOMAIN =
+  process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN || "dub.sh";
+
+// "app.acme.com" -> "acme.com"; "acme.com" -> "acme.com"
+export const ROOT_DOMAIN = APP_HOSTNAME.replace(/^app\./, "");
+export const API_HOSTNAME =
+  process.env.NEXT_PUBLIC_API_DOMAIN || `api.${ROOT_DOMAIN}`;
+
+// true only for dub.co's own deployment; gates dub.co-specific behaviour
+export const IS_DUB_CO = APP_HOSTNAME === "app.dub.co";
+
+// cookie domain for the auth session (must be shared by app + api hosts)
+export const COOKIE_DOMAIN = `.${ROOT_DOMAIN}`;
 
 export const API_HOSTNAMES = new Set([
+  API_HOSTNAME,
   "api.dub.co",
   "api-staging.dub.co",
   `api.${SHORT_DOMAIN}`,
@@ -8,33 +37,33 @@ export const API_HOSTNAMES = new Set([
   "api.localhost",
 ]);
 
-export const API_DOMAIN =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
-    ? "https://api.dub.co"
-    : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
-      ? "https://api-staging.dub.co"
-      : "http://api.localhost:8888";
+export const API_DOMAIN = IS_PRODUCTION
+  ? `https://${API_HOSTNAME}`
+  : IS_PREVIEW
+    ? "https://api-staging.dub.co"
+    : "http://api.localhost:8888";
 
-export const APP_DOMAIN =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
-    ? "https://app.dub.co"
-    : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL || "preview.dub.co"}`
-      : "http://localhost:8888";
+export const APP_DOMAIN = IS_PRODUCTION
+  ? `https://${APP_HOSTNAME}`
+  : IS_PREVIEW
+    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL || "preview.dub.co"}`
+    : "http://localhost:8888";
 
-export const APP_DOMAIN_WITH_NGROK =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
-    ? "https://app.dub.co"
-    : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL || "preview.dub.co"}`
-      : process.env.NEXT_PUBLIC_NGROK_URL || "http://localhost:8888";
+export const APP_DOMAIN_WITH_NGROK = IS_PRODUCTION
+  ? `https://${APP_HOSTNAME}`
+  : IS_PREVIEW
+    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL || "preview.dub.co"}`
+    : process.env.NEXT_PUBLIC_NGROK_URL || "http://localhost:8888";
+
+// marketing site (dub.co); self-hosted instances point this at the app
+export const WEBSITE_URL = IS_DUB_CO ? "https://dub.co" : APP_DOMAIN;
 
 export const isAppHostname = (hostname: string) => {
-  if (process.env.NEXT_PUBLIC_VERCEL_ENV === "preview") {
+  if (IS_PREVIEW) {
     // pattern of our preview URLs are always "dub-<random-string>.dub.co"
     return hostname.startsWith("dub-") && hostname.endsWith(".dub.co");
   }
-  return new Set(["app.dub.co", "localhost:8888", "localhost"]).has(hostname);
+  return new Set([APP_HOSTNAME, "localhost:8888", "localhost"]).has(hostname);
 };
 
 export const DUB_LOGO = "https://assets.dub.co/logo.png";
