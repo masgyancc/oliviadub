@@ -221,6 +221,18 @@ Keputusan: DNS dipindah ke **Cloudflare**. Zone sudah dibuat via API
 project Vercel (verified), HTTPS valid, status Active + Primary di workspace
 `olivia`. Link baru default ke `brewcc.online`.
 
+## 0d. Default domain bersama (30 Okt 2026)
+
+`NEXT_PUBLIC_DUB_DEFAULT_DOMAINS=lilac-orbit.com,brewcc.online` (koma, maks 8,
+yang pertama otomatis = `NEXT_PUBLIC_APP_SHORT_DOMAIN`). Semua domain di daftar
+ini tampil di tab "Default domains" dan di pilihan domain saat membuat link, di
+semua workspace. Tiap domain dipetakan ke satu kolom boolean `DefaultDomains`
+(`dubsh`, `chatgpt`, `sptifi`, ... urut), tanpa ubah schema. Workspace baru
+mendapat semuanya aktif. Menambah domain: tambah ke env (lokal + Vercel),
+pastikan domainnya terdaftar di project Vercel + DNS ke Vercel, redeploy.
+Catatan: domain default **tidak** boleh sekaligus jadi custom domain di
+workspace mana pun (hapus row `Domain`-nya).
+
 ## 0c. Workspace master / admin (30 Okt 2026)
 
 Dub tidak punya flag admin per user. Anggota workspace ber-ID `DUB_WORKSPACE_ID`

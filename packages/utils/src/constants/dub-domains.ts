@@ -133,12 +133,64 @@ const ALL_DUB_DOMAINS = [
   },
 ];
 
-// self-hosted instances only expose their own short domain; dub.co exposes all
+// Self-hosting: shared ("default") short-link domains offered to every
+// workspace, from NEXT_PUBLIC_DUB_DEFAULT_DOMAINS (comma-separated, first one
+// is primary). Falls back to the single SHORT_DOMAIN. Max 8: each maps to a
+// boolean column of the DefaultDomains table (see DEFAULT_DOMAIN_COLUMNS).
+const SELF_HOST_DEFAULT_DOMAINS = Array.from(
+  new Set(
+    [
+      SHORT_DOMAIN,
+      ...(process.env.NEXT_PUBLIC_DUB_DEFAULT_DOMAINS || "").split(","),
+    ]
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean),
+  ),
+).slice(0, 8);
+
 export const DUB_DOMAINS = IS_DUB_CO
   ? ALL_DUB_DOMAINS
-  : ALL_DUB_DOMAINS.filter((d) => d.slug === SHORT_DOMAIN);
+  : SELF_HOST_DEFAULT_DOMAINS.map((slug, i) => ({
+      id: `default_${slug.replace(/[^a-z0-9]/g, "")}`,
+      slug,
+      verified: true,
+      primary: i === 0,
+      archived: false,
+      placeholder: "https://example.com",
+      allowedHostnames: [] as string[],
+      description:
+        i === 0
+          ? "The default domain for all new accounts."
+          : "Shared short-link domain available to every workspace.",
+      projectId: DUB_WORKSPACE_ID,
+    }));
 
 export const DUB_DOMAINS_ARRAY = DUB_DOMAINS.map((domain) => domain.slug);
+
+// Boolean columns of the DefaultDomains table, in slot order.
+export const DEFAULT_DOMAIN_COLUMNS = [
+  "dubsh",
+  "chatgpt",
+  "sptifi",
+  "gitnew",
+  "callink",
+  "amznid",
+  "ggllink",
+  "figpage",
+] as const;
+
+// dub.co: column name is the slug without dots (dub.sh -> dubsh).
+// self-hosted: slot i holds the i-th configured default domain.
+export const defaultDomainColumnToSlug = (
+  column: string,
+): string | undefined =>
+  IS_DUB_CO
+    ? DUB_DOMAINS_ARRAY.find((d) => d.replace(".", "") === column)
+    : DUB_DOMAINS_ARRAY[
+        DEFAULT_DOMAIN_COLUMNS.indexOf(
+          column as (typeof DEFAULT_DOMAIN_COLUMNS)[number],
+        )
+      ];
 
 export const DUB_DEMO_LINKS = [
   {

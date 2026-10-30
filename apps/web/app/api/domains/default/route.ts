@@ -1,7 +1,11 @@
 import { withWorkspace } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getDefaultDomainsQuerySchema } from "@/lib/zod/schemas/domains";
-import { DUB_DOMAINS_ARRAY, SHORT_DOMAIN } from "@dub/utils";
+import {
+  DEFAULT_DOMAIN_COLUMNS,
+  DUB_DOMAINS_ARRAY,
+  defaultDomainColumnToSlug,
+} from "@dub/utils";
 import { NextResponse } from "next/server";
 import * as z from "zod/v4";
 
@@ -31,15 +35,10 @@ export const GET = withWorkspace(
     if (data) {
       defaultDomains = Object.keys(data)
         .filter((key) => data[key])
-        .map((domain) =>
-          // the `dubsh` column represents the instance's primary short domain
-          domain === "dubsh"
-            ? SHORT_DOMAIN
-            : DUB_DOMAINS_ARRAY.find((d) => d.replace(".", "") === domain)!,
-        )
-        .filter(Boolean)
+        .map((column) => defaultDomainColumnToSlug(column))
+        .filter((domain): domain is string => Boolean(domain))
         .filter((domain) =>
-          search ? domain?.toLowerCase().includes(search.toLowerCase()) : true,
+          search ? domain.toLowerCase().includes(search.toLowerCase()) : true,
         );
     }
 
@@ -61,20 +60,19 @@ export const PATCH = withWorkspace(
       await req.json(),
     );
 
+    // one boolean column per default-domain slot (see DEFAULT_DOMAIN_COLUMNS)
+    const data = Object.fromEntries(
+      DEFAULT_DOMAIN_COLUMNS.map((column) => {
+        const slug = defaultDomainColumnToSlug(column);
+        return [column, Boolean(slug && defaultDomains.includes(slug))];
+      }),
+    ) as Record<(typeof DEFAULT_DOMAIN_COLUMNS)[number], boolean>;
+
     const response = await prisma.defaultDomains.update({
       where: {
         projectId: workspace.id,
       },
-      data: {
-        dubsh: defaultDomains.includes(SHORT_DOMAIN),
-        chatgpt: defaultDomains.includes("chatg.pt"),
-        sptifi: defaultDomains.includes("spti.fi"),
-        gitnew: defaultDomains.includes("git.new"),
-        callink: defaultDomains.includes("cal.link"),
-        amznid: defaultDomains.includes("amzn.id"),
-        ggllink: defaultDomains.includes("ggl.link"),
-        figpage: defaultDomains.includes("fig.page"),
-      },
+      data,
     });
 
     return NextResponse.json(response);
