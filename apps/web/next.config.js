@@ -1,6 +1,11 @@
 const { withPlausibleProxy } = require("next-plausible");
 
 // Suppress specific external package warnings
+// Self-hosting: root domain of this instance, regex-escaped (e.g. "lilac-orbit\.com")
+const SELF_HOST_ROOT_DOMAIN_RE = (process.env.NEXT_PUBLIC_APP_DOMAIN || "app.dub.co")
+  .replace(/^app\./, "")
+  .replace(/[.]/g, "[.]");
+
 const originalConsoleWarn = console.warn;
 console.warn = (...args) => {
   const message = args.join(" ");
@@ -154,7 +159,10 @@ module.exports = withPlausibleProxy({
         missing: [
           {
             type: "host",
-            value: ".*(\\.dub\\.co|localhost)",
+            // Self-hosting: also allow the instance's own root domain
+            // (derived from NEXT_PUBLIC_APP_DOMAIN), otherwise every
+            // /api/* request (incl. NextAuth) is redirected to "/".
+            value: `.*(\\.dub\\.co|localhost|\\.${SELF_HOST_ROOT_DOMAIN_RE})`,
           },
         ],
         destination: "/",
