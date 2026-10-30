@@ -1,5 +1,12 @@
 # Checklist Deploy Dub (self-host di Vercel)
 
+> **STATUS 30 Okt 2026, 21:37 WIB: LIVE.** https://app.lilac-orbit.com (login
+> GitHub), https://api.lilac-orbit.com, link pendek di https://lilac-orbit.com.
+> Deployment pertama yang sukses: commit `29bbc06` (Vercel Pro, mesin Standard
+> 8 GB, `experimental.cpus: 2` + typecheck/lint dilewati). Repo:
+> https://github.com/oliviaevergarden44-a11y/oliviadub (push ke `main` = deploy).
+> Belum diuji: login, buat link, redirect, analytics, upload gambar ke R2.
+
 Status: repo sudah di-clone dan di-patch supaya domain bisa diatur lewat env.
 File `apps/web/.env` sudah dibuat dengan secret acak. Sisanya butuh akun di
 layanan di bawah ini. Isi nilainya ke `apps/web/.env`, lalu nanti disalin ke
@@ -176,6 +183,17 @@ gagal kalau `STRIPE_SECRET_KEY` kosong. Di `.env` sudah diisi placeholder
 (`sk_test_placeholder` dkk.). Paste placeholder yang sama ke Vercel. Fitur
 billing tidak akan dipakai di instance self-host.
 
+## 0b. Domain link pendek tambahan: brewcc.online (30 Okt 2026)
+
+DNS di Namecheap (`dns1/dns2.registrar-servers.com`), saat ini A 192.64.119.99
+(parking). Cara tambah di Dub (jangan lewat Vercel langsung):
+1. Dashboard app.lilac-orbit.com → workspace → **Domains** → Add domain →
+   `brewcc.online`. Dub mendaftarkannya ke project Vercel via API.
+2. Namecheap → Advanced DNS: hapus record parking, tambah **A `@` →
+   `216.198.79.1`** (dan opsional CNAME `www` → `cname.vercel-dns.com`).
+3. Kembali ke Dub → Domains → Verify. Sertifikat otomatis dari Vercel.
+Opsional: pindahkan NS ke Cloudflare agar satu tempat dengan lilac-orbit.com.
+
 ## 7a. DNS Cloudflare untuk Vercel (status 30 Okt 2026: belum dipasang)
 
 Project Vercel `dub` (prj_PNHaHemtJvWHGHyLmiEhtzMfOnV9, team olivia-18ea)
@@ -231,5 +249,8 @@ yang memanggil `https://app.lilac-orbit.com/api/cron/...` dengan header
 | `apps/web/next.config.js` | host `STORAGE_BASE_URL` diizinkan untuk `next/image` |
 | `apps/web/vercel.json` | dihapus (cron) |
 
-Yang **tidak** di-patch: teks/link di template email dan halaman marketing yang
-masih menyebut dub.co. Itu kosmetik, tidak memengaruhi fungsi.
+| `apps/web/app/[domain]/{page,notfound,expired,banned,disabled}/page.tsx` | tombol "Try Dub today" → `${APP_DOMAIN}/register` |
+| `packages/ui/src/nav/nav.tsx` | Log in / Sign up → `APP_DOMAIN`; cek sesi juga di `ROOT_DOMAIN` |
+
+Yang **tidak** di-patch: teks/link di template email, menu marketing Nav
+(Product/Solutions/Pricing → dub.co), dan "Learn more". Kosmetik saja.

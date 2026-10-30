@@ -1,6 +1,6 @@
 "use client";
 
-import { APP_DOMAIN, cn, createHref } from "@dub/utils";
+import { APP_DOMAIN, ROOT_DOMAIN, cn, createHref } from "@dub/utils";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import { motion } from "motion/react";
 import Link from "next/link";
@@ -171,7 +171,8 @@ export function Nav({
   const scrolled = useScroll(40);
   const pathname = usePathname();
   const { data: session, isLoading } = useSWR(
-    domain.endsWith("dub.co") && "/api/auth/session",
+    (domain.endsWith("dub.co") || domain.endsWith(ROOT_DOMAIN)) &&
+      "/api/auth/session",
     sessionFetcher,
     {
       dedupingInterval: 60000,
@@ -329,7 +330,7 @@ export function Nav({
               ) : !isLoading ? (
                 <>
                   <Link
-                    href="https://app.dub.co/login"
+                    href={`${APP_DOMAIN}/login`}
                     className={cn(
                       buttonVariants({ variant: "secondary" }),
                       "flex h-8 items-center rounded-lg border px-4 text-sm",
@@ -339,7 +340,7 @@ export function Nav({
                     Log in
                   </Link>
                   <Link
-                    href="https://app.dub.co/register"
+                    href={`${APP_DOMAIN}/register`}
                     className={cn(
                       buttonVariants({ variant: "primary" }),
                       "flex h-8 items-center rounded-lg border px-4 text-sm",
