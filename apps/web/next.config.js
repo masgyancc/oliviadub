@@ -36,6 +36,12 @@ module.exports = withPlausibleProxy({
       "./node_modules/openid-client/**/*",
     ],
   },
+  // Self-hosting: Vercel Hobby build machines (basic) hit OOM during the
+  // "Linting and checking validity of types" phase of this monorepo. Both
+  // checks run locally (tsc --noEmit / next lint) before pushing, so skip
+  // them inside the Vercel build.
+  typescript: { ignoreBuildErrors: true },
+  eslint: { ignoreDuringBuilds: true },
   experimental: {
     optimizePackageImports: [
       "@dub/email",

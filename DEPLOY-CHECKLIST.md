@@ -161,12 +161,36 @@ token kosong. Di `.env` sudah diisi placeholder
 `UPSTASH_VECTOR_REST_TOKEN=placeholder`). Paste yang sama ke Vercel. Fitur
 pencarian docs/help center tidak dipakai di self-host.
 
+## 6d. OOM di build Vercel (Hobby, mesin "basic")
+
+Deploy pertama (30 Okt 2026) gagal: webpack selesai 6 menit, lalu tahap
+"Linting and checking validity of types" dibunuh SIGKILL (Out of Memory), dan
+`.next/routes-manifest.json` tidak pernah terbentuk. Fix: `next.config.js`
+`typescript.ignoreBuildErrors` + `eslint.ignoreDuringBuilds` = true. Jalankan
+typecheck lokal sebelum push: `cd apps/web && npx tsc --noEmit`.
+
 ## 6b. Stripe (tidak dipakai, tapi wajib ada nilai)
 
 `lib/stripe/index.ts` membuat client Stripe saat modul di-load, jadi build
 gagal kalau `STRIPE_SECRET_KEY` kosong. Di `.env` sudah diisi placeholder
 (`sk_test_placeholder` dkk.). Paste placeholder yang sama ke Vercel. Fitur
 billing tidak akan dipakai di instance self-host.
+
+## 7a. DNS Cloudflare untuk Vercel (status 30 Okt 2026: belum dipasang)
+
+Project Vercel `dub` (prj_PNHaHemtJvWHGHyLmiEhtzMfOnV9, team olivia-18ea)
+sudah dibuat via API: root `apps/web`, Node 22.x, region fra1, 33 env production.
+Tiga domain sudah didaftarkan ke project. Record DNS yang diminta Vercel
+(pasang di Cloudflare → DNS, **Proxy status: DNS only / awan abu-abu**):
+
+| Type | Name | Content | Proxy |
+|---|---|---|---|
+| CNAME | `app` | `b271e7123c379a57.vercel-dns-017.com` | DNS only |
+| CNAME | `api` | `b271e7123c379a57.vercel-dns-017.com` | DNS only |
+| A | `@` | `216.198.79.1` | DNS only |
+
+Jangan proxied (awan oranye): Vercel sudah terminasi TLS sendiri, proxy
+Cloudflare di atasnya memicu redirect loop/sertifikat gagal.
 
 ## 7. Vercel — https://vercel.com
 
