@@ -31,7 +31,7 @@ const stageLinks = [
   {
     icon: OfficeBuilding,
     title: "Enterprise",
-    description: "Dub for enterprise scale",
+    description: "BrewCC for enterprise scale",
     href: "/enterprise",
   },
   {

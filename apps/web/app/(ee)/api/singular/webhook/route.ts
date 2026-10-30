@@ -29,7 +29,7 @@ const querySchema = z.object({
     .string()
     .min(1, "dub_workspace_id is required")
     .describe(
-      "The Singular advertiser's workspace ID on Dub (see https://d.to/id).",
+      "The Singular advertiser's workspace ID on BrewCC (see https://d.to/id).",
     )
     .transform((v) => normalizeWorkspaceId(v)),
 });
@@ -66,7 +66,7 @@ export const GET = withAxiom(async (req) => {
 
     if (!supportedEvents.includes(eventName)) {
       console.error(
-        `Event ${eventName} is not supported by Singular <> Dub integration.`,
+        `Event ${eventName} is not supported by Singular <> BrewCC integration.`,
       );
 
       return NextResponse.json("OK");

@@ -1,4 +1,4 @@
-import { DUB_WORDMARK } from "@dub/utils";
+import { APP_DOMAIN, DUB_WORDMARK } from "@dub/utils";
 import {
   Body,
   Container,
@@ -40,9 +40,9 @@ export default function InvalidDomain({
             </Heading>
             <Text className="text-sm leading-6 text-black">
               Your domain <code className="text-purple-600">{domain}</code> for
-              your Dub workspace{" "}
+              your BrewCC workspace{" "}
               <Link
-                href={`https://app.dub.co/${workspaceSlug}`}
+                href={`${APP_DOMAIN}/${workspaceSlug}`}
                 className="font-medium text-blue-600 no-underline"
               >
                 {workspaceSlug}↗
@@ -51,21 +51,21 @@ export default function InvalidDomain({
             </Text>
             <Text className="text-sm leading-6 text-black">
               If your domain remains unconfigured for 30 days, it will be
-              automatically deleted from Dub. Please click the link below to
+              automatically deleted from BrewCC. Please click the link below to
               configure your domain.
             </Text>
             <Section className="my-8">
               <Link
                 className="rounded-lg bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
-                href={`https://app.dub.co/${workspaceSlug}/settings/domains`}
+                href={`${APP_DOMAIN}/${workspaceSlug}/settings/domains`}
               >
                 Configure domain
               </Link>
             </Section>
             <Text className="text-sm leading-6 text-black">
-              If you do not want to keep this domain on Dub, you can{" "}
+              If you do not want to keep this domain on BrewCC, you can{" "}
               <Link
-                href={`https://app.dub.co/${workspaceSlug}/settings/domains`}
+                href={`${APP_DOMAIN}/${workspaceSlug}/settings/domains`}
                 className="font-medium text-blue-600 no-underline"
               >
                 delete it
@@ -79,7 +79,7 @@ export default function InvalidDomain({
             </Text>
             <Footer
               email={email}
-              notificationSettingsUrl={`https://app.dub.co/${workspaceSlug}/settings/notifications`}
+              notificationSettingsUrl={`${APP_DOMAIN}/${workspaceSlug}/settings/notifications`}
             />
           </Container>
         </Body>

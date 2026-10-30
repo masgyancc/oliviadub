@@ -46,7 +46,7 @@ const socials = [
 
 const navigation = {
   product: FEATURES_LIST.filter(
-    ({ title }) => title !== "Dub Integrations",
+    ({ title }) => title !== "BrewCC Integrations",
   ).map(({ id, title, href }) => ({
     id,
     name: title,
@@ -121,7 +121,7 @@ export function Footer({
                 })}
                 className="block max-w-fit"
               >
-                <span className="sr-only">Dub Logo</span>
+                <span className="sr-only">BrewCC Logo</span>
                 <NavWordmark className="h-8 text-neutral-800" />
               </Link>
             </div>
@@ -348,7 +348,7 @@ export function Footer({
             />
           </Link>
           <p className="text-xs text-neutral-500 sm:text-right">
-            © {new Date().getFullYear()} Dub Technologies, Inc.
+            © {new Date().getFullYear()} BrewCC
           </p>
         </div>
       </footer>

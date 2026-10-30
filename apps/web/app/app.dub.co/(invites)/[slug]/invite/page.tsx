@@ -128,7 +128,7 @@ export default async function WorkspaceInvitePage({
                       <DubLinksIcon className="size-3 text-orange-900" />
                     </div>
                   ),
-                  title: "Dub Links",
+                  title: "BrewCC Links",
                   href: "https://dub.co/links",
                   cta: "Learn more",
                 },

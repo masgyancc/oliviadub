@@ -1,4 +1,5 @@
 import {
+  APP_DOMAIN,
   capitalize,
   DUB_LOGO,
   DUB_TRIAL_PERIOD_DAYS,
@@ -40,13 +41,13 @@ export default function TrialStartedEmail({
   };
 }) {
   const planLabel = capitalize(plan);
-  const dashboardUrl = `https://app.dub.co/${workspace.slug}`;
+  const dashboardUrl = `${APP_DOMAIN}/${workspace.slug}`;
 
   return (
     <Html>
       <Head />
       <Preview>
-        {String(DUB_TRIAL_PERIOD_DAYS)} days of Dub — domains, tracking, and
+        {String(DUB_TRIAL_PERIOD_DAYS)} days of BrewCC — domains, tracking, and
         API. Here are your first steps.
       </Preview>
       <Tailwind>
@@ -57,7 +58,7 @@ export default function TrialStartedEmail({
             </Section>
             <Heading className="mx-0 my-7 p-0 text-xl font-semibold text-black">
               Welcome to your free {String(DUB_TRIAL_PERIOD_DAYS)}-day trial of
-              Dub!
+              BrewCC!
             </Heading>
 
             <Text className="mb-6 mt-5 text-sm leading-5 text-neutral-600">
@@ -165,7 +166,7 @@ export default function TrialStartedEmail({
               >
                 Check out our docs
               </Link>{" "}
-              to learn how to programmatically manage your Dub links.
+              to learn how to programmatically manage your BrewCC links.
             </Text>
 
             <Hr />
@@ -173,7 +174,7 @@ export default function TrialStartedEmail({
             <Text className="mb-8 text-sm leading-5 text-neutral-800">
               You&apos;ll have access to all{" "}
               <Link
-                href={`https://app.dub.co/${workspace.slug}/settings/billing/upgrade`}
+                href={`${APP_DOMAIN}/${workspace.slug}/settings/billing/upgrade`}
                 className="font-medium text-neutral-500 underline underline-offset-2"
               >
                 {planLabel} features

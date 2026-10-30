@@ -20,7 +20,7 @@ export default function WebhooksPageClient() {
         <EmptyState
           icon={Webhook}
           title="Webhooks"
-          description="Webhooks allow you to receive HTTP requests whenever a specific event (eg: someone clicked your link) occurs in Dub."
+          description="Webhooks allow you to receive HTTP requests whenever a specific event (eg: someone clicked your link) occurs in BrewCC."
           learnMore="https://d.to/webhooks"
           buttonText="Upgrade to Business"
           buttonLink={`/${slug}/upgrade`}
@@ -44,7 +44,7 @@ export default function WebhooksPageClient() {
               <EmptyState
                 icon={Webhook}
                 title="You haven't set up any webhooks yet."
-                description="Webhooks allow you to receive HTTP requests whenever a specific event (eg: someone clicked your link) occurs in Dub."
+                description="Webhooks allow you to receive HTTP requests whenever a specific event (eg: someone clicked your link) occurs in BrewCC."
                 learnMore="https://d.to/webhooks"
               />
             </div>

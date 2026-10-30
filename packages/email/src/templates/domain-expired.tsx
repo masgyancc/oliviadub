@@ -1,4 +1,4 @@
-import { DUB_WORDMARK, formatDate, pluralize } from "@dub/utils";
+import { APP_DOMAIN, DUB_WORDMARK, formatDate, pluralize } from "@dub/utils";
 import {
   Body,
   Column,
@@ -114,7 +114,7 @@ export default function DomainExpired({
               again in the future, you can add {hasSingleDomain ? "it" : "them"}{" "}
               to your workspace anytime in the{" "}
               <Link
-                href={`https://app.dub.co/${workspace.slug}/links/domains`}
+                href={`${APP_DOMAIN}/${workspace.slug}/links/domains`}
                 className="font-semibold text-black underline"
               >
                 domain settings page

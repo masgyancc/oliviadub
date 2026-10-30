@@ -57,7 +57,7 @@ export default function BannedLinkPage() {
           )}
         >
           <ButtonLink variant="primary" href={`${APP_DOMAIN}/register`}>
-            Try Dub today
+            Try BrewCC today
           </ButtonLink>
           <LearnMoreButton utmParams={UTM_PARAMS} />
         </div>

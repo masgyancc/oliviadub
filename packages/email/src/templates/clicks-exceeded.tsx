@@ -37,7 +37,7 @@ export default function ClicksExceeded({
     <Html>
       <Head />
       <Preview>
-        Your Dub workspace, {name || ""} has exceeded the{" "}
+        Your BrewCC workspace, {name || ""} has exceeded the{" "}
         {capitalize(plan) || ""} Plan limit of {nFormatter(usageLimit)} link
         clicks/month.
       </Preview>
@@ -51,9 +51,9 @@ export default function ClicksExceeded({
               Clicks Limit Exceeded
             </Heading>
             <Text className="text-sm leading-6 text-black">
-              Your Dub workspace,{" "}
+              Your BrewCC workspace,{" "}
               <Link
-                href={`https://app.dub.co/${slug}`}
+                href={`${APP_DOMAIN}/${slug}`}
                 className="text-black underline"
               >
                 <strong>{name}</strong>

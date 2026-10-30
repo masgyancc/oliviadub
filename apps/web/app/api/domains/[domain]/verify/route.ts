@@ -3,6 +3,7 @@ import { getDomainOrThrow } from "@/lib/api/domains/get-domain-or-throw";
 import { getDomainResponse } from "@/lib/api/domains/get-domain-response";
 import { serializeVerificationResponse } from "@/lib/api/domains/serialize-verification-response";
 import { verifyDomainWithRetry } from "@/lib/api/domains/verify-domain";
+import { DubApiError } from "@/lib/api/errors";
 import { withWorkspace } from "@/lib/auth";
 import { DEFAULT_DC_SERVICE_SUBDOMAIN } from "@/lib/domain-connect/constants";
 import {
@@ -12,6 +13,7 @@ import {
 import type { DomainConnectDiscovery } from "@/lib/domain-connect/types";
 import { prisma } from "@/lib/prisma";
 import { DomainVerificationStatusProps } from "@/lib/types";
+import { ratelimit } from "@/lib/upstash";
 import { getApexDomain, getSubdomain } from "@dub/utils";
 import { NextResponse } from "next/server";
 
@@ -20,6 +22,17 @@ export const maxDuration = 30;
 // GET /api/domains/[domain]/verify - get domain verification status
 export const GET = withWorkspace(
   async ({ params, workspace }) => {
+    // BrewCC: each check calls the Vercel API, so cap manual refreshes per workspace
+    const { success } = await ratelimit(30, "1 m").limit(
+      `domains:verify:${workspace.id}`,
+    );
+    if (!success) {
+      throw new DubApiError({
+        code: "rate_limit_exceeded",
+        message: "Too many verification checks. Please wait a minute.",
+      });
+    }
+
     const { slug: domain } = await getDomainOrThrow({
       workspace,
       domain: params.domain,

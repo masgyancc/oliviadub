@@ -1,28 +1,32 @@
 import { Metadata } from "next";
+import { APP_DOMAIN } from "../constants/main";
+
+// BrewCC brand assets live in apps/web/public/brand and are served from the app domain
+const BRAND_ASSETS = `${APP_DOMAIN}/brand`;
 
 export function constructMetadata({
   title,
   fullTitle,
-  description = "Dub is the modern link attribution platform for short links and conversion tracking.",
-  image = "https://assets.dub.co/thumbnail.jpg",
+  description = "BrewCC is a modern link management platform for short links, custom domains and click analytics.",
+  image = `${BRAND_ASSETS}/og.png`,
   video,
   icons = [
     {
       rel: "apple-touch-icon",
-      sizes: "32x32",
-      url: "https://assets.dub.co/favicons/apple-touch-icon.png",
+      sizes: "180x180",
+      url: `${BRAND_ASSETS}/apple-touch-icon.png`,
     },
     {
       rel: "icon",
       type: "image/png",
       sizes: "32x32",
-      url: "https://assets.dub.co/favicons/favicon-32x32.png",
+      url: `${BRAND_ASSETS}/favicon-32x32.png`,
     },
     {
       rel: "icon",
       type: "image/png",
       sizes: "16x16",
-      url: "https://assets.dub.co/favicons/favicon-16x16.png",
+      url: `${BRAND_ASSETS}/favicon-16x16.png`,
     },
   ],
   url,
@@ -44,11 +48,12 @@ export function constructMetadata({
   return {
     title:
       fullTitle ||
-      (title ? `${title} | Dub` : "Dub - The Modern Link Attribution Platform"),
+      (title ? `${title} | BrewCC` : "BrewCC - Short Links & Custom Domains"),
     description,
     openGraph: {
       title,
       description,
+      siteName: "BrewCC",
       ...(image && {
         images: image,
       }),
@@ -67,10 +72,9 @@ export function constructMetadata({
       ...(video && {
         player: video,
       }),
-      creator: "@dubdotco",
     },
     icons,
-    metadataBase: new URL("https://dub.co"),
+    metadataBase: new URL(APP_DOMAIN),
     ...((url || canonicalUrl) && {
       alternates: {
         canonical: url || canonicalUrl,

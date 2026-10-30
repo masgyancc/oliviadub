@@ -34,7 +34,7 @@ export default function PasswordUpdated({
               Password has been {verb}
             </Heading>
             <Text className="text-sm leading-6 text-black">
-              The password for your Dub account has been successfully {verb}.
+              The password for your BrewCC account has been successfully {verb}.
             </Text>
             <Text className="text-sm leading-6 text-black">
               If you did not make this change or you believe an unauthorised

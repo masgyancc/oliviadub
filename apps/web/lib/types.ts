@@ -175,6 +175,8 @@ export interface UserProps {
   isMachine: boolean;
   hasPassword: boolean;
   provider: string | null;
+  platformRole?: "user" | "master_admin";
+  status?: "pending" | "approved" | "rejected" | "suspended";
 }
 
 export type DomainVerificationStatusProps =

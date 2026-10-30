@@ -224,7 +224,7 @@ export async function updateWorkspacePlan({
                 workspaceOwners.map((user) => ({
                   to: user.email as string,
                   replyTo: "steven.tey@dub.co",
-                  subject: `Thank you for upgrading to Dub ${newPlan.name}!`,
+                  subject: `Thank you for upgrading to BrewCC ${newPlan.name}!`,
                   react: UpgradeEmail({
                     name: user.name,
                     email: user.email as string,

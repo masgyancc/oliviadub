@@ -42,7 +42,7 @@ export default function LinksLimitAlert({
     <Html>
       <Head />
       <Preview>
-        Your Dub workspace, {name} has used {percentage.toString()}% of its
+        Your BrewCC workspace, {name} has used {percentage.toString()}% of its
         links limit for the month.
       </Preview>
       <Tailwind>
@@ -52,12 +52,12 @@ export default function LinksLimitAlert({
               <Img src={DUB_WORDMARK} height="32" alt="Dub" />
             </Section>
             <Heading className="mx-0 my-7 p-0 text-lg font-medium text-black">
-              Dub Links Limit Alert
+              BrewCC Links Limit Alert
             </Heading>
             <Text className="text-sm leading-6 text-black">
-              Your Dub workspace,{" "}
+              Your BrewCC workspace,{" "}
               <Link
-                href={`https://app.dub.co/${slug}`}
+                href={`${APP_DOMAIN}/${slug}`}
                 className="text-black underline"
               >
                 <strong>{name}</strong>

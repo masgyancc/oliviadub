@@ -18,41 +18,47 @@ const updateUserSchema = z.object({
 });
 
 // GET /api/user – get a specific user
-export const GET = withSession(async ({ session }) => {
-  const [user, account] = await Promise.all([
-    prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        image: true,
-        source: true,
-        defaultWorkspace: true,
-        passwordHash: true,
-        createdAt: true,
-      },
-    }),
+export const GET = withSession(
+  async ({ session }) => {
+    const [user, account] = await Promise.all([
+      prisma.user.findUnique({
+        where: {
+          id: session.user.id,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+          source: true,
+          defaultWorkspace: true,
+          passwordHash: true,
+          createdAt: true,
+          platformRole: true,
+          status: true,
+        },
+      }),
 
-    prisma.account.findFirst({
-      where: {
-        userId: session.user.id,
-      },
-      select: {
-        provider: true,
-      },
-    }),
-  ]);
+      prisma.account.findFirst({
+        where: {
+          userId: session.user.id,
+        },
+        select: {
+          provider: true,
+        },
+      }),
+    ]);
 
-  return NextResponse.json({
-    ...user,
-    provider: account?.provider,
-    hasPassword: user?.passwordHash !== null,
-    passwordHash: undefined,
-  });
-});
+    return NextResponse.json({
+      ...user,
+      provider: account?.provider,
+      hasPassword: user?.passwordHash !== null,
+      passwordHash: undefined,
+    });
+    // BrewCC: pending users still need their own profile (user menu, status page)
+  },
+  { allowUnapproved: true },
+);
 
 // PATCH /api/user – edit a specific user
 export const PATCH = withSession(async ({ req, session }) => {

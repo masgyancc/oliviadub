@@ -1,4 +1,9 @@
-import { DUB_WORDMARK, nFormatter, smartTruncate } from "@dub/utils";
+import {
+  APP_DOMAIN,
+  DUB_WORDMARK,
+  nFormatter,
+  smartTruncate,
+} from "@dub/utils";
 import {
   Body,
   Column,
@@ -79,7 +84,7 @@ export default function ClicksSummary({
   return (
     <Html>
       <Head />
-      <Preview>Your 30-day Dub summary for {workspaceName}</Preview>
+      <Preview>Your 30-day BrewCC summary for {workspaceName}</Preview>
       <Tailwind>
         <Body className="mx-auto my-auto bg-white font-sans">
           <Container className="mx-auto my-10 max-w-[600px] rounded border border-solid border-neutral-200 px-10 py-5">
@@ -87,10 +92,10 @@ export default function ClicksSummary({
               <Img src={DUB_WORDMARK} height="32" alt="Dub" />
             </Section>
             <Heading className="mx-0 my-7 p-0 text-lg font-medium text-black">
-              Your 30-day Dub summary for {workspaceName}
+              Your 30-day BrewCC summary for {workspaceName}
             </Heading>
             <Text className="text-sm leading-6 text-black">
-              In the last 30 days, your Dub workspace,{" "}
+              In the last 30 days, your BrewCC workspace,{" "}
               <strong>{workspaceName}</strong> received{" "}
               <strong>{nFormatter(totalClicks)} link clicks</strong>. You also
               created <strong>{createdLinks} new links</strong> during that
@@ -137,7 +142,7 @@ export default function ClicksSummary({
                           <Row>
                             <Column align="left">
                               <Link
-                                href={`https://app.dub.co/${workspaceSlug}/analytics?linkId=${linkId}`}
+                                href={`${APP_DOMAIN}/${workspaceSlug}/analytics?linkId=${linkId}`}
                                 className="text-sm font-medium text-black underline"
                               >
                                 {smartTruncate(shortLink, 33)}↗
@@ -171,7 +176,7 @@ export default function ClicksSummary({
                 <Section className="my-8 text-center">
                   <Link
                     className="rounded-full bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
-                    href={`https://app.dub.co/${workspaceSlug}`}
+                    href={`${APP_DOMAIN}/${workspaceSlug}`}
                   >
                     Start creating links
                   </Link>
@@ -185,7 +190,7 @@ export default function ClicksSummary({
                 <Section className="my-8">
                   <Link
                     className="rounded-lg bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
-                    href={`https://app.dub.co/${workspaceSlug}/analytics?interval=30d`}
+                    href={`${APP_DOMAIN}/${workspaceSlug}/analytics?interval=30d`}
                   >
                     View my stats
                   </Link>
@@ -194,7 +199,7 @@ export default function ClicksSummary({
             )}
             <Footer
               email={email}
-              notificationSettingsUrl={`https://app.dub.co/${workspaceSlug}/settings/notifications`}
+              notificationSettingsUrl={`${APP_DOMAIN}/${workspaceSlug}/settings/notifications`}
             />
           </Container>
         </Body>

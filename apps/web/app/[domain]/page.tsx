@@ -14,8 +14,8 @@ export async function generateMetadata(props: {
   params: Promise<{ domain: string }>;
 }) {
   const params = await props.params;
-  const title = `${params.domain.toUpperCase()} - A Dub Custom Domain`;
-  const description = `${params.domain.toUpperCase()} is a custom domain on Dub - the modern link attribution platform for short links, conversion tracking, and affiliate programs.`;
+  const title = `${params.domain.toUpperCase()} - A BrewCC Custom Domain`;
+  const description = `${params.domain.toUpperCase()} is a custom domain on BrewCC - the modern link attribution platform for short links, conversion tracking, and affiliate programs.`;
 
   return constructMetadata({
     title,
@@ -49,7 +49,7 @@ export default function CustomDomainPage() {
               "animate-slide-up-fade motion-reduce:animate-fade-in [--offset:20px] [animation-duration:1s] [animation-fill-mode:both]",
             )}
           >
-            Welcome to Dub
+            Welcome to BrewCC
           </h1>
           <p
             className={cn(
@@ -57,7 +57,7 @@ export default function CustomDomainPage() {
               "animate-slide-up-fade motion-reduce:animate-fade-in [--offset:10px] [animation-delay:200ms] [animation-duration:1s] [animation-fill-mode:both]",
             )}
           >
-            This custom domain is powered by Dub &ndash; the link attribution
+            This custom domain is powered by BrewCC &ndash; the link attribution
             platform for modern marketing teams.
           </p>
         </div>
@@ -69,7 +69,7 @@ export default function CustomDomainPage() {
           )}
         >
           <ButtonLink variant="primary" href={`${APP_DOMAIN}/register`}>
-            Try Dub today
+            Try BrewCC today
           </ButtonLink>
           <LearnMoreButton utmParams={UTM_PARAMS} />
         </div>

@@ -36,7 +36,7 @@ export default function ResetPasswordLink({
             </Heading>
             <Text className="text-sm leading-6 text-black">
               You are receiving this email because we received a password reset
-              request for your account at Dub.
+              request for your account at BrewCC.
             </Text>
             <Text className="text-sm leading-6 text-black">
               Please click the button below to reset your password.

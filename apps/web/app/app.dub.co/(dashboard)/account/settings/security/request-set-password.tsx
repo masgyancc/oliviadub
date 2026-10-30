@@ -54,7 +54,7 @@ export const RequestSetPassword = () => {
             .{" "}
           </>
         )}
-        You can set a password to use with your Dub account.
+        You can set a password to use with your BrewCC account.
       </p>
       <Button
         text="Create account password"

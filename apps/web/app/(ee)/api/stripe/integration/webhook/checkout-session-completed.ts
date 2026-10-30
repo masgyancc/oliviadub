@@ -169,14 +169,14 @@ export async function checkoutSessionCompleted({
       - we try to update the customer with the stripe customerId (for future events)
       - if the customer is not found, we skip the event
     - else:
-      - we first try to see if the customer with the Stripe ID already exists in Dub
-        - if it does, great, we can use the customer found on Dub
+      - we first try to see if the customer with the Stripe ID already exists in BrewCC
+        - if it does, great, we can use the customer found on BrewCC
       - if it doesn't, we try to find the customer on the connected account
       - if present:
           - we update the customer with the stripe customerId
-          - we then find the lead event using the customer's unique ID on Dub
+          - we then find the lead event using the customer's unique ID on BrewCC
           - the lead event will then be passed to the remaining logic to record a sale
-      - if not present, or if the customer is not found on Dub, we skip the event
+      - if not present, or if the customer is not found on BrewCC, we skip the event
   */
     if (dubCustomerExternalId) {
       customer = await updateCustomerWithStripeCustomerId({
@@ -187,7 +187,7 @@ export async function checkoutSessionCompleted({
 
       if (!customer) {
         return {
-          response: `dubCustomerExternalId was provided but customer with dubCustomerExternalId ${dubCustomerExternalId} not found on Dub, skipping...`,
+          response: `dubCustomerExternalId was provided but customer with dubCustomerExternalId ${dubCustomerExternalId} not found on BrewCC, skipping...`,
         };
       }
     } else {
@@ -235,7 +235,7 @@ export async function checkoutSessionCompleted({
         if (!customer) {
           if (connectedCustomerDubCustomerExternalId) {
             return {
-              response: `dubCustomerExternalId was found on the connected customer ${stripeCustomerId} but customer with dubCustomerExternalId ${dubCustomerExternalId} not found on Dub, skipping...`,
+              response: `dubCustomerExternalId was found on the connected customer ${stripeCustomerId} but customer with dubCustomerExternalId ${dubCustomerExternalId} not found on BrewCC, skipping...`,
             };
           } else {
             return {

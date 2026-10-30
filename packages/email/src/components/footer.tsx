@@ -1,9 +1,10 @@
+import { APP_DOMAIN } from "@dub/utils";
 import { Hr, Link, Tailwind, Text } from "@react-email/components";
 
 export function Footer({
   email,
   marketing,
-  unsubscribeUrl = "https://app.dub.co/account/settings",
+  unsubscribeUrl = `${APP_DOMAIN}/account/settings`,
   notificationSettingsUrl,
 }: {
   email: string;
@@ -18,10 +19,7 @@ export function Footer({
         This email was intended for <span className="text-black">{email}</span>.
         If you were not expecting this email, you can ignore this email. If you
         are concerned about your account's safety, please{" "}
-        <Link
-          className="text-neutral-700 underline"
-          href="https://dub.co/support"
-        >
+        <Link className="text-neutral-700 underline" href={`${APP_DOMAIN}`}>
           reach out to let us know
         </Link>
         .
@@ -41,7 +39,7 @@ export function Footer({
         </Text>
       )}
       <Text className="text-[12px] text-neutral-500">
-        Dub Technologies, Inc.
+        BrewCC
         <br />
         2261 Market Street STE 5906
         <br />

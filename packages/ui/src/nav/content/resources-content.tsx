@@ -13,7 +13,7 @@ const COLUMNS = [
   },
   {
     heading: "Company",
-    titles: ["About", "Careers", "Dub Brand"],
+    titles: ["About", "Careers", "BrewCC Brand"],
   },
   {
     heading: "Updates",

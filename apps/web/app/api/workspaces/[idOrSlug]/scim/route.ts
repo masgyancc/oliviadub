@@ -71,7 +71,7 @@ export const POST = withWorkspace(
 
     const [data, _] = await Promise.all([
       directorySyncController.directories.create({
-        name: "Dub SCIM Directory",
+        name: "BrewCC SCIM Directory",
         tenant: workspace.id,
         product: "Dub",
         type: provider,

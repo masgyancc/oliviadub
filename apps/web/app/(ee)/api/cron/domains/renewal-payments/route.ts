@@ -143,7 +143,9 @@ export const GET = withCron(async () => {
         stripeId: dubWorkspace.stripeId,
       };
 
-      console.log(`Using Dub workspace stripeId for Acme workspace domains...`);
+      console.log(
+        `Using BrewCC workspace stripeId for Acme workspace domains...`,
+      );
     }
 
     if (!workspace.stripeId) {

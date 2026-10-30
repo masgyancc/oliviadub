@@ -356,7 +356,7 @@ export const AddCustomerModal = ({
                                       target="_blank"
                                       className="rounded bg-neutral-200/80 px-1.5 py-0.5 text-neutral-500 hover:bg-neutral-200 hover:text-neutral-900"
                                     >
-                                      Already on Dub
+                                      Already on BrewCC
                                     </a>
                                   )}
                                 </div>

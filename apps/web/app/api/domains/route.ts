@@ -11,6 +11,7 @@ import { withWorkspace } from "@/lib/auth";
 import { exceededLimitError } from "@/lib/exceeded-limit-error";
 import { prisma } from "@/lib/prisma";
 import { storage } from "@/lib/storage";
+import { ratelimit } from "@/lib/upstash";
 import {
   createDomainBodySchemaExtended,
   getDomainsQuerySchemaExtended,
@@ -149,6 +150,17 @@ export const POST = withWorkspace(
       value: deepviewData,
       field: "deepviewData",
     });
+
+    // BrewCC: limit how fast a workspace can register hostnames with Vercel
+    const { success } = await ratelimit(10, "1 h").limit(
+      `domains:add:${workspace.id}`,
+    );
+    if (!success) {
+      throw new DubApiError({
+        code: "rate_limit_exceeded",
+        message: "Too many domains added recently. Please try again later.",
+      });
+    }
 
     const validDomain = await validateDomain(slug);
 

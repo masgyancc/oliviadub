@@ -14,17 +14,17 @@ import { NavWordmark } from "../nav-wordmark";
 import { navItems, type NavItem, type NavTheme } from "./nav";
 
 const specialIcons: Record<string, ReactNode> = {
-  "Dub Links": (
+  "BrewCC Links": (
     <div className="flex size-5 items-center justify-center rounded bg-orange-400">
       <DubLinksIcon className="size-3 text-orange-900" />
     </div>
   ),
-  "Dub Analytics": (
+  "BrewCC Analytics": (
     <div className="flex size-5 items-center justify-center rounded bg-green-400">
       <DubAnalyticsIcon className="size-3 text-green-900" />
     </div>
   ),
-  "Dub API": (
+  "BrewCC API": (
     <div className="flex size-5 items-center justify-center rounded bg-neutral-400">
       <DubApiIcon className="size-3 text-neutral-900" />
     </div>

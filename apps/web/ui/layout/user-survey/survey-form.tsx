@@ -66,7 +66,7 @@ export default function SurveyForm({
     <div className="grid gap-4">
       <Wordmark className="h-8" />
       <p className="text-sm font-medium text-neutral-800">
-        Where did you hear about Dub?
+        Where did you hear about BrewCC?
       </p>
       <form
         onSubmit={(e) => {

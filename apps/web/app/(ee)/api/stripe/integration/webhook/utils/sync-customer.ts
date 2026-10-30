@@ -241,7 +241,7 @@ export async function syncCustomer({
   );
 
   return {
-    response: `New Dub customer created: ${customer.id}. Lead event recorded: ${leadData.event_id}`,
+    response: `New BrewCC customer created: ${customer.id}. Lead event recorded: ${leadData.event_id}`,
   };
 }
 
@@ -262,11 +262,11 @@ async function updateStripeCustomer({
     });
 
     return {
-      response: `Dub customer with ID ${customerId} updated.`,
+      response: `BrewCC customer with ID ${customerId} updated.`,
     };
   } catch (error) {
     return {
-      response: `Error updating Dub customer with ID ${customerId}: ${error}`,
+      response: `Error updating BrewCC customer with ID ${customerId}: ${error}`,
     };
   }
 }

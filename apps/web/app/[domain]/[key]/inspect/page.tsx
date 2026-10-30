@@ -69,8 +69,8 @@ export default async function InspectPage(props: {
             "animate-slide-up-fade motion-reduce:animate-fade-in [--offset:10px] [animation-delay:200ms] [animation-duration:1s] [animation-fill-mode:both]",
           )}
         >
-          Inspect a short link on Dub to make sure it&apos;s safe to click on.
-          If you think this link is malicious, please report it.
+          Inspect a short link on BrewCC to make sure it&apos;s safe to click
+          on. If you think this link is malicious, please report it.
         </p>
       </div>
 

@@ -1,4 +1,4 @@
-import { DUB_WORDMARK, capitalize, nFormatter } from "@dub/utils";
+import { APP_DOMAIN, DUB_WORDMARK, capitalize, nFormatter } from "@dub/utils";
 import {
   Body,
   Container,
@@ -44,13 +44,13 @@ export default function WorkspaceDisabled({
     full: true,
   });
 
-  const upgradeUrl = `https://app.dub.co/${slug}/settings/billing/upgrade?plan=advanced&planPeriod=yearly`;
+  const upgradeUrl = `${APP_DOMAIN}/${slug}/settings/billing/upgrade?plan=advanced&planPeriod=yearly`;
 
   return (
     <Html>
       <Head />
       <Preview>
-        Your Dub workspace, {name} has used {percentage}% of its events limit
+        Your BrewCC workspace, {name} has used {percentage}% of its events limit
         and has been disabled.
       </Preview>
       <Tailwind>
@@ -60,12 +60,12 @@ export default function WorkspaceDisabled({
               <Img src={DUB_WORDMARK} height="32" alt="Dub" />
             </Section>
             <Heading className="mx-0 my-7 p-0 text-lg font-medium text-black">
-              Your Dub workspace has been disabled
+              Your BrewCC workspace has been disabled
             </Heading>
             <Text className="text-sm leading-6 text-black">
-              Your Dub workspace,{" "}
+              Your BrewCC workspace,{" "}
               <Link
-                href={`https://app.dub.co/${slug}`}
+                href={`${APP_DOMAIN}/${slug}`}
                 className="text-black underline"
               >
                 <strong>{name}</strong>

@@ -420,7 +420,7 @@ function PlanIncludedProducts({ plan }: { plan: PlanDetails }) {
             className="size-5"
             iconClassName="size-3"
           />
-          <span>Dub Links</span>
+          <span>BrewCC Links</span>
         </Link>
       </div>
     </div>

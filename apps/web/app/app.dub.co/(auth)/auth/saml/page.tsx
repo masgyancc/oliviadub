@@ -9,7 +9,7 @@ export default function SAMLPage() {
       <EmptyState
         icon={LoadingSpinner}
         title="SAML Authentication"
-        description="Dub is verifying your identity via SAML. This might take a few seconds..."
+        description="BrewCC is verifying your identity via SAML. This might take a few seconds..."
       />
       <Suspense>
         <SAMLIDPForm />

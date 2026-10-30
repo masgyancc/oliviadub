@@ -45,7 +45,7 @@ export function EventsExportButton({
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `Dub Events Export - ${new Date().toISOString()}.csv`;
+    a.download = `BrewCC Events Export - ${new Date().toISOString()}.csv`;
     a.click();
     setOpenPopover(false);
     return {

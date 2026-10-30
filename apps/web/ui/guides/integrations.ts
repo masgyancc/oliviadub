@@ -41,7 +41,7 @@ export const sections: {
     type: "client-sdk",
     title: "Install client-side script",
     description:
-      "First, you need to install Dub's client-side script, which enables Dub to track click events and store them as a first-party cookie on your site.",
+      "First, you need to install BrewCC's client-side script, which enables BrewCC to track click events and store them as a first-party cookie on your site.",
   },
   {
     type: "track-lead",

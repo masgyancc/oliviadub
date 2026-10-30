@@ -437,16 +437,16 @@ export function ChatInterface({
       >
         <img
           src="https://assets.dub.co/misc/dub-avatar.svg"
-          alt="Dub Support"
+          alt="BrewCC Support"
           className="size-12 rounded-full"
           draggable={false}
         />
         <div>
           <p className="text-sm font-medium text-neutral-800">
-            Please log in to chat with Dub support
+            Please log in to chat with BrewCC support
           </p>
           <p className="mt-1 text-xs text-neutral-500">
-            You need a Dub account to access support.
+            You need a BrewCC account to access support.
           </p>
         </div>
         <a
@@ -455,7 +455,7 @@ export function ChatInterface({
           rel="noopener noreferrer"
           className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-700"
         >
-          Log in to Dub ↗
+          Log in to BrewCC ↗
         </a>
       </div>
     );
@@ -472,8 +472,8 @@ export function ChatInterface({
       >
         <SupportMessage avatar={assistantAvatar} animate={false}>
           <p className="text-sm text-neutral-700">
-            Hi there! I'm Dub's AI support assistant. Which workspace would you
-            like help with today?
+            Hi there! I'm BrewCC's AI support assistant. Which workspace would
+            you like help with today?
           </p>
           <div className="mt-3 w-full max-w-72">
             <WorkspaceCombobox

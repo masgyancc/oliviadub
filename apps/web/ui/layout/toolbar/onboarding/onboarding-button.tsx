@@ -88,7 +88,7 @@ function OnboardingButtonInner({
                 <p className="mt-1 text-sm text-neutral-300">
                   Finish setting up your workspace
                   <br className="hidden sm:block" />
-                  to get the most out of Dub
+                  to get the most out of BrewCC
                 </p>
               </div>
               <div className="flex items-center gap-1">

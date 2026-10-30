@@ -9,7 +9,7 @@ export default function WebhooksLayout({ children }: { children: ReactNode }) {
       title="Webhooks"
       titleInfo={{
         title:
-          "Webhooks allow you to receive HTTP requests whenever a specific event (eg: someone clicked your link) occurs in Dub.",
+          "Webhooks allow you to receive HTTP requests whenever a specific event (eg: someone clicked your link) occurs in BrewCC.",
         href: "https://d.to/webhooks",
       }}
       controls={<CreateWebhookButton />}

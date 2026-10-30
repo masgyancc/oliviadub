@@ -1,4 +1,4 @@
-import { DUB_WORDMARK, formatDate, pluralize } from "@dub/utils";
+import { APP_DOMAIN, DUB_WORDMARK, formatDate, pluralize } from "@dub/utils";
 import {
   Body,
   Column,
@@ -110,7 +110,7 @@ export default function DomainRenewalFailed({
               {pluralize("domain", domains.length)}, turn off auto-renewal in
               your{" "}
               <Link
-                href={`https://app.dub.co/${workspace.slug}/links/domains`}
+                href={`${APP_DOMAIN}/${workspace.slug}/links/domains`}
                 className="font-semibold text-black underline"
               >
                 domain settings page

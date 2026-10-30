@@ -3,6 +3,7 @@ import { createSafeActionClient } from "next-safe-action";
 import { after } from "next/server";
 import { normalizeWorkspaceId } from "../api/workspaces/workspace-id";
 import { getSession } from "../auth";
+import { assertMasterAdmin, assertUserApproved } from "../auth/platform-access";
 import { logger } from "../axiom/server";
 import { PlanProps } from "../types";
 
@@ -29,6 +30,26 @@ export const authUserActionClient = actionClient.use(async ({ next }) => {
     throw new Error("Unauthorized: Login required.");
   }
 
+  // BrewCC: only approved accounts can run server actions
+  await assertUserApproved(session.user.id);
+
+  return next({
+    ctx: {
+      user: session.user,
+    },
+  });
+});
+
+// BrewCC master admins (role is read from the database, never from client input)
+export const masterAdminActionClient = actionClient.use(async ({ next }) => {
+  const session = await getSession();
+
+  if (!session?.user.id) {
+    throw new Error("Unauthorized: Login required.");
+  }
+
+  await assertMasterAdmin(session.user.id);
+
   return next({
     ctx: {
       user: session.user,
@@ -44,6 +65,8 @@ export const authActionClient = actionClient.use(
     if (!session?.user.id) {
       throw new Error("Unauthorized: Login required.");
     }
+
+    await assertUserApproved(session.user.id);
 
     // @ts-ignore
     let workspaceId = clientInput?.workspaceId;

@@ -22,13 +22,13 @@ export function FeaturesSection({
     <div className="mt-20">
       <div className="mx-auto w-full max-w-xl px-4 text-center">
         <div className="mx-auto flex h-7 w-fit items-center rounded-full border border-neutral-200 bg-white px-4 text-xs text-neutral-800">
-          What is Dub?
+          What is BrewCC?
         </div>
         <h2 className="font-display mt-2 text-balance text-3xl font-medium text-neutral-900">
           Powerful features for modern marketing teams
         </h2>
         <p className="mt-3 text-pretty text-lg text-neutral-500">
-          Dub is more than just a link shortener. We've built a suite of
+          BrewCC is more than just a link shortener. We've built a suite of
           powerful features that gives you marketing superpowers.
         </p>
       </div>
@@ -48,7 +48,7 @@ export function FeaturesSection({
           </FeatureCard>
           <FeatureCard
             title="Branded QR codes"
-            description="QR codes and short links are like peas in a pod. Dub offers free QR codes for every short link you create. Feeling artsy? [Customize them with your own logo](https://dub.co/help/article/custom-qr-codes)."
+            description="QR codes and short links are like peas in a pod. BrewCC offers free QR codes for every short link you create. Feeling artsy? [Customize them with your own logo](https://dub.co/help/article/custom-qr-codes)."
             linkText="Try the demo"
             href={createHref("/tools/qr-code", domain, {
               utm_campaign: domain,
@@ -64,7 +64,7 @@ export function FeaturesSection({
           className="border-y border-neutral-200 pt-12 sm:col-span-2"
           graphicClassName="sm:h-96"
           title="Analytics that matter"
-          description="Dub provides powerful analytics for your links, including geolocation, device, browser, and referrer information."
+          description="BrewCC provides powerful analytics for your links, including geolocation, device, browser, and referrer information."
           linkText="Explore analytics"
           href={createHref("/help/article/dub-analytics", domain, {
             utm_campaign: domain,
@@ -103,7 +103,7 @@ export function FeaturesSection({
           </FeatureCard>
           <FeatureCard
             title="Collaborate with your team"
-            description="Invite your teammates to collaborate on your links. For [enterprises](https://dub.co/enterprise), Dub offers [SAML SSO](https://dub.co/help/category/saml-sso) with Okta, Google, and Azure AD for higher security."
+            description="Invite your teammates to collaborate on your links. For [enterprises](https://dub.co/enterprise), BrewCC offers [SAML SSO](https://dub.co/help/category/saml-sso) with Okta, Google, and Azure AD for higher security."
             linkText="Learn more"
             href={createHref("/help/article/how-to-invite-teammates", domain, {
               utm_campaign: domain,

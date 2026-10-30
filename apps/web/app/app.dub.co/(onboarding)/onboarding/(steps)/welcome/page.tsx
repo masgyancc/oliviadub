@@ -9,8 +9,8 @@ export default function Welcome() {
       <TrackSignup />
       <StepPage
         headingTestId={testIds.onboarding.stepWelcome}
-        title="Welcome to Dub"
-        description="Create short links, track clicks and conversions, and grow your business with Dub."
+        title="Welcome to BrewCC"
+        description="Create short links, track clicks and conversions, and grow your business with BrewCC."
         className="max-w-sm"
       >
         <NextButton

@@ -3,6 +3,11 @@ import {
   ONBOARDING_WINDOW_SECONDS,
   onboardingStepCache,
 } from "../api/workspaces/onboarding-step-cache";
+import {
+  getUserAccess,
+  isApproved,
+  isMasterAdmin,
+} from "../auth/platform-access";
 import { EmbedMiddleware } from "./embed";
 import { NewLinkMiddleware } from "./new-link";
 import { appRedirect } from "./utils/app-redirect";
@@ -45,6 +50,25 @@ export async function AppMiddleware(req: NextRequest) {
 
     // if there's a user
   } else if (user && !isPublicPath(path)) {
+    // BrewCC: accounts that are not approved only get the status page
+    const access = await getUserAccess(user.id);
+    if (!isApproved(access)) {
+      if (path !== "/pending") {
+        return NextResponse.redirect(new URL("/pending", req.url));
+      }
+      return NextResponse.rewrite(new URL(`/app.dub.co${fullPath}`, req.url));
+    }
+    if (path === "/pending") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+    // the admin area is server-checked again in its layout; this just avoids rendering it for others
+    if (
+      (path === "/admin" || path.startsWith("/admin/")) &&
+      !isMasterAdmin(access)
+    ) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+
     // /new is a special path that creates a new link (or workspace if the user doesn't have one yet)
     if (path === "/new") {
       return NewLinkMiddleware(req, user);

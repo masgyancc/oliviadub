@@ -29,6 +29,14 @@ model User {
   source   String? // where the user came from
   sentMail Boolean @default(false)
 
+  // BrewCC platform access (role and approval status are kept separate)
+  // existing users are backfilled to "approved"; new sign-ups stay "pending" until a master admin approves them
+  platformRole      PlatformRole   @default(user)
+  status            AccountStatus  @default(pending)
+  statusReason      String?        @db.Text
+  statusUpdatedAt   DateTime?
+  statusUpdatedById String?
+
   // relational data
   accounts                Account[]
   sessions                Session[]
@@ -49,6 +57,19 @@ model User {
   @@index(defaultWorkspace)
   @@index(source)
   @@index(sentMail)
+  @@index(status)
+}
+
+enum PlatformRole {
+  user
+  master_admin
+}
+
+enum AccountStatus {
+  pending
+  approved
+  rejected
+  suspended
 }
 
 model Account {

@@ -25,6 +25,7 @@ import { normalizeWorkspaceId } from "../api/workspaces/workspace-id";
 import { withAxiomBodyLog } from "../axiom/server";
 import { getFeatureFlags } from "../edge-config";
 import { hashToken } from "./hash-token";
+import { assertUserApproved } from "./platform-access";
 import { rateLimitRequest } from "./rate-limit-request";
 import { TokenCacheItem, tokenCache } from "./token-cache";
 import { Session, getSession } from "./utils";
@@ -356,6 +357,9 @@ export const withWorkspace = (
             });
           }
         }
+
+        // BrewCC: only approved accounts can use operational endpoints (session or API key)
+        await assertUserApproved(session.user.id);
 
         workspace = (await prisma.project.findUnique({
           where: {

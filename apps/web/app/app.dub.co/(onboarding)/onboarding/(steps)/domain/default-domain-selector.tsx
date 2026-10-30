@@ -31,7 +31,7 @@ export function DefaultDomainSelector() {
           bannerText="Recommended setup"
           bannerVariant="recommended"
           title="Connect a custom domain"
-          description="Already have a domain? Connect it to your Dub workspace."
+          description="Already have a domain? Connect it to your BrewCC workspace."
           cta="Connect domain"
           testId={testIds.onboarding.connectDomain}
         />

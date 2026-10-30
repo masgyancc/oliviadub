@@ -1,4 +1,4 @@
-import { DUB_WORDMARK } from "@dub/utils";
+import { APP_DOMAIN, DUB_WORDMARK } from "@dub/utils";
 import {
   Body,
   Container,
@@ -38,35 +38,35 @@ export default function DomainDeleted({
             </Heading>
             <Text className="text-sm leading-6 text-black">
               Your domain <code className="text-purple-600">{domain}</code> for
-              your Dub workspace{" "}
+              your BrewCC workspace{" "}
               <Link
-                href={`https://app.dub.co/${workspaceSlug}`}
+                href={`${APP_DOMAIN}/${workspaceSlug}`}
                 className="font-medium text-blue-600 no-underline"
               >
                 {workspaceSlug}↗
               </Link>{" "}
               has been invalid for 30 days. As a result, it has been deleted
-              from Dub.
+              from BrewCC.
             </Text>
             <Text className="text-sm leading-6 text-black">
               If you would like to restore the domain, you can easily create it
-              again on Dub with the link below.
+              again on BrewCC with the link below.
             </Text>
             <Section className="my-8">
               <Link
                 className="rounded-lg bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
-                href={`https://app.dub.co/${workspaceSlug}/settings/domains`}
+                href={`${APP_DOMAIN}/${workspaceSlug}/settings/domains`}
               >
                 Add a domain
               </Link>
             </Section>
             <Text className="text-sm leading-6 text-black">
-              If you don’t plan to keep using this domain on Dub, feel free to
-              ignore this email.
+              If you don’t plan to keep using this domain on BrewCC, feel free
+              to ignore this email.
             </Text>
             <Footer
               email={email}
-              notificationSettingsUrl={`https://app.dub.co/${workspaceSlug}/settings/notifications`}
+              notificationSettingsUrl={`${APP_DOMAIN}/${workspaceSlug}/settings/notifications`}
             />
           </Container>
         </Body>

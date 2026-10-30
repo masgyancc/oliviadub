@@ -16,7 +16,7 @@ const products = [
         <DubAnalyticsIcon className="size-2.5 text-green-900" />
       </div>
     ),
-    title: "Dub Analytics",
+    title: "BrewCC Analytics",
     description: "Powerful analytics delivered instantly.",
     href: "/analytics",
     color: "#36D78F",
@@ -31,7 +31,7 @@ const products = [
         <DubLinksIcon className="size-2.5 text-orange-900" />
       </div>
     ),
-    title: "Dub Links",
+    title: "BrewCC Links",
     description: "Short links with superpowers for modern marketing teams.",
     href: "/links",
     color: "#f4950c",
@@ -42,8 +42,8 @@ const products = [
 
 const largeLinks = [
   {
-    title: "Dub Integrations",
-    description: "Connect Dub with your favorite tools",
+    title: "BrewCC Integrations",
+    description: "Connect BrewCC with your favorite tools",
     href: "/integrations",
     graphic: (
       <div className="absolute -right-6 top-1/2 h-[180px] w-[240px] -translate-y-1/2 [mask-image:linear-gradient(90deg,black_50%,transparent_95%)] dark:opacity-80">
@@ -56,8 +56,8 @@ const largeLinks = [
     ),
   },
   {
-    title: "Dub API & MCP",
-    description: "Connect your agent to Dub",
+    title: "BrewCC API & MCP",
+    description: "Connect your agent to BrewCC",
     href: "/docs/api-reference/introduction",
     graphic: (
       <div className="absolute -right-4 top-2.5 h-[180px] w-[240px] [mask-image:linear-gradient(90deg,black_50%,transparent_95%)] dark:opacity-60">

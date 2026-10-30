@@ -1,4 +1,4 @@
-import { currencyFormatter, DUB_WORDMARK } from "@dub/utils";
+import { APP_DOMAIN, currencyFormatter, DUB_WORDMARK } from "@dub/utils";
 import {
   Body,
   Container,
@@ -41,7 +41,7 @@ export default function FailedPayment({
         : attemptCount == 3
           ? "3rd notice: "
           : "Final notice: "
-  }Your payment for Dub failed`;
+  }Your payment for BrewCC failed`;
 
   return (
     <Html>
@@ -56,7 +56,7 @@ export default function FailedPayment({
             <Heading className="mx-0 my-7 p-0 text-lg font-medium text-black">
               {attemptCount == 2 || attemptCount == 3
                 ? `${attemptCount == 2 ? "2nd" : "3rd"} payment attempt failed`
-                : "Failed Payment for Dub"}
+                : "Failed Payment for BrewCC"}
             </Heading>
             <Text className="text-sm leading-6 text-black">
               Hey{user.name ? ` ${user.name}` : ""},
@@ -66,7 +66,7 @@ export default function FailedPayment({
               <code className="text-purple-600">
                 {currencyFormatter(amountDue)}
               </code>{" "}
-              for your Dub workspace{" "}
+              for your BrewCC workspace{" "}
               <code className="text-purple-600">{workspace.name}</code>.
             </Text>
             <Text className="text-sm leading-6 text-black">
@@ -82,7 +82,7 @@ export default function FailedPayment({
             <Section className="my-8">
               <Link
                 className="rounded-lg bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
-                href={`https://app.dub.co/${workspace.slug}/settings/billing#payment-methods`}
+                href={`${APP_DOMAIN}/${workspace.slug}/settings/billing#payment-methods`}
               >
                 Update payment method
               </Link>

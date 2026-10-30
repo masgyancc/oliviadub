@@ -70,7 +70,7 @@ function DotLinkOfferModal({
                 >
                   1-year free .link domain
                 </a>{" "}
-                on Dub.
+                on BrewCC.
               </p>
               <div className="mt-6 rounded-xl border border-neutral-100 bg-neutral-50 p-4">
                 <RegisterDomainForm

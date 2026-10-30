@@ -23,7 +23,7 @@ export function YearInReviewCard() {
     >
       <div className="flex flex-col gap-1">
         <span className="line-clamp-1 font-medium text-neutral-900">
-          Dub 2024 Year in Review 🎊
+          BrewCC 2024 Year in Review 🎊
         </span>
         <p className="line-clamp-2 h-10 leading-5 text-neutral-500">
           As we put a wrap on 2024, we want to say thank you for your support!
@@ -38,7 +38,7 @@ export function YearInReviewCard() {
         />
         <Image
           src="https://assets.dub.co/blog/2024.jpg"
-          alt="Dub logo with confetti"
+          alt="BrewCC logo with confetti"
           fill
           sizes="10vw"
           className="rounded object-cover object-center"

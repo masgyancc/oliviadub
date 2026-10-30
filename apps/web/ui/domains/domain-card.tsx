@@ -140,7 +140,7 @@ export default function DomainCard({ props }: { props: DomainProps }) {
               <div className="flex shrink-0 items-center gap-1.5">
                 <Wordmark className="h-4" />
                 <span className="font-medium text-neutral-900">
-                  Provisioned by Dub
+                  Provisioned by BrewCC
                 </span>
               </div>
 

@@ -1,4 +1,4 @@
-import { DUB_WORDMARK } from "@dub/utils";
+import { APP_DOMAIN, DUB_WORDMARK } from "@dub/utils";
 import {
   Body,
   Container,
@@ -39,9 +39,9 @@ export default function DomainRegistered({
             <Text className="text-sm leading-6 text-black">
               Your premium domain{" "}
               <code className="text-purple-600">{domain}</code> has been
-              successfully registered for your Dub workspace{" "}
+              successfully registered for your BrewCC workspace{" "}
               <Link
-                href={`https://app.dub.co/${workspaceSlug}`}
+                href={`${APP_DOMAIN}/${workspaceSlug}`}
                 className="font-medium text-blue-600 no-underline"
               >
                 {workspaceSlug}↗
@@ -51,7 +51,7 @@ export default function DomainRegistered({
             <Section className="my-8">
               <Link
                 className="rounded-lg bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
-                href={`https://app.dub.co/${workspaceSlug}/settings/domains`}
+                href={`${APP_DOMAIN}/${workspaceSlug}/settings/domains`}
               >
                 Manage your domain
               </Link>

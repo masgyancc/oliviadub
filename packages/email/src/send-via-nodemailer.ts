@@ -26,7 +26,7 @@ export const sendViaNodeMailer = async ({
   });
 
   return await transporter.sendMail({
-    from: "noreply@example.com",
+    from: `BrewCC <noreply@${process.env.EMAIL_FROM_DOMAIN || "brewcc.online"}>`,
     to,
     subject,
     text,

@@ -8,7 +8,7 @@ export function ModalHero() {
       <BackgroundGradient className="opacity-15" />
       <Image
         src="https://assets.dub.co/misc/welcome-modal-background.svg"
-        alt="Welcome to Dub"
+        alt="Welcome to BrewCC"
         fill
         className="object-cover object-top"
       />

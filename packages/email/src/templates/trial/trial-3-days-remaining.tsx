@@ -1,4 +1,4 @@
-import { capitalize } from "@dub/utils";
+import { APP_DOMAIN, capitalize } from "@dub/utils";
 import { Body, Head, Html, Link, Preview, Text } from "@react-email/components";
 import { type TrialMarketingEmailProps } from "../../types";
 import {
@@ -14,7 +14,7 @@ export default function Trial3DaysRemainingEmail({
   plan = "business",
   workspaceSlug = "acme",
 }: TrialMarketingEmailProps) {
-  const dashboardUrlPrefix = `https://app.dub.co/${workspaceSlug}`;
+  const dashboardUrlPrefix = `${APP_DOMAIN}/${workspaceSlug}`;
   return (
     <Html>
       <Head />
@@ -25,7 +25,7 @@ export default function Trial3DaysRemainingEmail({
         <Text style={pStyle}>Hi {name ? name.split(" ")[0] : "there"},</Text>
 
         <Text style={pStyle}>
-          How are things going on your end? You have 3 days left in your Dub{" "}
+          How are things going on your end? You have 3 days left in your BrewCC{" "}
           {capitalize(plan)} trial, so I wanted to reach out before your trial
           ends to make sure you have everything you need.
         </Text>
@@ -36,7 +36,7 @@ export default function Trial3DaysRemainingEmail({
         </Text>
 
         <Text style={pStyle}>
-          If Dub is indeed a perfect fit (and I really hope it is!), please
+          If BrewCC is indeed a perfect fit (and I really hope it is!), please
           double-check your{" "}
           <Link
             href={`${dashboardUrlPrefix}/settings/billing#payment-methods`}
@@ -57,16 +57,13 @@ export default function Trial3DaysRemainingEmail({
           <br />
           Steven – Founder,{" "}
           <Link href="https://dub.co" style={linkStyle}>
-            Dub.co
+            BrewCC
           </Link>
         </Text>
 
         <Text style={footerStyle}>
           If you&apos;d like me to stop sending you emails, please{" "}
-          <Link
-            href="https://app.dub.co/account/settings"
-            style={footerLinkStyle}
-          >
+          <Link href={`${APP_DOMAIN}/account/settings`} style={footerLinkStyle}>
             click here
           </Link>
         </Text>

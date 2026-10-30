@@ -66,11 +66,12 @@ export const isAppHostname = (hostname: string) => {
   return new Set([APP_HOSTNAME, "localhost:8888", "localhost"]).has(hostname);
 };
 
-export const DUB_LOGO = "https://assets.dub.co/logo.png";
-export const DUB_LOGO_SQUARE = "https://assets.dub.co/logo-square.png";
-export const DUB_QR_LOGO = "https://assets.dub.co/logo.png";
-export const DUB_WORDMARK = "https://assets.dub.co/wordmark.png";
-export const DUB_THUMBNAIL = "https://assets.dub.co/thumbnail.jpg";
+// BrewCC brand images (apps/web/public/brand), served from the app domain
+export const DUB_LOGO = `${APP_DOMAIN}/brand/icon-512.png`;
+export const DUB_LOGO_SQUARE = `${APP_DOMAIN}/brand/icon-512.png`;
+export const DUB_QR_LOGO = `${APP_DOMAIN}/brand/icon-512.png`;
+export const DUB_WORDMARK = `${APP_DOMAIN}/brand/wordmark.png`;
+export const DUB_THUMBNAIL = `${APP_DOMAIN}/brand/og.png`;
 
 // Self-hosting: the "master" workspace. Members of this workspace are treated
 // as platform admins (see lib/auth/admin.ts) and it owns the default domains

@@ -54,7 +54,7 @@ export function SettingsPageClient() {
     <PageWidthWrapper className="mb-8 grid gap-8">
       <Form
         title="Your Name"
-        description="This is your display name on Dub."
+        description="This is your display name on BrewCC."
         inputAttrs={{
           name: "name",
           defaultValue:
@@ -74,7 +74,7 @@ export function SettingsPageClient() {
       />
       <Form
         title="Your Email"
-        description="This will be the email you use to log in to Dub and receive notifications. A confirmation is required for changes."
+        description="This will be the email you use to log in to BrewCC and receive notifications. A confirmation is required for changes."
         inputAttrs={{
           name: "email",
           type: "email",

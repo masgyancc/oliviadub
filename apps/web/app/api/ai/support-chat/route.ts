@@ -224,7 +224,7 @@ export const POST = withSession(async ({ req, session }) => {
       await postSupportChatMessage({
         channel: slackChannel,
         threadTs,
-        text: `*Dub AI:*\n${markdownToSlackMrkdwn(escapeSlackMrkdwn(replyText))}`,
+        text: `*BrewCC AI:*\n${markdownToSlackMrkdwn(escapeSlackMrkdwn(replyText))}`,
       });
     },
   });

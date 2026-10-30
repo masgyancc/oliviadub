@@ -1,3 +1,4 @@
+import { APP_DOMAIN } from "@dub/utils";
 import type { CreateEmailOptions } from "resend";
 import { resend } from "./resend";
 import { VARIANT_TO_FROM_MAP } from "./resend/constants";
@@ -62,7 +63,10 @@ const resendEmailForOptions = (
     bcc,
     // if replyTo is set to "noreply@dub.co", don't set replyTo
     // else set it to the value of replyTo or fallback to support@dub.co
-    ...(replyTo === "noreply" ? {} : { replyTo: replyTo || "support@dub.co" }),
+    // BrewCC: falls back to EMAIL_REPLY_TO (if set) instead of dub.co support
+    ...(replyTo === "noreply" || !(replyTo || process.env.EMAIL_REPLY_TO)
+      ? {}
+      : { replyTo: replyTo || process.env.EMAIL_REPLY_TO }),
     scheduledAt,
     tags,
     ...(variant === "marketing"
@@ -70,7 +74,7 @@ const resendEmailForOptions = (
           headers: {
             ...(headers || {}),
             "List-Unsubscribe":
-              unsubscribeUrl || "https://app.dub.co/account/settings",
+              unsubscribeUrl || `${APP_DOMAIN}/account/settings`,
           },
         }
       : headers && { headers }),

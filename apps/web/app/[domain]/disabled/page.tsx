@@ -59,7 +59,7 @@ export default function DisabledLinkPage() {
           )}
         >
           <ButtonLink variant="primary" href={`${APP_DOMAIN}/register`}>
-            Try Dub today
+            Try BrewCC today
           </ButtonLink>
           <LearnMoreButton utmParams={UTM_PARAMS} />
         </div>

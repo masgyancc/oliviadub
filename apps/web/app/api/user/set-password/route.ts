@@ -39,7 +39,7 @@ export const POST = withSession(async ({ session }) => {
 
   // Send email with password reset link
   await sendEmail({
-    subject: "Dub: Password reset instructions",
+    subject: "BrewCC: Password reset instructions",
     to: session.user.email,
     react: ResetPasswordLink({
       email: session.user.email,

@@ -50,7 +50,7 @@ export default function DomainDnsInstructions({
             </Heading>
             <Text className="text-sm leading-6 text-black">
               <strong>{senderEmail}</strong> forwarded you the DNS records
-              needed to connect <strong>{domain}</strong> to Dub. Add the
+              needed to connect <strong>{domain}</strong> to BrewCC. Add the
               records below to your DNS provider to complete the setup.
             </Text>
 

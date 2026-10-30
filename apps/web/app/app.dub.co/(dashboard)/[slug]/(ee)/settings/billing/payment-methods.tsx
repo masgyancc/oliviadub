@@ -49,7 +49,7 @@ export default function PaymentMethods() {
         <div>
           <h2 className="text-xl font-medium">Payment methods</h2>
           <p className="text-balance text-sm leading-normal text-neutral-500">
-            Manage your payment methods on Dub
+            Manage your payment methods on BrewCC
           </p>
         </div>
         {stripeId && (

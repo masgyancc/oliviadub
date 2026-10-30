@@ -107,7 +107,7 @@ export default function WrappedPageClient() {
       >
         <Image
           src="https://assets.dub.co/blog/2024.jpg"
-          alt="Dub logo with confetti"
+          alt="BrewCC logo with confetti"
           width={1838}
           height={1172}
           className="w-1/3 rounded-md"
@@ -115,7 +115,7 @@ export default function WrappedPageClient() {
         />
         <div className="flex flex-col gap-2">
           <h3 className="font-display font-semibold text-black">
-            Dub {year} Year in Review 🎊
+            BrewCC {year} Year in Review 🎊
           </h3>
           <p className="text-sm text-neutral-500 group-hover:underline">
             A full recap of some of the top features we shipped this year – and

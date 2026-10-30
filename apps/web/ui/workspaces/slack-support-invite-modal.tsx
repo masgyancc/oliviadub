@@ -109,7 +109,7 @@ export function SlackSupportInviteModal({
           </h2>
         </div>
         <p className="text-content-subtle text-sm font-normal">
-          If your Slack email isn&apos;t your Dub email, use it below. Add
+          If your Slack email isn&apos;t your BrewCC email, use it below. Add
           teammates if needed.
         </p>
       </div>
@@ -119,7 +119,7 @@ export function SlackSupportInviteModal({
           <p className="text-content-subtle text-sm">Loading your account…</p>
         ) : sessionEmailMissing ? (
           <p className="text-content-subtle text-sm">
-            Your Dub account does not have an email address. Add one in your
+            Your BrewCC account does not have an email address. Add one in your
             profile before requesting a Slack invite.
           </p>
         ) : (

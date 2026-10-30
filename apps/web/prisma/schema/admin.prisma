@@ -1,0 +1,16 @@
+// BrewCC: record of every action taken by a master admin
+model AdminAuditLog {
+  id           String   @id @default(cuid())
+  actorId      String // master admin who performed the action
+  action       String // e.g. user.approve, user.reject, user.suspend, user.role, domain.disable
+  targetUserId String?
+  targetDomain String?
+  fromValue    String?
+  toValue      String?
+  reason       String?  @db.Text
+  createdAt    DateTime @default(now())
+
+  @@index(actorId)
+  @@index(targetUserId)
+  @@index(createdAt)
+}

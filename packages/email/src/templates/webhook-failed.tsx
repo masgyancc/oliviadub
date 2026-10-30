@@ -1,4 +1,4 @@
-import { DUB_WORDMARK } from "@dub/utils";
+import { APP_DOMAIN, DUB_WORDMARK } from "@dub/utils";
 import {
   Body,
   Container,
@@ -64,7 +64,7 @@ export default function WebhookFailed({
             <Section className="mb-8 mt-8">
               <Link
                 className="rounded-lg bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
-                href={`https://app.dub.co/${workspace.slug}/settings/webhooks/${webhook.id}/edit`}
+                href={`${APP_DOMAIN}/${workspace.slug}/settings/webhooks/${webhook.id}/edit`}
               >
                 Edit Webhook
               </Link>

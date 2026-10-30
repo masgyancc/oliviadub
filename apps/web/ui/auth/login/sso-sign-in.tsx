@@ -52,7 +52,7 @@ export const SSOSignIn = () => {
             <h2 className="text-sm font-medium text-neutral-900">
               Workspace Slug
             </h2>
-            <InfoTooltip content="This is your workspace's unique identifier on Dub. E.g. app.dub.co/acme is 'acme'." />
+            <InfoTooltip content="This is your workspace's unique identifier on BrewCC. E.g. app.dub.co/acme is 'acme'." />
           </div>
           <input
             id="slug"

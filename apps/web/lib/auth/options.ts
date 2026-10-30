@@ -40,6 +40,8 @@ const CustomPrismaAdapter = (p: PrismaClient) => {
         data: {
           ...data,
           id: createId({ prefix: "user_" }),
+          // new sign-ups need master admin approval before they can use BrewCC
+          status: "pending",
           notificationPreferences: {
             create: {},
           },

@@ -111,7 +111,7 @@ function StepIcon({ step }: { step: TrackingSetupStep }) {
 }
 
 const GENERAL_GUIDES = [
-  { title: "Dub docs", href: "https://dub.co/docs" },
+  { title: "BrewCC docs", href: "https://dub.co/docs" },
   {
     title: "Conversion tracking guide",
     href: "https://dub.co/docs/conversions/quickstart",

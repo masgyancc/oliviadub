@@ -69,7 +69,7 @@ export function InstallationSection() {
       <div className="divide-y divide-neutral-200">
         <TrackingSettingsRow
           heading="Setup instructions"
-          description="Use the prompts and instructions to install Dub."
+          description="Use the prompts and instructions to install BrewCC."
           leftExtra={ready ? <DeveloperGuides /> : undefined}
           leftExtraAlign="end"
         >
@@ -78,7 +78,7 @@ export function InstallationSection() {
 
         <TrackingSettingsRow
           heading="Verify installation"
-          description="Select your hostname to verify the Dub installation."
+          description="Select your hostname to verify the BrewCC installation."
           align="center"
         >
           <VerifyInstall hostnames={hostnames} />

@@ -31,6 +31,7 @@ export const RESERVED_SLUGS = [
   "terms",
   "privacy",
   "admin",
+  "pending", // BrewCC account status page
   "help",
   "new",
   "info",

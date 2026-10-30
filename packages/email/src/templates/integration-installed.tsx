@@ -1,4 +1,4 @@
-import { DUB_WORDMARK } from "@dub/utils";
+import { APP_DOMAIN, DUB_WORDMARK } from "@dub/utils";
 import {
   Body,
   Container,
@@ -50,12 +50,12 @@ export default function IntegrationInstalled({
             </Heading>
             <Text className="text-sm leading-6 text-black">
               The <strong>{integration.name}</strong> integration has been added
-              to your workspace {workspace.name} on Dub.
+              to your workspace {workspace.name} on BrewCC.
             </Text>
             <Section className="mb-8 mt-8">
               <Link
                 className="rounded-lg bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
-                href={`https://app.dub.co/${workspace.slug}/settings/integrations/${integration.slug}`}
+                href={`${APP_DOMAIN}/${workspace.slug}/settings/integrations/${integration.slug}`}
               >
                 View installed integration
               </Link>

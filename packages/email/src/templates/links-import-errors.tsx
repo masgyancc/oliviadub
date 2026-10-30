@@ -1,4 +1,9 @@
-import { DUB_WORDMARK, linkConstructor, truncate } from "@dub/utils";
+import {
+  APP_DOMAIN,
+  DUB_WORDMARK,
+  linkConstructor,
+  truncate,
+} from "@dub/utils";
 import {
   Body,
   Column,
@@ -65,7 +70,7 @@ export default function LinksImportErrors({
               {Intl.NumberFormat("en-us").format(errorLinks.length)} links from{" "}
               {provider} failed to import into your Dub workspace,{" "}
               <Link
-                href={`https://app.dub.co/${workspaceSlug}`}
+                href={`${APP_DOMAIN}/${workspaceSlug}`}
                 className="font-medium text-blue-600 no-underline"
               >
                 {workspaceName}↗

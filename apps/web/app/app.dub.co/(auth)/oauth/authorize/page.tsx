@@ -15,7 +15,7 @@ import { AuthorizeWorkspaceProvider } from "./authorize-workspace-context";
 import { ScopesRequested } from "./scopes-requested";
 
 export const metadata = constructMetadata({
-  title: "Authorize API access | Dub",
+  title: "Authorize API access | BrewCC",
   noIndex: true,
 });
 
@@ -68,7 +68,7 @@ export default async function Authorize(props: {
 
         <p className="text-md">
           <span className="font-bold">{integration.name}</span> is requesting
-          API access to a workspace on Dub.
+          API access to a workspace on BrewCC.
         </p>
         <span className="text-xs text-neutral-500">
           Built by{" "}
@@ -90,7 +90,7 @@ export default async function Authorize(props: {
           >
             <div className="flex flex-col gap-0.5">
               <p className="font-medium">
-                Dub hasn't verified this integration
+                BrewCC hasn't verified this integration
               </p>
               <p className="text-amber-800">
                 It can only be installed by its developer or on the developer's

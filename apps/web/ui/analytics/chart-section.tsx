@@ -172,7 +172,7 @@ function ConversionTrackingPaywall() {
         </h2>
         <p className="mt-4 max-w-sm text-center text-sm text-neutral-500">
           Want to see how your clicks are converting to revenue? Upgrade to our
-          Business Plan and start tracking conversion events with Dub.{" "}
+          Business Plan and start tracking conversion events with BrewCC.{" "}
           <Link
             href="https://d.to/conversions"
             target="_blank"

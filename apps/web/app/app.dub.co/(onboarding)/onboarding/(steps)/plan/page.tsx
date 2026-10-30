@@ -25,7 +25,7 @@ export default function Plan() {
               className="mb-[3px] ml-1 inline-flex size-5 align-middle transition-transform group-hover:-rotate-12"
               iconClassName="size-3"
             />{" "}
-            Dub Links
+            BrewCC Links
           </a>{" "}
           plan
         </>

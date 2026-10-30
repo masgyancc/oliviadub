@@ -23,7 +23,7 @@ function SignUp() {
     <>
       <div className="w-full max-w-sm">
         <h3 className="text-center text-xl font-semibold">
-          Create your Dub account
+          Create your BrewCC account
         </h3>
         <div className="mt-8">
           <SignUpForm />

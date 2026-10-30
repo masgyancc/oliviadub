@@ -68,7 +68,7 @@ export async function invoicePaid({
 
   if (!customer) {
     return {
-      response: `Customer with stripeCustomerId ${stripeCustomerId} not found on Dub (nor does the connected customer ${stripeCustomerId} have a valid dubCustomerExternalId), skipping...`,
+      response: `Customer with stripeCustomerId ${stripeCustomerId} not found on BrewCC (nor does the connected customer ${stripeCustomerId} have a valid dubCustomerExternalId), skipping...`,
     };
   }
 

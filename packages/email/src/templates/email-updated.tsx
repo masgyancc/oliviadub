@@ -1,4 +1,4 @@
-import { DUB_WORDMARK } from "@dub/utils";
+import { APP_DOMAIN, DUB_WORDMARK } from "@dub/utils";
 import {
   Body,
   Container,
@@ -35,13 +35,13 @@ export default function EmailUpdated({
               Your email address has been changed
             </Heading>
             <Text className="mx-auto text-sm leading-6">
-              The e-mail address for your Dub account has been changed from{" "}
+              The e-mail address for your BrewCC account has been changed from{" "}
               <strong>{oldEmail}</strong> to <strong>{newEmail}</strong>.
             </Text>
             <Text className="text-sm leading-6 text-black">
               If you did not make this change, please contact our support team
               or{" "}
-              <Link href="https://app.dub.co/account/settings">
+              <Link href={`${APP_DOMAIN}/account/settings`}>
                 update your email address
               </Link>
               .

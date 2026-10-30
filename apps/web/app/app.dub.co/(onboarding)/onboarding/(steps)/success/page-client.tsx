@@ -135,7 +135,7 @@ export function SuccessPageClient({
             {
               icon: Hyperlink,
               title: "Create a short link",
-              description: "Create your first Dub short link",
+              description: "Create your first BrewCC short link",
               href: `/${workspace.slug}/links?newLink=true`,
               cta: "Create",
             },

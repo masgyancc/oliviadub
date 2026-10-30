@@ -210,10 +210,29 @@ export default function DomainConfiguration({
         ]}
         warning={
           txtVerification
-            ? "Warning: if you are using this domain for another site, setting this TXT record will transfer domain ownership away from that site and break it. Please exercise caution when setting this record; make sure that the domain that is shown in the TXT verification value is actually the <b><i>domain you want to use on Dub</i></b> – <b><i>not your production site</i></b>."
+            ? "Warning: if you are using this domain for another site, setting this TXT record will transfer domain ownership away from that site and break it. Please exercise caution when setting this record; make sure that the domain that is shown in the TXT verification value is actually the <b><i>domain you want to use on BrewCC</i></b> – <b><i>not your production site</i></b>."
             : undefined
         }
       />
+
+      <div className="mt-4 flex items-start gap-2 rounded-lg bg-amber-50 p-3 text-amber-800">
+        <CircleInfo className="mt-0.5 h-5 w-5 shrink-0" />
+        <p className="text-sm">
+          <b>Using Cloudflare?</b> Set the proxy status of this record to{" "}
+          <b>DNS only</b> (grey cloud). Proxied (orange cloud) records block SSL
+          certificate issuance.
+          {recordType === "A" && (
+            <>
+              {" "}
+              For apex domains, Cloudflare also accepts a CNAME on{" "}
+              <code>@</code> (CNAME flattening) pointing to{" "}
+              <code>{DUB_CUSTOM_DOMAIN_CNAME}</code>.
+            </>
+          )}{" "}
+          BrewCC checks your DNS automatically and activates the domain as soon
+          as the SSL certificate is issued.
+        </p>
+      </div>
 
       {(domainConnect || (domain && workspaceId)) && (
         <div className="mt-4 flex flex-wrap gap-2">

@@ -1,5 +1,6 @@
 import { cn } from "@dub/utils";
 
+// BrewCC symbol: a geometric lowercase "b" on a circle
 export function Logo({ className }: { className?: string }) {
   return (
     <svg
@@ -8,14 +9,15 @@ export function Logo({ className }: { className?: string }) {
       viewBox="0 0 64 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="BrewCC"
       className={cn("h-10 w-10 text-black dark:text-white", className)}
     >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M32 64C49.6731 64 64 49.6731 64 32C64 20.1555 57.5648 9.81398 48 4.28103V31.9999V47.9999H40V45.8594C37.6466 47.2208 34.9143 47.9999 32 47.9999C23.1634 47.9999 16 40.8365 16 31.9999C16 23.1634 23.1634 15.9999 32 15.9999C34.9143 15.9999 37.6466 16.7791 40 18.1404V1.00814C37.443 0.350024 34.7624 0 32 0C14.3269 0 0 14.3269 0 32C0 49.6731 14.3269 64 32 64Z"
-        fill="currentColor"
-      />
+      <circle cx="32" cy="32" r="32" fill="currentColor" />
+      <g className="fill-white stroke-white dark:fill-black dark:stroke-black">
+        <rect x="18" y="13" width="7" height="38" rx="1.5" stroke="none" />
+        <circle cx="34" cy="38" r="9.5" fill="none" strokeWidth="7" />
+      </g>
     </svg>
   );
 }

@@ -1,10 +1,11 @@
 "use client";
 
+import useUser from "@/lib/swr/use-user";
 import { UserAvatar } from "@/ui/users/user-avatar";
 import { Icon, Popover, User } from "@dub/ui";
 import { Gear } from "@dub/ui/icons";
 import { cn } from "@dub/utils";
-import { LogOut } from "lucide-react";
+import { LogOut, ShieldCheck } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -17,6 +18,7 @@ import {
 
 export function UserDropdown() {
   const { data: session } = useSession();
+  const { user } = useUser();
   const [openPopover, setOpenPopover] = useState(false);
   const { slug: paramsSlug } = useParams() as { slug?: string | string[] };
 
@@ -49,6 +51,16 @@ export function UserDropdown() {
       });
     }
 
+    // visibility only; /admin is authorized on the server
+    if (user?.platformRole === "master_admin") {
+      options.push({
+        label: "Admin",
+        icon: ShieldCheck,
+        href: "/admin",
+        onClick: () => setOpenPopover(false),
+      });
+    }
+
     // Add logout option
     options.push({
       type: "button",
@@ -62,7 +74,7 @@ export function UserDropdown() {
     });
 
     return options;
-  }, [workspaceSlug, setOpenPopover]);
+  }, [workspaceSlug, setOpenPopover, user?.platformRole]);
 
   return (
     <Popover

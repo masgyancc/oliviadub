@@ -23,13 +23,13 @@ export function EmbeddedSupportChat() {
         <div className="flex items-center gap-3">
           <img
             src="https://assets.dub.co/misc/dub-avatar.svg"
-            alt="Dub Support"
+            alt="BrewCC Support"
             className="size-8 rounded-full"
             draggable={false}
           />
           <div>
             <p className="text-sm font-semibold text-neutral-900">
-              Dub Support
+              BrewCC Support
             </p>
             <p className="text-xs text-neutral-500">
               AI-powered · escalates to human when needed

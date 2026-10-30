@@ -116,6 +116,8 @@ export const POST = withWorkspace(
               id: createId({ prefix: "user_" }),
               name: `${generateRandomName()} (Machine User)`,
               isMachine: true,
+              // machine users are created by an approved workspace owner, so they inherit approval
+              status: "approved",
             },
             select: {
               id: true,
@@ -153,7 +155,7 @@ export const POST = withWorkspace(
     waitUntil(
       sendEmail({
         to: session.user.email,
-        subject: `A new API key has been created for your workspace ${workspace.name} on Dub`,
+        subject: `A new API key has been created for your workspace ${workspace.name} on BrewCC`,
         react: APIKeyCreated({
           email: session.user.email,
           token: {

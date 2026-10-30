@@ -42,28 +42,28 @@ export type NavItemChildren = (
 export const FEATURES_LIST = [
   {
     id: "analytics",
-    title: "Dub Analytics",
+    title: "BrewCC Analytics",
     description: "Powerful real-time analytics",
     icon: DubAnalyticsIcon,
     href: "/analytics",
   },
   {
     id: "links",
-    title: "Dub Links",
+    title: "BrewCC Links",
     description: "Short links with superpowers",
     icon: DubLinksIcon,
     href: "/links",
   },
   {
     id: "api",
-    title: "Dub API",
+    title: "BrewCC API",
     description: "Programmatic link creation at scale",
     icon: DubApiIcon,
     href: "/docs/api-reference/introduction",
   },
   {
-    title: "Dub Integrations",
-    description: "Connect Dub with your favorite tools",
+    title: "BrewCC Integrations",
+    description: "Connect BrewCC with your favorite tools",
     icon: withFillVariant(Toggle2),
     href: "/integrations",
   },
@@ -163,7 +163,7 @@ export const RESOURCES = [
   },
   {
     icon: Logo,
-    title: "Dub Brand",
+    title: "BrewCC Brand",
     description: "Logos, wordmark, etc.",
     href: "/brand",
   },

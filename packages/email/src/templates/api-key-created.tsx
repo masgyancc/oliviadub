@@ -1,4 +1,4 @@
-import { DUB_WORDMARK, formatDate } from "@dub/utils";
+import { APP_DOMAIN, DUB_WORDMARK, formatDate } from "@dub/utils";
 import {
   Body,
   Container,
@@ -51,7 +51,7 @@ export default function APIKeyCreated({
               New Workspace API Key Created
             </Heading>
             <Text className="text-sm leading-6 text-black">
-              You've created a new API key for your Dub workspace{" "}
+              You've created a new API key for your BrewCC workspace{" "}
               <strong>{workspace.name}</strong> with the name{" "}
               <strong>"{token.name}"</strong> on{" "}
               {formatDate(new Date().toString())}.
@@ -63,7 +63,7 @@ export default function APIKeyCreated({
             <Section className="mb-8 mt-8">
               <Link
                 className="rounded-lg bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
-                href={`https://app.dub.co/${workspace.slug}/settings/tokens`}
+                href={`${APP_DOMAIN}/${workspace.slug}/settings/tokens`}
               >
                 View API Keys
               </Link>
@@ -71,7 +71,7 @@ export default function APIKeyCreated({
             <Text className="text-sm leading-6 text-black">
               If you did not create this API key, you can{" "}
               <Link
-                href={`https://app.dub.co/${workspace.slug}/settings/tokens`}
+                href={`${APP_DOMAIN}/${workspace.slug}/settings/tokens`}
                 className="text-black underline"
               >
                 <strong>delete this key</strong>

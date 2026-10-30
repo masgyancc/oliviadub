@@ -4,7 +4,7 @@ import { APP_DOMAIN, constructMetadata } from "@dub/utils";
 import Link from "next/link";
 
 export const metadata = constructMetadata({
-  title: "Sign in to Dub",
+  title: "Sign in to BrewCC",
   canonicalUrl: `${APP_DOMAIN}/login`,
 });
 
@@ -13,7 +13,7 @@ export default function LoginPage() {
     <AuthLayout showTerms="app">
       <div className="w-full max-w-sm">
         <h3 className="text-center text-xl font-semibold">
-          Log in to your Dub account
+          Log in to your BrewCC account
         </h3>
         <div className="mt-8">
           <LoginForm />

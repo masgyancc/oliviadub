@@ -6,6 +6,7 @@ import { waitUntil } from "@vercel/functions";
 import { headers } from "next/headers";
 import { withAxiom } from "../axiom/server";
 import { hashToken } from "./hash-token";
+import { assertUserApproved } from "./platform-access";
 import { Session, getSession } from "./utils";
 
 interface WithSessionHandler {
@@ -22,7 +23,13 @@ interface WithSessionHandler {
   }): Promise<Response>;
 }
 
-export const withSession = (handler: WithSessionHandler) =>
+export const withSession = (
+  handler: WithSessionHandler,
+  {
+    // BrewCC: routes that pending/rejected/suspended users may still call (e.g. reading their own profile)
+    allowUnapproved = false,
+  }: { allowUnapproved?: boolean } = {},
+) =>
   withAxiom(
     async (
       req,
@@ -125,6 +132,10 @@ export const withSession = (handler: WithSessionHandler) =>
               message: "Unauthorized: Login required.",
             });
           }
+        }
+
+        if (!allowUnapproved) {
+          await assertUserApproved(session.user.id);
         }
 
         const searchParams = getSearchParams(req.url);

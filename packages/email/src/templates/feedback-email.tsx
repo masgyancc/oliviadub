@@ -14,7 +14,7 @@ import {
 
 export default function FeedbackEmail({
   email = "panic@thedis.co",
-  feedback = "I love Dub!",
+  feedback = "I love BrewCC!",
 }: {
   email: string;
   feedback: string;

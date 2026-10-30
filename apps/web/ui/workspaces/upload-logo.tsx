@@ -52,7 +52,7 @@ export default function UploadLogo() {
         <div className="flex flex-col space-y-1">
           <h2 className="text-base font-semibold">Workspace Logo</h2>
           <p className="text-sm text-neutral-500">
-            This is your workspace's logo on Dub.
+            This is your workspace's logo on BrewCC.
           </p>
           <p className="text-sm text-neutral-500">
             Click the logo to upload a new image.

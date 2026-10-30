@@ -1,4 +1,9 @@
-import { DUB_THUMBNAIL, DUB_WORDMARK, getPrettyUrl } from "@dub/utils";
+import {
+  APP_DOMAIN,
+  DUB_THUMBNAIL,
+  DUB_WORDMARK,
+  getPrettyUrl,
+} from "@dub/utils";
 import {
   Body,
   Column,
@@ -31,13 +36,13 @@ export default function WelcomeEmail({
   unsubscribeUrl: string;
 }) {
   const workspaceUrl = workspace
-    ? `https://app.dub.co/${workspace?.slug}`
-    : "https://app.dub.co";
+    ? `${APP_DOMAIN}/${workspace?.slug}`
+    : APP_DOMAIN;
 
   return (
     <Html>
       <Head />
-      <Preview>Welcome to Dub</Preview>
+      <Preview>Welcome to BrewCC</Preview>
       <Tailwind>
         <Body className="mx-auto my-auto bg-white font-sans">
           <Container className="mx-auto my-10 max-w-[600px] rounded border border-solid border-neutral-200 px-10 py-5">
@@ -45,11 +50,11 @@ export default function WelcomeEmail({
               <Img src={DUB_WORDMARK} height="32" alt="Dub" />
             </Section>
             <Heading className="mx-0 my-7 p-0 text-xl font-semibold text-black">
-              Welcome to Dub!
+              Welcome to BrewCC!
             </Heading>
             <Text className="mb-8 text-sm leading-6 text-neutral-600">
-              Thank you for signing up for Dub! You can now start creating and
-              managing short links and track their performance.
+              Thank you for signing up for BrewCC! You can now start creating
+              and managing short links and track their performance.
             </Text>
 
             {workspace ? (
@@ -93,7 +98,7 @@ export default function WelcomeEmail({
             </Heading>
 
             <Text className="mb-6 mt-0 text-sm leading-6 text-neutral-600">
-              Get familiar with Dub by exploring the platform and features.
+              Get familiar with BrewCC by exploring the platform and features.
             </Text>
 
             <Text className="mb-4 text-sm leading-6 text-neutral-600">
@@ -117,10 +122,10 @@ export default function WelcomeEmail({
             <Text className="mb-4 text-sm leading-6 text-neutral-600">
               2. Track conversions:{" "}
               <Link
-                href="https://app.dub.co/settings/tracking"
+                href={`${APP_DOMAIN}/settings/tracking`}
                 className="text-neutral-600 underline underline-offset-2"
               >
-                Install the Dub tracking script
+                Install the BrewCC tracking script
               </Link>{" "}
               to track conversions from your short links.
             </Text>
@@ -144,13 +149,13 @@ export default function WelcomeEmail({
               >
                 Check out our docs
               </Link>{" "}
-              to learn how to programmatically manage your Dub links.
+              to learn how to programmatically manage your BrewCC links.
             </Text>
 
             <Section className="my-8">
               <Link
                 className="rounded-lg bg-black px-4 py-2.5 text-center text-[14px] font-medium text-white no-underline"
-                href="https://app.dub.co"
+                href={`${APP_DOMAIN}`}
               >
                 Go to your dashboard
               </Link>

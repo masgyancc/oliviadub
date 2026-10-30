@@ -46,12 +46,12 @@ export function SupportChatBubble() {
               <div className="flex items-center gap-2.5">
                 <img
                   src="https://assets.dub.co/misc/dub-avatar.svg"
-                  alt="Dub Support"
+                  alt="BrewCC Support"
                   className="size-7 rounded-full"
                   draggable={false}
                 />
                 <p className="text-sm font-semibold leading-none text-white">
-                  Dub Support
+                  BrewCC Support
                 </p>
               </div>
 

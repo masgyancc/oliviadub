@@ -67,7 +67,7 @@ export async function invoicePaymentFailed(
               : attemptCount == 3
                 ? "3rd notice: "
                 : "Final notice: "
-        }Your payment for Dub.co failed`,
+        }Your payment for BrewCC failed`,
         react: (
           <FailedPayment
             attemptCount={attemptCount}

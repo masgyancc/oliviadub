@@ -1,4 +1,4 @@
-import { DUB_WORDMARK, formatDate, pluralize } from "@dub/utils";
+import { APP_DOMAIN, DUB_WORDMARK, formatDate, pluralize } from "@dub/utils";
 import {
   Body,
   Column,
@@ -98,7 +98,7 @@ export default function DomainRenewed({
               {pluralize("domain", domains.length)} next year, you can turn off
               auto-renewal in your{" "}
               <Link
-                href={`https://app.dub.co/${workspace.slug}/settings/domains`}
+                href={`${APP_DOMAIN}/${workspace.slug}/settings/domains`}
                 className="font-semibold text-black underline"
               >
                 domain settings page
@@ -109,7 +109,7 @@ export default function DomainRenewed({
             <Section className="my-10">
               <Link
                 className="rounded-lg bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
-                href={`https://app.dub.co/${workspace.slug}/settings/domains`}
+                href={`${APP_DOMAIN}/${workspace.slug}/settings/domains`}
               >
                 Manage your {pluralize("domain", domains.length)}
               </Link>
