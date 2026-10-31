@@ -21,6 +21,7 @@ import LinksContainer from "@/ui/links/links-container";
 import { LinksDisplayProvider } from "@/ui/links/links-display-provider";
 import { useLinkFilters } from "@/ui/links/use-link-filters";
 import { useAddEditTagModal } from "@/ui/modals/add-edit-tag-modal";
+import { useBulkReplaceModal } from "@/ui/modals/bulk-replace-modal";
 import { useDotLinkOfferModal } from "@/ui/modals/dot-link-offer-modal";
 import { useExportLinksModal } from "@/ui/modals/export-links-modal";
 import { useLinkBuilder } from "@/ui/modals/link-builder";
@@ -276,6 +277,7 @@ const MoreLinkOptions = () => {
   const [openPopover, setOpenPopover] = useState(false);
   const [_state, setState] = useState<"default" | "import">("default");
   const { ExportLinksModal, setShowExportLinksModal } = useExportLinksModal();
+  const { BulkReplaceModal, setShowBulkReplaceModal } = useBulkReplaceModal();
   const { openTrialLimitModal, TrialLimitActivateModal } =
     useTrialLimitActivateModal();
 
@@ -287,6 +289,7 @@ const MoreLinkOptions = () => {
     <>
       <TrialLimitActivateModal />
       <ExportLinksModal />
+      <BulkReplaceModal />
       <Popover
         content={
           <div className="w-full md:w-52">
@@ -392,6 +395,24 @@ const MoreLinkOptions = () => {
                 <IconMenu
                   text="Export as CSV"
                   icon={<Download className="h-4 w-4" />}
+                />
+              </button>
+            </div>
+            <div className="border-t border-neutral-200" />
+            <div className="grid gap-px p-2">
+              <p className="mb-1.5 mt-1 flex items-center gap-2 px-1 text-xs font-medium text-neutral-500">
+                Bulk Edit
+              </p>
+              <button
+                onClick={() => {
+                  setOpenPopover(false);
+                  setShowBulkReplaceModal(true);
+                }}
+                className="w-full rounded-md p-2 hover:bg-neutral-100 active:bg-neutral-200"
+              >
+                <IconMenu
+                  text="Replace destination domain"
+                  icon={<Globe className="h-4 w-4" />}
                 />
               </button>
             </div>

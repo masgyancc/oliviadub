@@ -8,6 +8,7 @@ import {
   CircleCheck,
   CircleDollar,
   Folder,
+  Globe,
   Icon,
   LoadingSpinner,
   PaginationControls,
@@ -20,6 +21,7 @@ import {
 import { cn } from "@dub/utils";
 import { memo, ReactNode, useContext, useMemo } from "react";
 import { useArchiveLinkModal } from "../modals/archive-link-modal";
+import { useBulkReplaceModal } from "../modals/bulk-replace-modal";
 import { useDeleteLinkModal } from "../modals/delete-link-modal";
 import { useLinkBuilder } from "../modals/link-builder";
 import { useLinkConversionTrackingModal } from "../modals/link-conversion-tracking-modal";
@@ -105,6 +107,10 @@ export const LinksToolbar = memo(
     const { setShowDeleteLinkModal, DeleteLinkModal } = useDeleteLinkModal({
       props: selectedLinks,
     });
+    // BrewCC: replace the destination domain of the selected links
+    const { setShowBulkReplaceModal, BulkReplaceModal } = useBulkReplaceModal({
+      linkIds: selectedLinkIds,
+    });
 
     const bulkActions: BulkAction[] = useMemo(
       () => [
@@ -141,6 +147,11 @@ export const LinksToolbar = memo(
             />
           ),
           keyboardShortcut: "c",
+        },
+        {
+          label: "Replace URL",
+          icon: Globe,
+          action: () => setShowBulkReplaceModal(true),
         },
         {
           label:
@@ -198,6 +209,7 @@ export const LinksToolbar = memo(
         <LinkConversionTrackingModal />
         <ArchiveLinkModal />
         <DeleteLinkModal />
+        <BulkReplaceModal />
         <LinkBuilder />
 
         {/* Leave room at bottom of list */}

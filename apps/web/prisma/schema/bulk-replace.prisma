@@ -1,0 +1,16 @@
+// BrewCC Bulk Destination Replacement: one row per link changed by a bulk run, so a run can
+// be undone safely (only links whose URL still equals newUrl are reverted).
+model LinkUrlReplacement {
+  id         String    @id @default(cuid())
+  runId      String
+  linkId     String
+  projectId  String
+  userId     String // the user who ran the replacement (always the link's creator)
+  oldUrl     String    @db.Text
+  newUrl     String    @db.Text
+  revertedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index(runId)
+  @@index([userId, createdAt])
+}
