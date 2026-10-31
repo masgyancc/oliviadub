@@ -56,3 +56,24 @@ Vercel Preview builds currently have **no** environment variables, since all are
 
 ## Rollback
 See `BREWCC_ROLLBACK_GUIDE.md` (Vercel Instant Rollback to `dpl_C69v7WTa6WJdGhBezPHEGmqTMr9D`).
+
+## Vercel Firewall: bot challenge on all short-link domains (2026-10-31)
+Applied via the Vercel API at the owner's request. Firewall config version 2, rule id `rule_brew_cc_challenge_short_links_IXpytO`.
+
+**Rule "BrewCC challenge short links"**: action **Challenge** when ALL of:
+- host is NOT `app.lilac-orbit.com` / `api.lilac-orbit.com`
+- host does NOT end with `.vercel.app` (deployment hosts and cron)
+- path does NOT match `^/(\.well-known|_next|api|_proxy|brand)(/|$)` (SSL/ACME, assets, API, brand images)
+
+Effect: every short-link host (`lilac-orbit.com`, `brewcc.online`, `meluncur.cc` and every future custom domain) serves the Vercel Security Checkpoint once per visitor, then redirects normally. Accepted trade-offs: chat-app link previews may fail, recorded clicks may drop, and the first click is slower.
+
+Verified after applying:
+| URL | Result |
+|---|---|
+| `meluncur.cc/tes`, `lilac-orbit.com/3B971vh`, `brewcc.online/` | `429` + `x-vercel-mitigated: challenge` (browser solves the challenge, then the redirect runs) |
+| `app.lilac-orbit.com/login` | 200 (not challenged) |
+| `api.lilac-orbit.com/links` | 401 (not challenged) |
+| `app.lilac-orbit.com/brand/og.png` | 200 |
+| `meluncur.cc/.well-known/acme-challenge/*` | passes through (SSL issuance for new domains still works) |
+
+**Disable or adjust:** Vercel → Project `dub` → Firewall → rule "BrewCC challenge short links" → toggle off or delete, then Publish. Alternatively, via API: `PATCH /v1/security/firewall/config` with `{"action":"rules.remove","id":"rule_brew_cc_challenge_short_links_IXpytO"}`.
