@@ -1,6 +1,7 @@
 import useCurrentFolderId from "@/lib/swr/use-current-folder-id";
 import { useCheckFolderPermission } from "@/lib/swr/use-folder-permissions";
 import { ExpandedLinkProps } from "@/lib/types";
+import { useAdsTrackingModal } from "@/ui/modals/ads-tracking-modal";
 import { useArchiveLinkModal } from "@/ui/modals/archive-link-modal";
 import { useDeleteLinkModal } from "@/ui/modals/delete-link-modal";
 import {
@@ -19,7 +20,7 @@ import {
   Trash,
 } from "@dub/ui/icons";
 import { cn, isDubDomain } from "@dub/utils";
-import { CopyPlus, FolderInput } from "lucide-react";
+import { CopyPlus, Crosshair as Crosshairs, FolderInput } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { toast } from "sonner";
@@ -94,6 +95,10 @@ export function LinkControls({
   });
   const { setShowMoveLinkToFolderModal, MoveLinkToFolderModal } =
     useMoveLinkToFolderModal({ link, onSuccess: onMoveSuccess });
+  // BrewCC: Meta / TikTok / Google Ads tags per link
+  const { setShowAdsTrackingModal, AdsTrackingModal } = useAdsTrackingModal({
+    link,
+  });
 
   const isRootLink = link.key === "_root";
   const { folderId: currentFolderId } = useCurrentFolderId();
@@ -172,6 +177,7 @@ export function LinkControls({
       {options.includes("transfer") && <TransferLinkModal />}
       {options.includes("delete") && <DeleteLinkModal />}
       {options.includes("move") && <MoveLinkToFolderModal />}
+      {options.includes("edit") && <AdsTrackingModal />}
       <Popover
         content={
           <div className="w-full sm:w-48">
@@ -191,6 +197,25 @@ export function LinkControls({
                     !canManageLink
                       ? "You don't have permission to update this link."
                       : undefined
+                  }
+                />
+              )}
+              {options.includes("edit") && (
+                <Button
+                  text="Ads Tracking"
+                  variant="outline"
+                  onClick={() => {
+                    setOpenPopover(false);
+                    setShowAdsTrackingModal(true);
+                  }}
+                  icon={<Crosshairs className="size-4" />}
+                  className="h-9 px-2 font-medium"
+                  disabledTooltip={
+                    !canManageLink
+                      ? "You don't have permission to update this link."
+                      : isRootLink
+                        ? "Ads tracking is available for short links, not root domain links."
+                        : undefined
                   }
                 />
               )}
