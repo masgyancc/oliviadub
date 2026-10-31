@@ -1,4 +1,5 @@
-const EXCLUDED_PAGES = ["/workspaces"];
+// BrewCC: /admin and /pending are app pages, not workspace slugs ("/[slug]" → "/[slug]/links")
+const EXCLUDED_PAGES = ["/workspaces", "/admin", "/pending"];
 
 const APP_REDIRECTS = {
   "/account": "/account/settings",
