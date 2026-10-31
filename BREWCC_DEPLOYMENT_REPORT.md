@@ -1,6 +1,25 @@
 # BrewCC — Deployment Procedure & Report
 
-Status: **NOT DEPLOYED.** Production is untouched. Every step below needs the owner's explicit approval before it runs.
+Status: **DEPLOYED on 2026-10-31** (approved by the owner).
+
+| Step | Result |
+|---|---|
+| Backup | Logical export of all 40 tables (19 rows) → `D:\seo\dub\backups\db-2026-10-31-pre-brewcc` (outside the repo) |
+| `01_up.sql` | Applied with `prisma db execute`, success |
+| `02_backfill.sql` | Applied. Both existing users are `approved` + `master_admin`, links still 3 |
+| Code | `main` fast-forwarded `f7a0978 → 2d911a0` (pushed by the owner) |
+| Vercel | `dpl_CSf7GK2udFPKEMVghVb7NkSBRNLT` → READY (production) |
+
+Post-deploy checks run anonymously:
+- `/login` returns 200, title "Sign in to BrewCC | BrewCC", BrewCC wordmark shown, no "Dub" in the meta tags
+- `/admin`, `/admin/approvals`, `/pending` return 307 → `/login?next=…` (protected)
+- `/favicon.ico` and `/brand/og.png` return 200
+- Existing links: `lilac-orbit.com/3B971vh` → 302 google.com, `lilac-orbit.com/tes` → 302 rika-wo.vercel.app, `brewcc.online/` → 200
+- `api.lilac-orbit.com/links` without auth returns 401
+
+Still to verify while logged in (requires a browser session): admin pages for both master admins, a test sign-up → pending → approve, and custom domain activation.
+
+---
 
 ## Pre-flight (done locally)
 - [x] Branch `feature/brewcc-platform-transformation` cut from production `HEAD` (`f7a097891a`)
