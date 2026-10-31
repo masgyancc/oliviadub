@@ -8,7 +8,7 @@ const APP_REDIRECTS = {
 };
 
 export const appRedirect = async (path: string) => {
-  if (EXCLUDED_PAGES.includes(path)) {
+  if (EXCLUDED_PAGES.includes(path) || path.startsWith("/admin/")) {
     return null;
   }
 

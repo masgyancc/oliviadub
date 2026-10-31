@@ -10,6 +10,7 @@ import { DubApiError } from "@/lib/api/errors";
 import { parseRequestBody } from "@/lib/api/utils";
 import { isNonEmptyJson } from "@/lib/api/utils/is-non-empty-json";
 import { withWorkspace } from "@/lib/auth";
+import { assertCanRemoveSharedDomain } from "@/lib/brewcc/shared-domains";
 import { setRenewOption } from "@/lib/dynadot/set-renew-option";
 import { prisma } from "@/lib/prisma";
 import { storage } from "@/lib/storage";
@@ -43,7 +44,7 @@ export const GET = withWorkspace(
 
 // PUT /api/domains/[domain] – edit a workspace's domain
 export const PATCH = withWorkspace(
-  async ({ req, workspace, params }) => {
+  async ({ req, workspace, params, session }) => {
     const existingDomain = await getDomainOrThrow({
       workspace,
       domain: params.domain,
@@ -112,6 +113,13 @@ export const PATCH = withWorkspace(
       newDomain && newDomain.toLowerCase() !== currentDomain.toLowerCase();
 
     if (domainChanged) {
+      // BrewCC: renaming a shared domain would move other users' links
+      await assertCanRemoveSharedDomain({
+        domain: currentDomain,
+        workspaceId: workspace.id,
+        userId: session.user.id,
+      });
+
       if (registeredDomain) {
         throw new DubApiError({
           code: "forbidden",
@@ -263,11 +271,18 @@ export const PATCH = withWorkspace(
 
 // DELETE /api/domains/[domain] - delete a workspace's domain
 export const DELETE = withWorkspace(
-  async ({ params, workspace }) => {
+  async ({ params, workspace, session }) => {
     const { slug: domain, registeredDomain } = await getDomainOrThrow({
       workspace,
       domain: params.domain,
       dubDomainChecks: true,
+    });
+
+    // BrewCC: deleting a shared domain would delete other users' links on it
+    await assertCanRemoveSharedDomain({
+      domain,
+      workspaceId: workspace.id,
+      userId: session.user.id,
     });
 
     if (registeredDomain) {

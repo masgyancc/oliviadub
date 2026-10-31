@@ -1,6 +1,9 @@
 import useDomains from "@/lib/swr/use-domains";
-import { DUB_DOMAINS, SHORT_DOMAIN } from "@dub/utils";
+import useWorkspace from "@/lib/swr/use-workspace";
+import { DomainProps } from "@/lib/types";
+import { DUB_DOMAINS, SHORT_DOMAIN, fetcher } from "@dub/utils";
 import { useMemo } from "react";
+import useSWR from "swr";
 
 // Sort domains alphabetically, with a specific domain prioritized
 const sortDomains = (domains: any[], prioritySlug?: string) => {
@@ -42,6 +45,27 @@ export function useAvailableDomains(
     opts: options.search ? { search: options.search } : undefined,
   });
 
+  // BrewCC: verified custom domains contributed by other workspaces
+  const { id: workspaceId } = useWorkspace();
+  const { data: sharedData } = useSWR<DomainProps[]>(
+    workspaceId && !options.onboarding
+      ? `/api/domains/shared?workspaceId=${workspaceId}`
+      : null,
+    fetcher,
+    { dedupingInterval: 60000 },
+  );
+  const sharedDomains = useMemo(
+    () =>
+      sortDomains(
+        (sharedData || []).filter(
+          (d) =>
+            !options.search ||
+            d.slug.toLowerCase().includes(options.search.toLowerCase()),
+        ),
+      ).map((domain) => ({ ...domain, isWorkspaceDomain: false })),
+    [sharedData, options.search],
+  );
+
   const domains = useMemo(() => {
     // Case 1: Onboarding - only show non-archived Dub domains
     if (options.onboarding) {
@@ -60,6 +84,7 @@ export function useAvailableDomains(
         // If domain not found at all, return all active domains
         return [
           ...sortDomains(activeWorkspaceDomains || []),
+          ...sharedDomains,
           ...sortDomains(activeDefaultDomains, SHORT_DOMAIN),
         ];
       }
@@ -71,6 +96,7 @@ export function useAvailableDomains(
       return [
         ...sortDomains(activeWorkspaceDomains || []),
         ...(isDefaultDomain ? [] : [domain]),
+        ...sharedDomains,
         ...sortDomains(activeDefaultDomains, SHORT_DOMAIN),
         ...(isDefaultDomain ? [domain] : []),
       ];
@@ -83,6 +109,8 @@ export function useAvailableDomains(
         ...domain,
         isWorkspaceDomain: true,
       })),
+      // BrewCC: shared custom domains from other workspaces
+      ...sharedDomains,
       // Default domains next, with dub.sh first, then alphabetically
       ...sortDomains(activeDefaultDomains, SHORT_DOMAIN).map((domain) => ({
         ...domain,
@@ -95,6 +123,7 @@ export function useAvailableDomains(
     allDomains,
     activeWorkspaceDomains,
     activeDefaultDomains,
+    sharedDomains,
   ]);
 
   return {

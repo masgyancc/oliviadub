@@ -1,12 +1,12 @@
+import { isSharedDomain } from "@/lib/brewcc/shared-domains";
 import { verifyFolderAccess } from "@/lib/folder/permissions";
 import { checkIfUserExists, getRandomKey } from "@/lib/planetscale";
 import { prisma } from "@/lib/prisma";
 import { isNotHostedImage } from "@/lib/storage";
 import { NewLinkProps, ProcessedLinkProps } from "@/lib/types";
 import {
-  DUB_DOMAINS,
-  UTMTags,
   constructURLFromUTMParams,
+  DUB_DOMAINS,
   getApexDomain,
   getDomainWithoutWWW,
   getUrlFromString,
@@ -15,6 +15,7 @@ import {
   parseDateTime,
   pluralize,
   SHORT_DOMAIN,
+  UTMTags,
 } from "@dub/utils";
 import { Project, WorkspaceRole } from "@prisma/client";
 import { combineTagIds } from "../tags/combine-tag-ids";
@@ -244,7 +245,11 @@ export async function processLink<T extends Record<string, any>>({
     }
 
     // else, check if the domain belongs to the workspace
-  } else if (!domains?.find((d) => d.slug === domain)) {
+    // BrewCC: verified custom domains of other workspaces are shared with everyone
+  } else if (
+    !domains?.find((d) => d.slug === domain) &&
+    !(workspace && key !== "_root" && (await isSharedDomain(domain)))
+  ) {
     return {
       link: payload,
       error: "Domain does not belong to workspace.",
