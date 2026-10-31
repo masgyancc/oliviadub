@@ -4,6 +4,7 @@ import { generateRandomString } from "@/lib/api/utils/generate-random-string";
 import { createWorkspaceId } from "@/lib/api/workspaces/create-workspace-id";
 import { prefixWorkspaceId } from "@/lib/api/workspaces/workspace-id";
 import { withSession } from "@/lib/auth";
+import { BREWCC_ENTERPRISE_PLAN } from "@/lib/brewcc/enterprise-plan";
 import { checkIfUserExists } from "@/lib/planetscale";
 import { prisma } from "@/lib/prisma";
 import { storage } from "@/lib/storage";
@@ -118,6 +119,8 @@ export const POST = withSession(async ({ req, session }) => {
                 },
               },
             },
+            // BrewCC: only approved users reach this route, and they all get enterprise
+            ...BREWCC_ENTERPRISE_PLAN,
             billingCycleStart: new Date().getDate(),
             invoicePrefix: generateRandomString(8),
             inviteCode: nanoid(24),

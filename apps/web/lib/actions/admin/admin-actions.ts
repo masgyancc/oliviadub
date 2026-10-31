@@ -4,6 +4,7 @@ import { addDomainToVercel } from "@/lib/api/domains/add-domain-vercel";
 import { markDomainAsDeleted } from "@/lib/api/domains/mark-domain-deleted";
 import { removeDomainFromVercel } from "@/lib/api/domains/remove-domain-vercel";
 import { invalidateUserAccess } from "@/lib/auth/platform-access";
+import { upgradeOwnedWorkspacesToEnterprise } from "@/lib/brewcc/enterprise-plan";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@dub/email";
 import { APP_DOMAIN } from "@dub/utils";
@@ -89,8 +90,8 @@ export const updateUserStatusAction = masterAdminActionClient
       );
     }
 
-    await prisma.$transaction([
-      prisma.user.update({
+    await prisma.$transaction(async (tx) => {
+      await tx.user.update({
         where: { id: userId },
         data: {
           status: to,
@@ -98,8 +99,8 @@ export const updateUserStatusAction = masterAdminActionClient
           statusUpdatedAt: new Date(),
           statusUpdatedById: ctx.user.id,
         },
-      }),
-      prisma.adminAuditLog.create({
+      });
+      await tx.adminAuditLog.create({
         data: {
           actorId: ctx.user.id,
           action: `user.${action}`,
@@ -108,8 +109,12 @@ export const updateUserStatusAction = masterAdminActionClient
           toValue: to,
           reason: reason || null,
         },
-      }),
-    ]);
+      });
+      // BrewCC: approved users get enterprise on any workspace they already own
+      if (to === "approved") {
+        await upgradeOwnedWorkspacesToEnterprise(tx, userId);
+      }
+    });
 
     await invalidateUserAccess(userId);
 
