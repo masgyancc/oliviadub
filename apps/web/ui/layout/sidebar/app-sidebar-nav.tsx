@@ -14,6 +14,7 @@ import {
   Globe,
   Key,
   MarketingTarget,
+  PaperPlane,
   Receipt2,
   ShieldCheck,
   StackY3,
@@ -237,6 +238,11 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             name: "Security",
             icon: ShieldCheck,
             href: "/account/settings/security",
+          },
+          {
+            name: "Telegram",
+            icon: PaperPlane,
+            href: "/account/settings/telegram",
           },
           {
             name: "Notifications",

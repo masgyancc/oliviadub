@@ -1,0 +1,22 @@
+// BrewCC Telegram bot: a BrewCC user linked to a Telegram account (identified by the numeric Telegram user id)
+model TelegramAccount {
+  id                String    @id @default(cuid())
+  userId            String    @unique // one Telegram account per BrewCC user
+  telegramId        String    @unique // one BrewCC user per Telegram account
+  telegramUsername  String?
+  connectedAt       DateTime  @default(now())
+  lastInteractionAt DateTime?
+}
+
+// One-time token used to link a Telegram account from the dashboard (only the SHA-256 hash is stored)
+model TelegramLinkToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index(userId)
+  @@index(expiresAt)
+}
