@@ -152,7 +152,7 @@ export const analyticsQuerySchema = z.object({
     .optional()
     .transform(parseFilterValue)
     .describe(
-      "The country to retrieve analytics for. Must be passed as a 2-letter ISO 3166-1 country code (see https://d.to/geo). " +
+      "The country to retrieve analytics for. Must be passed as a 2-letter ISO 3166-1 country code. " +
         "Supports advanced filtering: single value, multiple values (comma-separated), or exclusion (prefix with `-`). " +
         "Examples: `US`, `US,BR,FR`, `-US`.",
     ),

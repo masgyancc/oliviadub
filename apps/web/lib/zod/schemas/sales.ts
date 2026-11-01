@@ -20,14 +20,14 @@ export const trackSaleRequestSchema = z.object({
     .int()
     .min(0, "amount cannot be negative")
     .describe(
-      "The amount of the sale in cents (for all two-decimal currencies). If the sale is in a zero-decimal currency, pass the full integer value (e.g. `1580` JPY). Learn more: https://d.to/currency",
+      "The amount of the sale in cents (for all two-decimal currencies). If the sale is in a zero-decimal currency, pass the full integer value (e.g. `1580` JPY).",
     ),
   currency: z
     .string()
     .default("usd")
     .transform((val) => val.toLowerCase())
     .describe(
-      "The currency of the sale. Accepts ISO 4217 currency codes. Sales will be automatically converted and stored as USD at the latest exchange rates. Learn more: https://d.to/currency",
+      "The currency of the sale. Accepts ISO 4217 currency codes. Sales will be automatically converted and stored as USD at the latest exchange rates.",
     ),
   eventName: z
     .string()

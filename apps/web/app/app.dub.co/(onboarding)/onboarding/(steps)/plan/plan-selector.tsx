@@ -141,17 +141,7 @@ export function PlanSelector() {
                       <ChevronLeft className="size-5 text-neutral-800" />
                     </button>
                     {plan.name === "Enterprise" ? (
-                      <a
-                        href="https://dub.co/contact/sales"
-                        target="_blank"
-                        className="w-full"
-                      >
-                        <Button
-                          text="Contact us"
-                          variant="secondary"
-                          className="h-10 rounded-lg shadow-sm"
-                        />
-                      </a>
+                      <div className="w-full" />
                     ) : (
                       <UpgradePlanButton
                         plan={plan.name.toLowerCase()}

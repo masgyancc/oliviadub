@@ -33,7 +33,7 @@ const ErrorSchema = z.object({
     }),
     doc_url: z.string().optional().meta({
       description: "A URL to more information about the error code reported.",
-      example: "https://dub.co/docs/api-reference",
+      example: "https://example.com/docs/errors",
     }),
   }),
 });
@@ -56,11 +56,10 @@ export class DubApiError extends Error {
   }) {
     super(message);
     this.code = code;
-    this.docUrl = docUrl ?? `${docErrorUrl}#${code.replace("_", "-")}`;
+    // BrewCC: no external error documentation, so no default doc_url
+    this.docUrl = docUrl;
   }
 }
-
-const docErrorUrl = "https://dub.co/docs/api-reference/errors";
 
 export function fromZodError(error: z.ZodError): ErrorResponse {
   return {
@@ -85,7 +84,6 @@ export function fromZodError(error: z.ZodError): ErrorResponse {
           label: "",
         },
       }),
-      doc_url: `${docErrorUrl}#unprocessable-entity`,
     },
   };
 }
@@ -136,7 +134,6 @@ export function handleApiError({
           error?.meta?.cause ||
           error.message ||
           "The requested resource was not found.",
-        doc_url: `${docErrorUrl}#not-found`,
       },
       status: 404,
     };
@@ -149,7 +146,6 @@ export function handleApiError({
       code: "internal_server_error",
       message:
         "An internal server error occurred. Please contact our support if the problem persists.",
-      doc_url: `${docErrorUrl}#internal-server-error`,
     },
     status: 500,
   };
@@ -191,12 +187,6 @@ export const errorSchemaFactory = (
                   description:
                     "A human readable explanation of what went wrong.",
                   example: "The requested resource was not found.",
-                },
-                doc_url: {
-                  type: "string",
-                  description:
-                    "A link to our documentation with more details about this error code",
-                  example: `${docErrorUrl}#${code.replace("_", "-")}`,
                 },
               },
               required: ["code", "message"],

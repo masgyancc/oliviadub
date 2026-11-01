@@ -14,7 +14,7 @@ export default function LinkNotFound() {
         to yield more results.
       </p>
       <img
-        src="https://assets.dub.co/misc/not-found.svg"
+        src="/_proxy/assets/misc/not-found.svg"
         alt="No links yet"
         width={300}
         height={300}

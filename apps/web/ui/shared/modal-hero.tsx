@@ -7,7 +7,7 @@ export function ModalHero() {
     <div className="relative h-48 w-full overflow-hidden rounded-t-2xl bg-white">
       <BackgroundGradient className="opacity-15" />
       <Image
-        src="https://assets.dub.co/misc/welcome-modal-background.svg"
+        src="/_proxy/assets/misc/welcome-modal-background.svg"
         alt="Welcome to BrewCC"
         fill
         className="object-cover object-top"

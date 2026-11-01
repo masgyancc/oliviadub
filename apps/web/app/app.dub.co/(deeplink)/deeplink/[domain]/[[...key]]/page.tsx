@@ -197,9 +197,7 @@ export default async function DeepLinkPreviewPage(props: {
         <div className="relative z-10 flex flex-1 flex-col px-8 py-8">
           {!hidePoweredByBadge && (
             <div className="flex justify-center">
-              <Link
-                href="https://dub.co/docs/concepts/deep-links/quickstart"
-                target="_blank"
+              <div
                 className={cn(
                   "flex items-center gap-1 whitespace-nowrap text-sm font-medium text-neutral-900",
                   t["poweredByOrder"] === "inverted" ? "flex-row-reverse" : "",
@@ -207,7 +205,7 @@ export default async function DeepLinkPreviewPage(props: {
               >
                 {t.poweredBy}{" "}
                 <Wordmark className="text-content-emphasis h-3.5" />
-              </Link>
+              </div>
             </div>
           )}
 

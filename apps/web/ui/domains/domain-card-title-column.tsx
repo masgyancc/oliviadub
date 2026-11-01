@@ -48,7 +48,7 @@ export function DomainCardTitleColumn({
           </a>
           <div className="flex items-center gap-1">
             {primary ? (
-              <Tooltip content="This is the [primary domain](https://dub.co/help/article/how-to-set-primary-domain) that Dub defaults to in the [link builder](https://dub.co/help/article/dub-link-builder) and the [Links API](https://dub.co/docs/concepts/links/introduction).">
+              <Tooltip content="This is the primary domain that BrewCC defaults to in the link builder and the Links API.">
                 <span className="xs:px-3 xs:py-1 flex cursor-help items-center gap-1 rounded-full bg-sky-400/[.15] px-1.5 py-0.5 text-xs font-medium text-sky-600">
                   <Flag2 className="hidden h-3 w-3 sm:block" />
                   Primary

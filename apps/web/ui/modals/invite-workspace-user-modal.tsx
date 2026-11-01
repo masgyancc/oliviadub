@@ -27,13 +27,7 @@ function InviteWorkspaceUserModal({
         <h3 className="text-lg font-medium">Invite Teammates</h3>
         <p className="text-sm text-neutral-500">
           Invite teammates with{" "}
-          <a
-            href="https://dub.co/help/article/workspace-roles"
-            target="_blank"
-            className="underline hover:text-neutral-900"
-          >
-            different roles and permissions
-          </a>
+          different roles and permissions
           . Invitations will be valid for 14 days.
         </p>
       </div>

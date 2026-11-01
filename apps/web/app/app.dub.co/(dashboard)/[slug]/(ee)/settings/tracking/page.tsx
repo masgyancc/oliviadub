@@ -12,7 +12,6 @@ export default function WorkspaceTrackingSettingsPage() {
       titleInfo={{
         title:
           "Configure and install BrewCC's tracking scripts and start tracking conversions on your website and web applications.",
-        href: "https://dub.co/docs/concepts/attribution",
       }}
       controls={<ConversionTrackingToggle />}
     >

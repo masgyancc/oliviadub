@@ -84,14 +84,7 @@ export default async function InspectPage(props: {
         <Suspense fallback={<LinkPreviewPlaceholder defaultUrl={data.url} />}>
           <LinkPreview defaultUrl={data.url} />
         </Suspense>
-        <a
-          href="https://dub.co/tools/inspector"
-          rel="noreferrer"
-          target="_blank"
-          className="flex items-center justify-center gap-2 text-sm text-neutral-600 transition-colors hover:text-neutral-900"
-        >
-          Inspect another short link →
-        </a>
+        Inspect another short link →
       </div>
     </Hero>
   );

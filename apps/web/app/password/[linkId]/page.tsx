@@ -14,7 +14,7 @@ export const runtime = "edge";
 const title = "Password Required";
 const description =
   "This link is password protected. Enter the password to view it.";
-const image = "https://assets.dub.co/misc/password-protected.png";
+const image = "/_proxy/assets/misc/password-protected.png";
 
 export async function generateMetadata(props: {
   params: Promise<{ linkId: string }>;

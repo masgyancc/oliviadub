@@ -10,7 +10,6 @@ export default function DomainsLayout({ children }: { children: ReactNode }) {
       titleInfo={{
         title:
           "Learn more about how to add, configure, and verify custom domains on BrewCC.",
-        href: "https://dub.co/help/article/how-to-add-custom-domain",
       }}
     >
       <PageWidthWrapper>

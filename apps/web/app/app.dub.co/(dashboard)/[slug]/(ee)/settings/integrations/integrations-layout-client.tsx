@@ -99,7 +99,6 @@ function IntegrationsLayoutContent({ children }: { children: ReactNode }) {
           : {
               title:
                 "Use BrewCC with your existing favorite tools with our seamless integrations.",
-              href: "https://dub.co/integrations",
             }
       }
     >

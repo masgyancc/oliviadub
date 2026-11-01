@@ -36,7 +36,7 @@ export const DomainSchema = z.object({
     .describe(
       "Provide context to your teammates in the link creation modal by showing them an example of a link to be shortened.",
     )
-    .meta({ example: "https://dub.co/help/article/dub-links" }),
+    .meta({ example: "https://example.com" }),
   expiredUrl: z
     .string()
     .nullable()
@@ -139,7 +139,7 @@ export const createDomainBodySchema = z.object({
     .describe(
       "Provide context to your teammates in the link creation modal by showing them an example of a link to be shortened.",
     )
-    .meta({ example: "https://dub.co/help/article/dub-links" }),
+    .meta({ example: "https://example.com" }),
   logo: uploadedImageSchema.nullish().describe("The logo of the domain."),
   assetLinks: z
     .string()

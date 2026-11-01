@@ -243,7 +243,7 @@ function ABTestingModal({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h3 className="text-lg font-medium">A/B Testing</h3>
-            <BusinessBadgeTooltip content="Test different URLs against each other to optimize your conversion rates. [Learn more.](https://dub.co/help/article/ab-testing)" />
+            <BusinessBadgeTooltip content="Test different URLs against each other to optimize your conversion rates." />
           </div>
           <div className="max-md:hidden">
             <Tooltip
@@ -269,7 +269,7 @@ function ABTestingModal({
             <label className="block text-sm font-medium text-neutral-700">
               Testing URLs
             </label>
-            <InfoTooltip content="Add up to 3 additional destination URLs to test for this short link. [Learn more](https://dub.co/help/article/ab-testing)" />
+            <InfoTooltip content="Add up to 3 additional destination URLs to test for this short link." />
           </div>
           <div className="mt-2">
             <AnimatedSizeContainer
@@ -289,7 +289,7 @@ function ABTestingModal({
                         placeholder={
                           domains?.find(({ slug }) => slug === domain)
                             ?.placeholder ||
-                          "https://dub.co/help/article/dub-links"
+                          "https://example.com"
                         }
                         className="block h-9 grow border-none px-2 text-neutral-900 placeholder-neutral-400 focus:ring-0 sm:text-sm"
                         {...register(`testVariants.${index}.url`, {
@@ -372,7 +372,7 @@ function ABTestingModal({
             >
               Completion Date
             </label>
-            <InfoTooltip content="Set when the A/B test should complete. After this date, all traffic will go to the best performing URL. [Learn more.](https://dub.co/help/article/ab-testing)" />
+            <InfoTooltip content="Set when the A/B test should complete. After this date, all traffic will go to the best performing URL." />
           </div>
           <div className="mt-2 flex w-full items-center justify-between rounded-md border border-neutral-300 bg-white shadow-sm transition-all focus-within:border-neutral-800 focus-within:outline-none focus-within:ring-1 focus-within:ring-neutral-500">
             <input

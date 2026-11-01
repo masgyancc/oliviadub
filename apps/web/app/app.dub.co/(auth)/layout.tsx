@@ -30,9 +30,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 
         <div className="relative flex min-h-[100dvh] min-h-screen w-full justify-center">
           <a
-            href="https://dub.co"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/"
             className="absolute left-1/2 top-4 z-10 -translate-x-1/2"
           >
             <Wordmark className="h-8" />

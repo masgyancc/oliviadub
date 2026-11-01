@@ -340,7 +340,7 @@ export function Footer({
             className="flex sm:justify-center"
           >
             <Image
-              src="https://assets.dub.co/misc/soc2.svg"
+              src="/_proxy/assets/misc/soc2.svg"
               alt="AICPA SOC 2 Type II Certified"
               width={63}
               height={32}

@@ -94,7 +94,7 @@ export function IntegrationsCards({
             <AnimatedEmptyState
               className="-mt-2"
               title="Integration not found"
-              description="Let us know if you'd like to see it in the future."
+              description="Try a different search."
               cardContent={() => (
                 <div className="flex h-24 w-full items-center justify-center sm:h-32">
                   <div className="rounded-xl bg-neutral-100/50 p-4">
@@ -102,17 +102,6 @@ export function IntegrationsCards({
                   </div>
                 </div>
               )}
-              addButton={
-                <a
-                  href="https://dub.co/support"
-                  className={cn(
-                    buttonVariants({ variant: "primary" }),
-                    "flex h-8 items-center rounded-md border px-2.5 text-sm",
-                  )}
-                >
-                  Request integration
-                </a>
-              }
             />
           </motion.div>
         )}

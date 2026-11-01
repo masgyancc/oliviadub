@@ -7,7 +7,7 @@ const ALL_DUB_DOMAINS = [
     verified: true,
     primary: true,
     archived: false,
-    placeholder: "https://dub.co/help/article/dub-links",
+    placeholder: "https://example.com",
     allowedHostnames: [],
     description: "The default domain for all new accounts.",
     projectId: DUB_WORKSPACE_ID,

@@ -120,7 +120,7 @@ function LinkQRModalInner({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h3 className="text-lg font-medium">QR Code</h3>
-          <ProBadgeTooltip content="Set a custom QR code design to improve click-through rates. [Learn more.](https://dub.co/help/article/custom-qr-codes)" />
+          <ProBadgeTooltip content="Set a custom QR code design to improve click-through rates." />
         </div>
         <div className="max-md:hidden">
           <Tooltip
@@ -154,7 +154,7 @@ function LinkQRModalInner({
               <label className="text-sm font-semibold text-neutral-800">
                 Logo
               </label>
-              <InfoTooltip content="Display your logo in the center of the QR code. [Learn more.](https://dub.co/help/article/custom-qr-codes)" />
+              <InfoTooltip content="Display your logo in the center of the QR code." />
             </div>
             <SegmentedControl
               activeIndex={data.hideLogo && isPro ? 1 : 0}
@@ -182,7 +182,7 @@ function LinkQRModalInner({
                         title="Upgrade to Pro to show or hide your QR code logo."
                         cta="Upgrade to Pro"
                         href={
-                          slug ? `/${slug}/upgrade` : "https://dub.co/pricing"
+                          slug ? `/${slug}/upgrade` : "/"
                         }
                         target="_blank"
                       />

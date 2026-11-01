@@ -110,23 +110,6 @@ function SAMLModal({
                 </option>
               ))}
             </select>
-            {currentProvider ? (
-              <a
-                href={`https://dub.co/help/article/${selectedProvider}-saml`}
-                target="_blank"
-                className="ml-2 mt-2 block text-sm text-neutral-500 underline"
-              >
-                Read the guide on {currentProvider.name} SSO
-              </a>
-            ) : (
-              <a
-                href="https://dub.co/help/category/saml-sso"
-                target="_blank"
-                className="ml-2 mt-2 block text-sm text-neutral-500 underline"
-              >
-                Learn more about SAML SSO
-              </a>
-            )}
           </div>
 
           {currentProvider &&
@@ -137,7 +120,7 @@ function SAMLModal({
                     {currentProvider.samlModalCopy}
                   </h2>
                   <InfoTooltip
-                    content={`Your ${currentProvider.samlModalCopy} is the URL to your SAML provider's metadata. [Learn more.](https://dub.co/help/article/${selectedProvider}-saml)`}
+                    content={`Your ${currentProvider.samlModalCopy} is the URL to your SAML provider's metadata.`}
                   />
                 </div>
                 <label
@@ -188,7 +171,7 @@ function SAMLModal({
                     {currentProvider.samlModalCopy}
                   </h2>
                   <InfoTooltip
-                    content={`Your ${currentProvider.samlModalCopy} is the URL to your SAML provider's metadata. [Learn more.](https://dub.co/help/article/${selectedProvider}-saml#step-4-copy-the-metadata-url)`}
+                    content={`Your ${currentProvider.samlModalCopy} is the URL to your SAML provider's metadata.`}
                   />
                 </div>
                 <input

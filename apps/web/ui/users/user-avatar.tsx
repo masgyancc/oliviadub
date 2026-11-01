@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, hashStringSHA256 } from "@dub/utils";
+import { cn, hashStringSHA256, OG_AVATAR_URL } from "@dub/utils";
 import { useEffect, useState } from "react";
 
 type User = {
@@ -13,9 +13,9 @@ type User = {
 export async function getUserAvatarUrl(user?: User | null) {
   if (user?.image) return user.image;
 
-  if (!user?.id) return "https://api.dub.co/og/avatar";
+  if (!user?.id) return OG_AVATAR_URL;
 
-  const ogAvatar = `https://api.dub.co/og/avatar/${user.id}`;
+  const ogAvatar = `${OG_AVATAR_URL}${user.id}`;
 
   return user.email
     ? `https://0.gravatar.com/avatar/${await hashStringSHA256(user.email)}?d=${ogAvatar}`

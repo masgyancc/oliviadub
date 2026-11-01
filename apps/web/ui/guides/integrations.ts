@@ -28,7 +28,6 @@ export type IntegrationGuide = {
   };
   recommended?: boolean;
   content?: string;
-  url: string;
   stepLabel?: string;
 };
 
@@ -200,42 +199,36 @@ export const guides: IntegrationGuide[] = [
     key: "react",
     title: "React",
     icon: React,
-    url: "https://dub.co/docs/sdks/client-side/installation-guides/react",
   },
   {
     type: "client-sdk",
     key: "framer",
     title: "Framer",
     icon: Framer,
-    url: "https://dub.co/docs/sdks/client-side/installation-guides/framer",
   },
   {
     type: "client-sdk",
     key: "shopify",
     title: "Shopify",
     icon: Shopify,
-    url: "https://dub.co/docs/sdks/client-side/installation-guides/shopify",
   },
   {
     type: "client-sdk",
     key: "wordpress",
     title: "WordPress",
     icon: Wordpress,
-    url: "https://dub.co/docs/sdks/client-side/installation-guides/wordpress",
   },
   {
     type: "client-sdk",
     key: "webflow",
     title: "Webflow",
     icon: Webflow,
-    url: "https://dub.co/docs/sdks/client-side/installation-guides/webflow",
   },
   {
     type: "client-sdk",
     key: "gtm-client-sdk",
     title: "Google Tag Manager",
     icon: GoogleTagManager,
-    url: "https://dub.co/docs/sdks/client-side/installation-guides/google-tag-manager",
   },
   {
     type: "client-sdk",
@@ -243,7 +236,6 @@ export const guides: IntegrationGuide[] = [
     title: "Manual Installation",
     description: "Manual Installation",
     icon: CodeEditor,
-    url: "https://dub.co/docs/sdks/client-side/installation-guides/manual",
   },
 
   // Track Leads
@@ -253,7 +245,6 @@ export const guides: IntegrationGuide[] = [
     title: "Custom Integration",
     description: "Manual Lead Tracking",
     icon: CodeEditor,
-    url: "https://dub.co/docs/quickstart/server",
     stepLabel: "Server-side",
   },
   {
@@ -261,56 +252,48 @@ export const guides: IntegrationGuide[] = [
     key: "segment-track-lead",
     title: "Segment",
     icon: Segment,
-    url: "https://dub.co/docs/conversions/leads/segment",
   },
   {
     type: "track-lead",
     key: "gtm-track-lead",
     title: "Google Tag Manager",
     icon: GoogleTagManager,
-    url: "https://dub.co/docs/conversions/leads/google-tag-manager",
   },
   {
     type: "track-lead",
     key: "clerk",
     title: "Clerk",
     icon: Clerk,
-    url: "https://dub.co/docs/conversions/leads/clerk",
   },
   {
     type: "track-lead",
     key: "better-auth",
     title: "Better Auth",
     icon: BetterAuth,
-    url: "https://dub.co/docs/conversions/leads/better-auth",
   },
   {
     type: "track-lead",
     key: "next-auth",
     title: "NextAuth.js",
     icon: NextAuth,
-    url: "https://dub.co/docs/conversions/leads/next-auth",
   },
   {
     type: "track-lead",
     key: "supabase",
     title: "Supabase",
     icon: Supabase,
-    url: "https://dub.co/docs/conversions/leads/supabase",
   },
   {
     type: "track-lead",
     key: "auth0",
     title: "Auth0",
     icon: Auth0,
-    url: "https://dub.co/docs/conversions/leads/auth0",
   },
   {
     type: "track-lead",
     key: "appwrite",
     title: "Appwrite",
     icon: Appwrite,
-    url: "https://dub.co/docs/conversions/leads/appwrite",
   },
 
   // Track Sales
@@ -325,7 +308,6 @@ export const guides: IntegrationGuide[] = [
     iconProps: {
       fullSize: true,
     },
-    url: "https://dub.co/docs/conversions/sales/stripe#option-2%3A-using-stripe-checkout-recommended",
   },
   {
     type: "track-sale",
@@ -337,7 +319,6 @@ export const guides: IntegrationGuide[] = [
     iconProps: {
       fullSize: true,
     },
-    url: "https://dub.co/docs/conversions/sales/stripe#option-1%3A-using-stripe-payment-links",
   },
   {
     type: "track-sale",
@@ -349,21 +330,18 @@ export const guides: IntegrationGuide[] = [
     iconProps: {
       fullSize: true,
     },
-    url: "https://dub.co/docs/conversions/sales/stripe#option-3%3A-using-stripe-customers",
   },
   {
     type: "track-sale",
     key: "segment-track-sale",
     title: "Segment",
     icon: Segment,
-    url: "https://dub.co/docs/conversions/sales/segment",
   },
   {
     type: "track-sale",
     key: "gtm-track-sale",
     title: "Google Tag Manager",
     icon: GoogleTagManager,
-    url: "https://dub.co/docs/conversions/sales/google-tag-manager",
   },
   {
     type: "track-sale",
@@ -371,7 +349,6 @@ export const guides: IntegrationGuide[] = [
     title: "Custom Integration",
     description: "Manual Sale Tracking",
     icon: CodeEditor,
-    url: "https://dub.co/docs/quickstart/server",
     stepLabel: "Server-side",
   },
 ];

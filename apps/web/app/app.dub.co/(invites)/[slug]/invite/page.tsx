@@ -116,52 +116,6 @@ export default async function WorkspaceInvitePage({
               "animate-slide-up-fade motion-reduce:animate-fade-in [--offset:10px] [animation-delay:150ms] [animation-duration:0.5s] [animation-fill-mode:both]",
             )}
           >
-            <h3 className="text-content-default font-semibold">
-              Products {invite.project.name} uses
-            </h3>
-
-            <div className="divide-border-subtle border-border-subtle bg-bg-muted flex flex-col divide-y rounded-lg border">
-              {[
-                {
-                  icon: (
-                    <div className="flex size-5 items-center justify-center rounded bg-orange-400">
-                      <DubLinksIcon className="size-3 text-orange-900" />
-                    </div>
-                  ),
-                  title: "BrewCC Links",
-                  href: "https://dub.co/links",
-                  cta: "Learn more",
-                },
-              ].map(({ icon, title, href, cta }) => (
-                <div
-                  key={href}
-                  className="flex items-center justify-between gap-2 px-2.5 py-2"
-                >
-                  <div className="flex min-w-0 items-center gap-2">
-                    {icon}
-                    <div className="text-content-default text-sm font-medium">
-                      {title}
-                    </div>
-                  </div>
-
-                  <Link
-                    href={href}
-                    target="_blank"
-                    className="border-subtle bg-bg-inverted hover:bg-bg-inverted/90 flex h-7 items-center rounded-lg border px-2.5 text-sm text-white transition-transform active:scale-[0.98]"
-                  >
-                    {cta}
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div
-            className={cn(
-              "mt-8 flex w-full max-w-[400px] flex-col gap-3",
-              "animate-slide-up-fade motion-reduce:animate-fade-in [--offset:10px] [animation-delay:150ms] [animation-duration:0.5s] [animation-fill-mode:both]",
-            )}
-          >
             <h3 className="text-content-default font-semibold">The team</h3>
 
             <div className="relative overflow-hidden">
@@ -199,70 +153,6 @@ export default async function WorkspaceInvitePage({
                   </span>
                 </div>
               )}
-            </div>
-          </div>
-
-          <div
-            className={cn(
-              "mt-8 flex w-full max-w-[400px] flex-col gap-3",
-              "animate-slide-up-fade motion-reduce:animate-fade-in [--offset:10px] [animation-delay:250ms] [animation-duration:0.5s] [animation-fill-mode:both]",
-            )}
-          >
-            <h3 className="text-content-default font-semibold">
-              Additional resources
-            </h3>
-
-            <div className="divide-border-subtle border-border-subtle bg-bg-muted flex flex-col divide-y rounded-lg border">
-              {[
-                {
-                  icon: LifeRing,
-                  title: "Help center",
-                  description: "Answers to your questions",
-                  href: "https://dub.co/help",
-                  cta: "Read",
-                },
-                {
-                  icon: Book2,
-                  title: "Docs",
-                  description: "Platform documentation",
-                  href: "https://dub.co/docs",
-                  cta: "Learn",
-                },
-                {
-                  icon: Msgs,
-                  title: "Support",
-                  description: "Product support or help requests",
-                  href: "https://dub.co/contact/support",
-                  cta: "Chat",
-                },
-              ].map(({ icon: Icon, title, description, href, cta }) => (
-                <div
-                  key={href}
-                  className="flex items-center justify-between gap-2 px-2.5 py-2"
-                >
-                  <div className="flex min-w-0 items-center gap-2">
-                    <div className="flex size-8 items-center justify-center rounded-md bg-black/5">
-                      <Icon variant="fill" className="size-4" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-content-default text-sm font-medium">
-                        {title}
-                      </div>
-                      <p className="text-content-subtle truncate text-xs font-medium">
-                        {description}
-                      </p>
-                    </div>
-                  </div>
-
-                  <Link
-                    href={href}
-                    target="_blank"
-                    className="border-subtle bg-bg-default hover:bg-bg-muted flex h-7 items-center rounded-lg border px-2.5 text-sm font-medium transition-transform active:scale-[0.98]"
-                  >
-                    {cta}
-                  </Link>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -336,8 +226,8 @@ function Hero({
               <Tooltip
                 content={
                   invite.role === "owner"
-                    ? "You have the highest workspace permissions. [Learn more](https://dub.co/help/article/workspace-roles#member-role)"
-                    : "You have limited workspace permissions. [Learn more](https://dub.co/help/article/workspace-roles#member-role)"
+                    ? "You have the highest workspace permissions."
+                    : "You have limited workspace permissions."
                 }
               >
                 <span className="underline decoration-dotted underline-offset-2">

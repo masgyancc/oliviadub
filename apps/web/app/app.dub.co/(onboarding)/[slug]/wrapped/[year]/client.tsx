@@ -52,7 +52,7 @@ export default function WrappedPageClient() {
         <div
           className="flex h-24 flex-col items-center justify-center rounded-lg"
           style={{
-            backgroundImage: `url(https://assets.dub.co/misc/year-in-review-header.jpg)`,
+            backgroundImage: `url(/_proxy/assets/misc/year-in-review-header.jpg)`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -99,30 +99,6 @@ export default function WrappedPageClient() {
           />
         </div>
       </div>
-
-      <Link
-        className="group flex flex-col gap-4 rounded-lg border border-neutral-200 bg-white p-4 sm:flex-row"
-        href="https://dub.co/blog/2024"
-        target="_blank"
-      >
-        <Image
-          src="https://assets.dub.co/blog/2024.jpg"
-          alt="BrewCC logo with confetti"
-          width={1838}
-          height={1172}
-          className="w-1/3 rounded-md"
-          draggable={false}
-        />
-        <div className="flex flex-col gap-2">
-          <h3 className="font-display font-semibold text-black">
-            BrewCC {year} Year in Review 🎊
-          </h3>
-          <p className="text-sm text-neutral-500 group-hover:underline">
-            A full recap of some of the top features we shipped this year – and
-            how we grew as a company.
-          </p>
-        </div>
-      </Link>
     </div>
   );
 }

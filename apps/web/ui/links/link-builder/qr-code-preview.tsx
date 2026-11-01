@@ -82,7 +82,7 @@ export function QRCodePreview() {
           <h2 className="text-sm font-medium text-neutral-700">QR Code</h2>
           <InfoTooltip
             content={
-              "Set a custom QR code design to improve click-through rates. [Learn more.](https://dub.co/help/article/custom-qr-codes)"
+              "Set a custom QR code design to improve click-through rates."
             }
           />
         </div>

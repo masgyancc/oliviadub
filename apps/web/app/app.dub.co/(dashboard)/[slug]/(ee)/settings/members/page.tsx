@@ -210,15 +210,7 @@ export default function WorkspaceMembersPage() {
                     `Invited ${timeAgo(user.createdAt)}`
                   ) : user.isMachine ? (
                     <>
-                      Machine user for API integration.{" "}
-                      <a
-                        href="https://dub.co/docs/api-reference/authentication#machine-users"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline decoration-dotted underline-offset-2 transition-colors hover:text-neutral-800"
-                      >
-                        Learn more ↗
-                      </a>
+                      Machine user for API integration.
                     </>
                   ) : (
                     user.email
@@ -317,7 +309,7 @@ export default function WorkspaceMembersPage() {
         title="Members"
         titleInfo={{
           title:
-            "Learn how to [invite teammates](https://dub.co/help/article/how-to-invite-teammates) to your workspace and [assign them different roles and permissions](https://dub.co/help/article/workspace-roles).",
+            "Learn how to invite teammates to your workspace and assign them different roles and permissions.",
         }}
         controls={
           <div className="flex space-x-2">

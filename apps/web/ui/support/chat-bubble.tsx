@@ -45,7 +45,7 @@ export function SupportChatBubble() {
             <div className="flex shrink-0 items-center justify-between bg-neutral-900 px-4 py-3">
               <div className="flex items-center gap-2.5">
                 <img
-                  src="https://assets.dub.co/misc/dub-avatar.svg"
+                  src="/_proxy/assets/misc/dub-avatar.svg"
                   alt="BrewCC Support"
                   className="size-7 rounded-full"
                   draggable={false}

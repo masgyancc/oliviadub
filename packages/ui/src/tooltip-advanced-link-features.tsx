@@ -4,27 +4,22 @@ const advancedLinkFeatures = [
   {
     icon: Views,
     text: "Custom link previews",
-    href: "https://dub.co/help/article/custom-link-previews",
   },
   {
     icon: Earth,
     text: "Geo/device targeting",
-    href: "https://dub.co/help/article/geo-targeting",
   },
   {
     icon: InputPasswordPointer,
     text: "Password protection",
-    href: "https://dub.co/help/article/password-protected-links",
   },
   {
     icon: Timer2,
     text: "Link expiration",
-    href: "https://dub.co/help/article/link-expiration",
   },
   {
     icon: Incognito,
     text: "Link cloaking",
-    href: "https://dub.co/help/article/link-cloaking",
   },
 ];
 

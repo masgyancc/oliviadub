@@ -30,7 +30,7 @@ export function NewBackground({
         )}
       >
         <Image
-          src="https://assets.dub.co/misc/welcome-background-grid.svg"
+          src="/_proxy/assets/misc/welcome-background-grid.svg"
           onLoad={() => setIsGridLoaded(true)}
           alt=""
           width={1750}
@@ -38,7 +38,7 @@ export function NewBackground({
           className="absolute inset-0"
         />
         <Image
-          src="https://assets.dub.co/misc/welcome-background.svg"
+          src="/_proxy/assets/misc/welcome-background.svg"
           onLoad={() => setIsBackgroundLoaded(true)}
           alt=""
           width={1750}

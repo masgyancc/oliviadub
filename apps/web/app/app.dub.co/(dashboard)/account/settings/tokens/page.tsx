@@ -24,29 +24,15 @@ export default function TokensPage() {
       titleInfo={{
         title:
           "These API keys allow other apps to access your account. Use it with caution – do not share your API key with others, or expose it in the browser or other client-side code",
-        href: "https://dub.co/docs/api-reference/tokens",
       }}
     >
       <PageWidthWrapper>
         <Callout variant="warn" size={2}>
           User API Keys have been replaced by Workspace API Keys. We recommend
           creating a new{" "}
-          <a
-            href="https://dub.co/docs/api-reference/tokens"
-            target="_blank"
-            className="font-medium underline underline-offset-2 transition-colors hover:text-neutral-800"
-          >
-            Workspace API Key
-          </a>{" "}
+          Workspace API Key{" "}
           for more granular control over your resources such as Links, Tags,
-          Domains, Analytics, etc.{" "}
-          <a
-            href="https://dub.co/blog/workspace-api-keys"
-            target="_blank"
-            className="font-medium underline underline-offset-2 transition-colors hover:text-neutral-800"
-          >
-            Read the announcement.
-          </a>
+          Domains, Analytics, etc.
         </Callout>
 
         <div className="mt-6 rounded-lg border border-neutral-200 bg-white">

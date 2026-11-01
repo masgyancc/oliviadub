@@ -10,14 +10,7 @@ export default function Workspace() {
       description={
         <>
           Where you'll work with your team to create, manage, and track your
-          short links.{" "}
-          <a
-            href="https://dub.co/help/article/what-is-a-workspace"
-            target="_blank"
-            className="cursor-help font-medium underline decoration-dotted underline-offset-2 transition-colors hover:text-neutral-700"
-          >
-            Learn more.
-          </a>
+          short links.
         </>
       }
     >

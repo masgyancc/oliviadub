@@ -26,7 +26,7 @@ export function DefaultDomainSelector() {
       <div className="animate-fade-in mx-auto grid w-full gap-4 sm:max-w-[600px] sm:grid-cols-2">
         <DomainOption
           step="domain/custom"
-          icon="https://assets.dub.co/icons/domain-sign.webp"
+          icon="/_proxy/assets/icons/domain-sign.webp"
           bannerIcon={withFillVariant(CircleCheck)}
           bannerText="Recommended setup"
           bannerVariant="recommended"
@@ -37,7 +37,7 @@ export function DefaultDomainSelector() {
         />
         <DomainOption
           step="domain/register"
-          icon="https://assets.dub.co/icons/gift.webp"
+          icon="/_proxy/assets/icons/gift.webp"
           bannerIcon={Crown}
           bannerText="Paid plan required"
           title={

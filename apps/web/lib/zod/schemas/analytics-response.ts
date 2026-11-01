@@ -81,7 +81,7 @@ export const analyticsResponse = {
     country: z
       .string()
       .describe(
-        "The 2-letter ISO 3166-1 country code of the country. Learn more: https://d.to/geo",
+        "The 2-letter ISO 3166-1 country code of the country.",
       ),
     region: z.literal("*").default("*"),
     city: z.literal("*").default("*"),
@@ -106,7 +106,7 @@ export const analyticsResponse = {
     country: z
       .string()
       .describe(
-        "The 2-letter ISO 3166-1 country code of the country. Learn more: https://d.to/geo",
+        "The 2-letter ISO 3166-1 country code of the country.",
       ),
     region: z
       .string()
@@ -133,7 +133,7 @@ export const analyticsResponse = {
     country: z
       .string()
       .describe(
-        "The 2-letter ISO 3166-1 country code of the country where this city is located. Learn more: https://d.to/geo",
+        "The 2-letter ISO 3166-1 country code of the country where this city is located.",
       ),
     region: z
       .string()

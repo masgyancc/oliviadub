@@ -99,7 +99,7 @@ export function AnalyticsGraphic({ className }: { className?: string }) {
                   className="bg-bg-emphasis size-11 rounded-full"
                   style={{
                     backgroundImage:
-                      "url(https://assets.dub.co/home/people.png)",
+                      "url(/_proxy/assets/home/people.png)",
                     backgroundSize: "3600%", // 36 images
                     backgroundPositionX: CUSTOMER.avatarIndex * 100 + "%",
                   }}

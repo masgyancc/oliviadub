@@ -80,7 +80,7 @@ export const getPricingPlanMainFeatures = (
             text: "Advanced link features",
             tooltip: {
               title:
-                "Supercharge your links with [custom link previews](https://dub.co/help/article/custom-link-previews), [device targeting](https://dub.co/help/article/device-targeting), [geo targeting](https://dub.co/help/article/geo-targeting), [link cloaking](https://dub.co/help/article/link-cloaking), [password protection](https://dub.co/help/article/password-protected-links), and more.",
+                "Supercharge your links with custom link previews, device targeting, geo targeting, link cloaking, password protection, and more.",
             },
           },
           {
@@ -88,9 +88,7 @@ export const getPricingPlanMainFeatures = (
             text: "Free .link domain",
             tooltip: {
               title:
-                "Get a free .link custom domain for 1 year with any of Dub's paid plans.",
-              cta: "Learn more ↗",
-              href: "https://dub.co/help/article/free-dot-link-domain",
+                "Get a free .link custom domain for 1 year with any of the paid plans.",
             },
           },
           {
@@ -98,9 +96,7 @@ export const getPricingPlanMainFeatures = (
             text: "Link folders",
             tooltip: {
               title:
-                "Organize and manage access to your links on Dub using folders.",
-              cta: "Learn more ↗",
-              href: "https://dub.co/help/article/link-folders",
+                "Organize and manage access to your links on BrewCC using folders.",
             },
           },
           {
@@ -109,8 +105,6 @@ export const getPricingPlanMainFeatures = (
             tooltip: {
               title:
                 "Redirect users to a specific page within your mobile application using deep links.",
-              cta: "Learn more ↗",
-              href: "https://dub.co/docs/concepts/deep-links/quickstart",
             },
           },
         ],
@@ -129,8 +123,6 @@ export const getPricingPlanMainFeatures = (
             tooltip: {
               title:
                 "Track how your link clicks are converting to signups and sales.",
-              cta: "Learn more ↗",
-              href: "https://dub.co/docs/quickstart/server",
             },
           },
           {
@@ -139,8 +131,6 @@ export const getPricingPlanMainFeatures = (
             tooltip: {
               title:
                 "Run A/B tests to compare different short-link variations and identify what drives the highest conversions.",
-              cta: "Learn more ↗",
-              href: "https://dub.co/help/article/ab-testing",
             },
           },
           {
@@ -149,8 +139,6 @@ export const getPricingPlanMainFeatures = (
             tooltip: {
               title:
                 "Get real-time insights into your customers' behavior and preferences.",
-              cta: "Learn more ↗",
-              href: "https://dub.co/help/article/customer-insights",
             },
           },
           {
@@ -159,8 +147,6 @@ export const getPricingPlanMainFeatures = (
             tooltip: {
               title:
                 "Get real-time notifications when a link is clicked or a QR code is scanned using webhooks.",
-              cta: "Learn more ↗",
-              href: "https://dub.co/docs/webhooks/introduction",
             },
           },
         ],
@@ -178,7 +164,7 @@ export const getPricingPlanMainFeatures = (
             text: "Elevated API rate limits",
             tooltip: {
               title:
-                "Get access to elevated [API rate limits](https://dub.co/docs/api-reference/rate-limits) to build advanced integrations and automate your workflows.",
+                "Get access to elevated API rate limits to build advanced integrations and automate your workflows.",
             },
           },
           {

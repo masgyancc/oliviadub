@@ -49,7 +49,6 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({ slug, pathname }) => [
     name: "Short Links",
     description:
       "Create, organize, and measure the performance of your short links.",
-    learnMoreHref: "https://dub.co/links",
     icon: Compass,
     href: slug ? `/${slug}/links` : "/links",
     active: pathname.startsWith(`/${slug}/links`),

@@ -89,15 +89,7 @@ function AddEditTagModal({
             {props ? "Edit" : "Create"} tag
           </h3>
           <p className="text-sm text-neutral-500">
-            Use tags to organize your links.{" "}
-            <a
-              href="https://dub.co/help/article/how-to-use-tags#what-is-a-tag"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-4 hover:text-neutral-800"
-            >
-              Learn more
-            </a>
+            Use tags to organize your links.
           </p>
         </div>
       </div>

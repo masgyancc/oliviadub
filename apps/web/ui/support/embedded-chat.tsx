@@ -22,7 +22,7 @@ export function EmbeddedSupportChat() {
       <div className="flex shrink-0 items-center justify-between border-b border-neutral-100 bg-neutral-50 px-5 py-4">
         <div className="flex items-center gap-3">
           <img
-            src="https://assets.dub.co/misc/dub-avatar.svg"
+            src="/_proxy/assets/misc/dub-avatar.svg"
             alt="BrewCC Support"
             className="size-8 rounded-full"
             draggable={false}

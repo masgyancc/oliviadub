@@ -13,7 +13,7 @@ export function LinkBuilderFolderSelector() {
         <h2 className="text-sm font-medium text-neutral-700">Folder</h2>
         <InfoTooltip
           content={
-            "Use folders to organize and manage access to your links. [Learn more](https://dub.co/help/article/link-folders)"
+            "Use folders to organize and manage access to your links."
           }
         />
       </div>

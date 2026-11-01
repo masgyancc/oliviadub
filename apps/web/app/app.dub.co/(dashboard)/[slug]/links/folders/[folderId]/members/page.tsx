@@ -14,7 +14,6 @@ export default async function FolderMembersPage(props: {
       titleInfo={{
         title:
           "Learn how to set role-based access control for your folders to limit access to links for select teammates.",
-        href: "https://dub.co/help/article/folders-rbac",
       }}
     >
       <PageWidthWrapper className="grid gap-4">

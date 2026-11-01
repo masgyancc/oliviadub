@@ -173,13 +173,7 @@ export default function DomainCard({ props }: { props: DomainProps }) {
               )}
             </div>
 
-            <a
-              href="https://dub.co/help/article/free-dot-link-domain"
-              target="_blank"
-              className="ml-auto shrink-0 text-neutral-500 underline transition-colors hover:text-neutral-800"
-            >
-              Learn more
-            </a>
+            
           </div>
         )}
         <div className="p-4 sm:p-5">
@@ -312,14 +306,7 @@ export default function DomainCard({ props }: { props: DomainProps }) {
               verificationData.status === "Valid Configuration" ? (
                 <Callout variant="success" size={2} className="mt-6">
                   Good news! Your DNS records are set up correctly, but it can
-                  take some time for them to propagate globally.{" "}
-                  <Link
-                    href="https://dub.co/help/article/how-to-add-custom-domain#how-long-do-i-have-to-wait-for-my-domain-to-work"
-                    target="_blank"
-                    className="underline transition-colors hover:text-green-800"
-                  >
-                    Learn more.
-                  </Link>
+                  take some time for them to propagate globally.
                 </Callout>
               ) : (
                 <DomainConfiguration

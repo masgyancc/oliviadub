@@ -205,7 +205,7 @@ export function QRCodeDesignFields({
             <span className="text-sm font-medium text-neutral-700">
               QR Code Preview
             </span>
-            <InfoTooltip content="Customize your QR code to fit your brand. [Learn more.](https://dub.co/help/article/custom-qr-codes)" />
+            <InfoTooltip content="Customize your QR code to fit your brand." />
           </div>
           {url && qrData && (
             <div className="flex items-center gap-2">

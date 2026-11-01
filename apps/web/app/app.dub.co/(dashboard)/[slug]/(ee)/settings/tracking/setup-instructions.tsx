@@ -110,42 +110,6 @@ function StepIcon({ step }: { step: TrackingSetupStep }) {
   return <Icon className="size-5 shrink-0" />;
 }
 
-const GENERAL_GUIDES = [
-  { title: "BrewCC docs", href: "https://dub.co/docs" },
-  {
-    title: "Conversion tracking guide",
-    href: "https://dub.co/docs/conversions/quickstart",
-  },
-  {
-    title: "API reference",
-    href: "https://dub.co/docs/api-reference/introduction",
-  },
-] as const;
-
-export function DeveloperGuides() {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <h4 className="text-xs font-semibold leading-4 tracking-[-0.02em] text-neutral-600">
-        Read developer guides
-      </h4>
-      <div className="flex flex-col gap-1.5">
-        {GENERAL_GUIDES.map((guide) => (
-          <Link
-            key={guide.href}
-            href={guide.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex w-fit items-center gap-1.5 text-xs font-medium leading-4 tracking-[-0.02em] text-neutral-500 transition-colors duration-150 hover:text-neutral-700"
-          >
-            <BookOpen className="size-3.5 shrink-0" />
-            {guide.title} ↗
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export function SetupInstructions({
   setup,
   ready,
@@ -173,7 +137,7 @@ export function SetupInstructions({
         <div className="flex flex-col gap-2">
           {setup.steps.map((step) => (
             <div
-              key={`${step.type}-${step.guideKey ?? step.url}`}
+              key={`${step.type}-${step.guideKey ?? step.label}`}
               className="flex h-[52px] w-full items-center justify-between gap-3 rounded-[10px] bg-neutral-50 p-3"
             >
               <div className="flex min-w-0 items-center gap-2.5">
@@ -182,14 +146,6 @@ export function SetupInstructions({
                   {step.label}
                 </span>
               </div>
-              <Button
-                text="Read install guide"
-                variant="secondary"
-                className="h-8 w-fit shrink-0 px-2.5"
-                onClick={() =>
-                  window.open(step.url, "_blank", "noopener,noreferrer")
-                }
-              />
             </div>
           ))}
         </div>

@@ -54,7 +54,7 @@ function RichTextLinkModalInner({ state }: { state: RichTextLinkModalState }) {
 
     if (!isSafeLinkHref(finalHref)) {
       toast.error(
-        "Enter a full URL starting with http://, https://, or mailto: (e.g. https://dub.co).",
+        "Enter a full URL starting with http://, https://, or mailto: (e.g. https://example.com).",
       );
       return;
     }
@@ -129,7 +129,7 @@ function RichTextLinkModalInner({ state }: { state: RichTextLinkModalState }) {
             <input
               type="text"
               value={href}
-              placeholder="https://dub.co"
+              placeholder="https://example.com"
               onChange={(e) => setHref(e.target.value)}
               onBlur={() => setHref((href) => normalizeLinkHref(href))}
               className="mt-2 block w-full rounded-md border-neutral-300 text-neutral-900 placeholder-neutral-400 focus:border-neutral-500 focus:outline-none focus:ring-neutral-500 sm:text-sm"

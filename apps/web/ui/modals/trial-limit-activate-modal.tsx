@@ -88,13 +88,7 @@ function TrialLimitActivateModalInner({
       <div className="flex flex-col gap-4 bg-neutral-50 p-4 sm:p-6">
         <p className="text-sm text-neutral-600">
           You&apos;ve hit a{" "}
-          <a
-            href="https://dub.co/help/article/free-trial#trial-limits"
-            target="_blank"
-            className="cursor-help font-semibold text-neutral-800 underline decoration-dotted underline-offset-2"
-          >
-            trial limit
-          </a>
+          trial limit
           . In order to {featurePhrase}, you&apos;ll have to start a paid plan
           to unlock higher limits.
         </p>

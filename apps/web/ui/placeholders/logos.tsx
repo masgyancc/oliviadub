@@ -70,7 +70,7 @@ export default function Logos({
             {logos.map((logo) => (
               <img
                 key={logo}
-                src={`https://assets.dub.co/clients/${logo}.svg`}
+                src={`/_proxy/assets/clients/${logo}.svg`}
                 alt={logo.toUpperCase()}
                 width={520}
                 height={182}

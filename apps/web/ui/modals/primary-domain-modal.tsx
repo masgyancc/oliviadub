@@ -52,14 +52,7 @@ function PrimaryDomainModal({
         <h3 className="text-lg font-medium">Set {domain} as primary domain</h3>
         <p className="text-sm text-neutral-500">
           Setting this domain as primary will make it the default domain in the
-          link creation modal, as well as in the API.{" "}
-          <a
-            href="https://dub.co/help/article/how-to-set-primary-domain"
-            target="_blank"
-            className="text-neutral-500 underline underline-offset-4 hover:text-neutral-800"
-          >
-            Learn more
-          </a>
+          link creation modal, as well as in the API.
         </p>
       </div>
 

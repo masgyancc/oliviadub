@@ -5,7 +5,7 @@ import { useWorkspaceStore } from "@/lib/swr/use-workspace-store";
 import { buildTrackingSetup } from "@/lib/tracking/build-tracking-setup";
 import { useEffect, useMemo, useRef } from "react";
 import { SectionCard } from "./section-card";
-import { DeveloperGuides, SetupInstructions } from "./setup-instructions";
+import { SetupInstructions } from "./setup-instructions";
 import { TrackingSettingsRow } from "./tracking-settings-row";
 import { VerifyInstall } from "./verify-install";
 
@@ -70,8 +70,6 @@ export function InstallationSection() {
         <TrackingSettingsRow
           heading="Setup instructions"
           description="Use the prompts and instructions to install BrewCC."
-          leftExtra={ready ? <DeveloperGuides /> : undefined}
-          leftExtraAlign="end"
         >
           <SetupInstructions setup={setup} ready={ready} />
         </TrackingSettingsRow>

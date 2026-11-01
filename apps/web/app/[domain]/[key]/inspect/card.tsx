@@ -39,16 +39,6 @@ export default function LinkInspectorCard({
           </a>
         </div>
       </div>
-      <Link
-        href={`https://dub.co/legal/abuse?link=${linkConstructor({
-          domain,
-          key,
-        })}`}
-        target="_blank"
-        className="rounded-md p-2 transition-all duration-75 hover:bg-red-100 focus:outline-none active:bg-red-200"
-      >
-        <Flag variant="fill" className="h-4 w-4 text-red-500" />
-      </Link>
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import { API_DOMAIN } from "./main";
+
 export const DEFAULT_LINK_PROPS: any = {
   key: "",
   url: "",
@@ -26,7 +28,8 @@ export const DEFAULT_LINK_PROPS: any = {
 export const GOOGLE_FAVICON_URL =
   "https://www.google.com/s2/favicons?sz=64&domain_url=";
 
-export const OG_AVATAR_URL = "https://api.dub.co/og/avatar/";
+// BrewCC: generated avatars come from this instance's own API host
+export const OG_AVATAR_URL = `${API_DOMAIN}/og/avatar/`;
 
 export const DEFAULT_PAGINATION_LIMIT = 100;
 

@@ -47,7 +47,7 @@ export const ConversionTrackingToggle = memo(() => {
           Conversion Tracking
           <InfoTooltip
             content={
-              "View analytics on conversions from your short links. [Learn more.](https://dub.co/docs/conversions/quickstart)"
+              "View analytics on conversions from your short links."
             }
           />
         </span>
@@ -66,7 +66,7 @@ export const ConversionTrackingToggle = memo(() => {
             <TooltipContent
               title="Conversion tracking is only available on Business plans and above."
               cta="Upgrade to Business"
-              href={slug ? `/${slug}/upgrade` : "https://dub.co/pricing"}
+              href={slug ? `/${slug}/upgrade` : "/"}
               target="_blank"
             />
           ) : undefined

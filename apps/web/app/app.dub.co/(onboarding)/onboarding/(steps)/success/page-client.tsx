@@ -94,8 +94,8 @@ export function SuccessPageClient({
           The {workspace.name} workspace has been created
         </h1>
         <MarkdownDescription className="mt-2 text-pretty text-center text-base text-neutral-500">
-          Now you have one central, organized place to create and [manage all
-          your short links](https://dub.co/help/category/link-management).
+          Now you have one central, organized place to create and manage all
+          your short links.
         </MarkdownDescription>
         <div className="mt-4 w-full">
           <Button
@@ -260,27 +260,6 @@ export function SuccessPageClient({
               description: "Invite and manage team members",
               href: `/${workspace.slug}/settings/members`,
               cta: "Invite",
-            },
-            {
-              icon: CircleQuestion,
-              title: "Help center",
-              description: "Answers to your questions",
-              href: "https://dub.co/help",
-              cta: "Read",
-            },
-            {
-              icon: Book2,
-              title: "Docs",
-              description: "Platform documentation",
-              href: "https://dub.co/docs",
-              cta: "Learn",
-            },
-            {
-              icon: Msg,
-              title: "Support",
-              description: "Product support or help requests",
-              href: "https://dub.co/contact/support",
-              cta: "Chat",
             },
           ].map(({ icon: Icon, title, description, href, cta }) => (
             <div

@@ -1,12 +1,13 @@
+import { APP_DOMAIN } from "@dub/utils";
 import { NextRequest, NextResponse } from "next/server";
 import { parse } from "./utils/parse";
 
 export function ApiMiddleware(req: NextRequest) {
   const { fullPath } = parse(req);
 
-  // redirect to dub.co for /metatags
+  // /metatags isn't served on the api host; send it to the app
   if (fullPath.startsWith("/metatags")) {
-    return NextResponse.redirect("https://dub.co", {
+    return NextResponse.redirect(APP_DOMAIN, {
       status: 301,
     });
   }

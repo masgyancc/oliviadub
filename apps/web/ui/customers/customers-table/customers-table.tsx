@@ -386,7 +386,7 @@ export function CustomersTable({
                 <div className="h-40 w-full max-w-[480px] overflow-hidden [mask-image:linear-gradient(black,transparent)]">
                   <div className="relative h-96 w-full overflow-hidden rounded-lg border border-neutral-200">
                     <Image
-                      src="https://assets.dub.co/misc/customer-screenshot.jpg"
+                      src="/_proxy/assets/misc/customer-screenshot.jpg"
                       fill
                       className="object-contain object-top"
                       alt="Customer overview screenshot"
@@ -401,14 +401,7 @@ export function CustomersTable({
                   <p className="mt-3 max-w-sm text-pretty text-sm text-neutral-500">
                     Want to see more details about your customers' LTV, country
                     breakdown etc.? Upgrade to our Business Plan to get deeper,
-                    real-time customer insights.{" "}
-                    <a
-                      href="https://dub.co/help/article/customer-insights"
-                      target="_blank"
-                      className="underline underline-offset-2 hover:text-neutral-800"
-                    >
-                      Learn more ↗
-                    </a>
+                    real-time customer insights.
                   </p>
                   <div className="mt-4">
                     <Link

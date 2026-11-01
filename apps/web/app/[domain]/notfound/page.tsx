@@ -15,7 +15,7 @@ export const metadata = constructMetadata({
   title: "Link Not Found",
   description:
     "This link does not exist on BrewCC. Please check the URL and try again.",
-  image: "https://assets.dub.co/misc/notfoundlink.jpg",
+  image: "/_proxy/assets/misc/notfoundlink.jpg",
   noIndex: true,
 });
 

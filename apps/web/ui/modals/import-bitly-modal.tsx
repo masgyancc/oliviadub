@@ -115,7 +115,7 @@ function ImportBitlyModal({
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-neutral-200 px-4 py-8 sm:px-16">
         <div className="flex items-center space-x-3 py-4">
           <img
-            src="https://assets.dub.co/misc/icons/bitly.svg"
+            src="/_proxy/assets/misc/icons/bitly.svg"
             alt="Bitly logo"
             className="h-10 w-10 rounded-full"
           />
@@ -124,7 +124,7 @@ function ImportBitlyModal({
         </div>
         <h3 className="text-lg font-medium">Import Your Bitly Links</h3>
         <p className="text-center text-sm text-neutral-500">
-          Easily import all your existing Bitly links into Dub with just a few
+          Easily import all your existing Bitly links into BrewCC with just a few
           clicks.
         </p>
       </div>
@@ -266,20 +266,14 @@ function ImportBitlyModal({
               loading={isPending}
               icon={
                 <img
-                  src="https://assets.dub.co/misc/icons/bitly.svg"
+                  src="/_proxy/assets/misc/icons/bitly.svg"
                   alt="Bitly logo"
                   className="h-5 w-5 rounded-full border border-neutral-200"
                 />
               }
               onClick={signInWithBitly}
             />
-            <a
-              href="https://dub.co/help/article/migrating-from-bitly"
-              target="_blank"
-              className="text-center text-xs text-neutral-500 underline underline-offset-4 transition-colors hover:text-neutral-800"
-            >
-              Read the guide
-            </a>
+            
           </div>
         )}
       </div>

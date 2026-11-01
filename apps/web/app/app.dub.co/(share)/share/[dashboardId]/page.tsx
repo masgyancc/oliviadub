@@ -2,8 +2,8 @@ import { getDashboard } from "@/lib/fetchers/get-dashboard";
 import { PlanProps } from "@/lib/types";
 import Analytics from "@/ui/analytics";
 import { AuroraGradient } from "@/ui/shared/aurora-gradient";
-import { Footer, Grid, Nav, NavMobile, ShieldKeyhole, Wordmark } from "@dub/ui";
-import { APP_DOMAIN, APP_HOSTNAME, cn, constructMetadata } from "@dub/utils";
+import { Grid, ShieldKeyhole, Wordmark } from "@dub/ui";
+import { APP_DOMAIN, cn, constructMetadata } from "@dub/utils";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -66,7 +66,7 @@ export default async function DashboardPage(props: {
 
         <div className="relative flex min-h-[100dvh] w-full items-center justify-center px-4 pb-12 pt-20">
           <a
-            href="https://dub.co"
+            href={APP_DOMAIN}
             target="_blank"
             rel="noopener noreferrer"
             className="absolute left-1/2 top-4 -translate-x-1/2"
@@ -93,12 +93,9 @@ export default async function DashboardPage(props: {
     );
   }
 
-  const domain = data.link?.domain || APP_HOSTNAME;
-
+  // BrewCC: public dashboards have no upstream marketing nav or footer
   return (
-    <div className="flex min-h-screen flex-col justify-between bg-neutral-50/80">
-      <NavMobile staticDomain={domain} />
-      <Nav staticDomain={domain} />
+    <div className="flex min-h-screen flex-col justify-between bg-neutral-50/80 pt-6">
       <Suspense fallback={<div className="h-screen w-full bg-neutral-50" />}>
         <Analytics
           dashboardProps={{
@@ -117,7 +114,6 @@ export default async function DashboardPage(props: {
           }}
         />
       </Suspense>
-      <Footer staticDomain={domain} />
     </div>
   );
 }

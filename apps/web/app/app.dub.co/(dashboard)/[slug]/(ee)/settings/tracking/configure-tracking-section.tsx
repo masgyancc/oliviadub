@@ -39,15 +39,15 @@ const emptyTrackingFormValues: TrackingFormData = {
 };
 
 const STACK_DESCRIPTION =
-  "Select all items that apply to your stack. [Learn more](https://dub.co/docs/conversions/quickstart)";
+  "Select all items that apply to your stack.";
 const HOSTNAMES_DESCRIPTION =
-  "Domains to allow client-side click tracking for. [Learn more](https://dub.co/docs/sdks/client-side/features/click-tracking)";
+  "Domains to allow client-side click tracking for.";
 const PUBLISHABLE_KEY_DESCRIPTION =
-  "Required for client-side conversion tracking. [Learn more](https://dub.co/docs/api-reference/publishable-keys)";
+  "Required for client-side conversion tracking.";
 const SITE_VISIT_DESCRIPTION =
-  "For tracking site visits (organic visits from Google/SEO/AEO). [Learn more](https://dub.co/docs/concepts/attribution)";
+  "For tracking site visits (organic visits from Google/SEO/AEO).";
 const OUTBOUND_DESCRIPTION =
-  "Track outbound clicks to your other domains. [Learn more](https://dub.co/docs/sdks/client-side/features/cross-domain-tracking#cross-domain-tracking)";
+  "Track outbound clicks to your other domains.";
 
 export function ConfigureTrackingSection() {
   const workspace = useWorkspace();

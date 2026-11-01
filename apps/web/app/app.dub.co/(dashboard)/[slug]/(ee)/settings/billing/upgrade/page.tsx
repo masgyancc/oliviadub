@@ -299,19 +299,7 @@ export default function WorkspaceBillingUpgradePage() {
                       >
                         <ChevronLeft className="size-5 text-neutral-800" />
                       </button>
-                      {plan.name === "Enterprise" && !isCurrentPlan ? (
-                        <Link
-                          href="https://dub.co/contact/sales"
-                          target="_blank"
-                          className={cn(
-                            "flex h-8 w-full items-center justify-center rounded-md text-center text-sm ring-gray-200 transition-all duration-200 ease-in-out",
-                            "border border-neutral-200 bg-white text-neutral-900 shadow-sm hover:bg-neutral-50",
-                            "xl:text-xs",
-                          )}
-                        >
-                          Contact us
-                        </Link>
-                      ) : (
+                      {plan.name === "Enterprise" && !isCurrentPlan ? null : (
                         <UpgradePlanButton
                           plan={plan.name.toLowerCase()}
                           data-testid={testIds.billing.planCta(plan.name)}
@@ -409,19 +397,14 @@ function PlanIncludedProducts({ plan }: { plan: PlanDetails }) {
         Includes
       </span>
       <div className="grid min-h-12 content-start gap-2">
-        <Link
-          href="https://dub.co/links"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex w-fit items-center gap-2 text-xs font-semibold leading-4 tracking-tight text-neutral-600 transition-colors hover:text-neutral-950"
-        >
+        <div className="flex w-fit items-center gap-2 text-xs font-semibold leading-4 tracking-tight text-neutral-600">
           <DubProductIcon
             product="links"
             className="size-5"
             iconClassName="size-3"
           />
           <span>BrewCC Links</span>
-        </Link>
+        </div>
       </div>
     </div>
   );

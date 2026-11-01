@@ -1,7 +1,7 @@
-import { HelpButton } from "../sidebar/help-button";
 import { OnboardingButton } from "./onboarding/onboarding-button";
 
-const toolbarItems = ["onboarding", "help"] as const;
+// BrewCC: the upstream "help" item (external support link) was removed
+const toolbarItems = ["onboarding"] as const;
 
 type ToolbarProps = {
   show?: (typeof toolbarItems)[number][];
@@ -14,11 +14,6 @@ export default function Toolbar(props: ToolbarProps) {
         {props.show?.includes("onboarding") && (
           <div className="shrink-0">
             <OnboardingButton />
-          </div>
-        )}
-        {props.show?.includes("help") && (
-          <div className="hidden shrink-0 md:block">
-            <HelpButton variant="secondary" />
           </div>
         )}
       </div>

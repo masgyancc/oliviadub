@@ -98,9 +98,9 @@ function AdvancedLinkFeaturesModal({
                 className="flex items-center gap-2 text-sm font-medium text-neutral-700"
               >
                 External ID{" "}
-                <InfoTooltip content="A unique identifier for this link in your database. [Learn more about external IDs.](https://d.to/externalId)" />
+                <InfoTooltip content="A unique identifier for this link in your database." />
               </label>
-              <Tooltip content="A unique identifier for this link in your system. [Learn more about external IDs.](https://d.to/externalId)" />
+              <Tooltip content="A unique identifier for this link in your system." />
             </div>
             <div className="mt-2 rounded-md shadow-sm">
               <input

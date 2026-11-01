@@ -138,7 +138,7 @@ function TargetingModal({
                 <span className="block text-sm font-medium text-neutral-700">
                   Geo Targeting
                 </span>
-                <ProBadgeTooltip content="Redirect your users to different links based on their location. [Learn more about geo targeting.](https://dub.co/help/article/geo-targeting)" />
+                <ProBadgeTooltip content="Redirect your users to different links based on their location." />
               </div>
               <div className="mt-2">
                 {geo && (
@@ -276,7 +276,7 @@ function TargetingModal({
                 >
                   iOS Targeting
                 </label>
-                <ProBadgeTooltip content="Redirect your iOS users to a different link. [Learn more about device targeting.](https://dub.co/help/article/device-targeting)" />
+                <ProBadgeTooltip content="Redirect your iOS users to a different link." />
               </div>
               <div className="mt-2 rounded-md shadow-sm">
                 <input
@@ -308,7 +308,7 @@ function TargetingModal({
                 >
                   Android Targeting
                 </label>
-                <ProBadgeTooltip content="Redirect your Android users to a different link. [Learn more about device targeting.](https://dub.co/help/article/device-targeting)" />
+                <ProBadgeTooltip content="Redirect your Android users to a different link." />
               </div>
               <div className="mt-2 rounded-md shadow-sm">
                 <input

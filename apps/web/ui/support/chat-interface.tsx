@@ -400,7 +400,7 @@ export function ChatInterface({
   const userAvatar =
     session?.user?.image || `${OG_AVATAR_URL}${session?.user?.email}`;
   const assistantAvatar = embedded
-    ? "https://assets.dub.co/misc/dub-avatar.svg"
+    ? "/_proxy/assets/misc/dub-avatar.svg"
     : undefined;
   const showStarterQuestions = canChat && messages.length === 0;
   const hasRequestedTicket = messages.some((m) =>
@@ -436,7 +436,7 @@ export function ChatInterface({
         )}
       >
         <img
-          src="https://assets.dub.co/misc/dub-avatar.svg"
+          src="/_proxy/assets/misc/dub-avatar.svg"
           alt="BrewCC Support"
           className="size-12 rounded-full"
           draggable={false}
@@ -450,7 +450,7 @@ export function ChatInterface({
           </p>
         </div>
         <a
-          href="https://app.dub.co/login"
+          href="/login"
           target="_blank"
           rel="noopener noreferrer"
           className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-700"

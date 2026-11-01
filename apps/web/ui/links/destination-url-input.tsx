@@ -48,9 +48,9 @@ export const DestinationUrlInput = forwardRef<
               Destination URL
             </label>
             {key === "_root" ? (
-              <ProBadgeTooltip content="The URL your users will get redirected to when they visit your root domain link. [Learn more.](https://dub.co/help/article/how-to-redirect-root-domain)" />
+              <ProBadgeTooltip content="The URL your users will get redirected to when they visit your root domain link." />
             ) : (
-              <InfoTooltip content="The URL your users will get redirected to when they visit your short link. [Learn more.](https://dub.co/help/article/how-to-create-link)" />
+              <InfoTooltip content="The URL your users will get redirected to when they visit your short link." />
             )}
           </div>
           {right}
@@ -62,7 +62,7 @@ export const DestinationUrlInput = forwardRef<
             id={inputId}
             placeholder={
               domains?.find(({ slug }) => slug === domain)?.placeholder ||
-              "https://dub.co/help/article/dub-links"
+              "https://example.com"
             }
             autoFocus={!key && !isMobile}
             autoComplete="off"

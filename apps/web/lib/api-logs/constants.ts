@@ -157,31 +157,31 @@ export const WEBHOOK_REQUEST_ACTORS_BY_PATH = {
     id: APPSFLYER_INTEGRATION_ID,
     name: "AppsFlyer",
     image:
-      "https://dubassets.com/integrations/int_1KN8JP7ET3VQQRF7ZQEVNFPJ5_2Geprc8",
+      "/_proxy/files/integrations/int_1KN8JP7ET3VQQRF7ZQEVNFPJ5_2Geprc8",
   },
   "/stripe/integration/webhook": {
     id: STRIPE_INTEGRATION_ID,
     name: "Stripe",
     image:
-      "https://dubassets.com/integrations/clzra1ya60001wnj4a89zcg9h_jtyaGa7",
+      "/_proxy/files/integrations/clzra1ya60001wnj4a89zcg9h_jtyaGa7",
   },
   "/shopify/integration/webhook": {
     id: SHOPIFY_INTEGRATION_ID,
     name: "Shopify",
     image:
-      "https://dubassets.com/integrations/int_iWOtrZgmcyU6XDwKr4AYYqLN_jUmF77W",
+      "/_proxy/files/integrations/int_iWOtrZgmcyU6XDwKr4AYYqLN_jUmF77W",
   },
   "/hubspot/webhook": {
     id: HUBSPOT_INTEGRATION_ID,
     name: "HubSpot",
     image:
-      "https://dubassets.com/integrations/int_ffw3qgrFAahY6qs1hXaH3wHS_JPoCPOh",
+      "/_proxy/files/integrations/int_ffw3qgrFAahY6qs1hXaH3wHS_JPoCPOh",
   },
   "/singular/webhook": {
     id: SINGULAR_INTEGRATION_ID,
     name: "Singular",
     image:
-      "https://dubassets.com/integrations/int_1K0F60E21R1F43ZBNES3RG81P_JjFaAI8",
+      "/_proxy/files/integrations/int_1K0F60E21R1F43ZBNES3RG81P_JjFaAI8",
   },
 } as const;
 

@@ -103,7 +103,7 @@ function ImportRebrandlyModal({
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-neutral-200 px-4 py-8 sm:px-16">
         <div className="flex items-center space-x-3 py-4">
           <img
-            src="https://assets.dub.co/misc/icons/rebrandly.svg"
+            src="/_proxy/assets/misc/icons/rebrandly.svg"
             alt="Rebrandly logo"
             className="h-12 w-12"
           />
@@ -112,7 +112,7 @@ function ImportRebrandlyModal({
         </div>
         <h3 className="text-lg font-medium">Import Your Rebrandly Links</h3>
         <p className="text-center text-sm text-neutral-500">
-          Easily import all your existing Rebrandly links into Dub with just a
+          Easily import all your existing Rebrandly links into BrewCC with just a
           few clicks.
         </p>
       </div>

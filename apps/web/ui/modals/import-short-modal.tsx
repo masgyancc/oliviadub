@@ -93,7 +93,7 @@ function ImportShortModal({
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-neutral-200 px-4 py-8 sm:px-16">
         <div className="flex items-center space-x-3 py-4">
           <img
-            src="https://assets.dub.co/misc/icons/short.svg"
+            src="/_proxy/assets/misc/icons/short.svg"
             alt="Short.io logo"
             className="h-10 w-10"
           />
@@ -102,7 +102,7 @@ function ImportShortModal({
         </div>
         <h3 className="text-lg font-medium">Import Your Short.io Links</h3>
         <p className="text-center text-sm text-neutral-500">
-          Easily import all your existing Short.io links into Dub with just a
+          Easily import all your existing Short.io links into BrewCC with just a
           few clicks.
         </p>
       </div>
@@ -207,15 +207,7 @@ function ImportShortModal({
                 production. Please reach out to support and we'll help you
                 import your links.
               </p>
-              <a
-                href="https://dub.co/support"
-                className={cn(
-                  buttonVariants({ variant: "secondary" }),
-                  "flex h-8 items-center justify-center rounded-md border px-4 text-sm",
-                )}
-              >
-                Contact Support
-              </a>
+              
             </div>
           )
         ) : (
@@ -250,7 +242,7 @@ function ImportShortModal({
                   Short.io API Key
                 </h2>
                 <InfoTooltip
-                  content={`Your Short.io API Key can be found in your Short.io account under "Integrations & API". [Read the guide.](https://dub.co/help/article/migrating-from-short)`}
+                  content={`Your Short.io API Key can be found in your Short.io account under "Integrations & API".`}
                 />
               </div>
               <input

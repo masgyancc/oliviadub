@@ -3,7 +3,6 @@ import { cn } from "@dub/utils";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { PropsWithChildren, ReactNode } from "react";
-import { HelpButton } from "../sidebar/help-button";
 import { UserDropdown } from "../sidebar/user-dropdown";
 import { NavButton } from "./nav-button";
 
@@ -73,7 +72,6 @@ export function PageContentOld({
           )}
           {showControls && (
             <div className="flex items-center gap-4 lg:hidden">
-              <HelpButton />
               <UserDropdown />
             </div>
           )}

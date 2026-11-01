@@ -69,13 +69,7 @@ export default function UpdateDefaultWorkspace() {
       </div>
 
       <div className="flex flex-col items-start justify-start gap-4 rounded-b-xl border-t border-neutral-200 bg-neutral-50 px-6 py-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-        <a
-          href="https://dub.co/help/article/how-to-change-default-workspace"
-          target="_blank"
-          className="text-sm text-neutral-500 underline underline-offset-4 hover:text-neutral-700"
-        >
-          Learn more about how default workspaces work
-        </a>
+        
         <div>
           <Button
             text="Save changes"

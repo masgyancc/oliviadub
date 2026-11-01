@@ -415,13 +415,13 @@ export const createLinkBodySchema = z.object({
     .string()
     .nullish()
     .describe(
-      "The custom link preview title (og:title). Will be used for Custom Link Previews if `proxy` is true. Learn more: https://d.to/og",
+      "The custom link preview title (og:title). Will be used for Custom Link Previews if `proxy` is true.",
     ),
   description: z
     .string()
     .nullish()
     .describe(
-      "The custom link preview description (og:description). Will be used for Custom Link Previews if `proxy` is true. Learn more: https://d.to/og",
+      "The custom link preview description (og:description). Will be used for Custom Link Previews if `proxy` is true.",
     ),
   image: z
     .string()
@@ -430,13 +430,13 @@ export const createLinkBodySchema = z.object({
       message: "Image URL must not contain relative path segments.",
     })
     .describe(
-      "The custom link preview image (og:image). Will be used for Custom Link Previews if `proxy` is true. Learn more: https://d.to/og",
+      "The custom link preview image (og:image). Will be used for Custom Link Previews if `proxy` is true.",
     ),
   video: z
     .string()
     .nullish()
     .describe(
-      "The custom link preview video (og:video). Will be used for Custom Link Previews if `proxy` is true. Learn more: https://d.to/og",
+      "The custom link preview video (og:video). Will be used for Custom Link Previews if `proxy` is true.",
     ),
   rewrite: z
     .boolean()
@@ -458,14 +458,14 @@ export const createLinkBodySchema = z.object({
     .record(z.string(), parseUrlSchema)
     .nullish()
     .describe(
-      "Geo targeting information for the short link in JSON format `{[COUNTRY]: https://example.com }`. See https://d.to/geo for more information.",
+      "Geo targeting information for the short link in JSON format `{[COUNTRY]: https://example.com }`.",
     )
     .meta({ id: "linkGeoTargeting" }),
   doIndex: z
     .boolean()
     .optional()
     .describe(
-      "Allow search engines to index your short link. Defaults to `false` if not provided. Learn more: https://d.to/noindex",
+      "Allow search engines to index your short link. Defaults to `false` if not provided.",
     ),
   utm_source: utmTagInputSchema.describe(
     "The UTM source of the short link. If set, this will populate or override the UTM source in the destination URL.",
@@ -655,7 +655,7 @@ export const LinkSchema = z
       .string()
       .nullable()
       .describe(
-        "The custom link preview video (og:video). Will be used for Custom Link Previews if `proxy` is true. Learn more: https://d.to/og",
+        "The custom link preview video (og:video). Will be used for Custom Link Previews if `proxy` is true.",
       ),
     rewrite: z
       .boolean()
@@ -681,7 +681,7 @@ export const LinkSchema = z
       .record(z.string(), z.url())
       .nullable()
       .describe(
-        "Geo targeting information for the short link in JSON format `{[COUNTRY]: https://example.com }`. See https://d.to/geo for more information.",
+        "Geo targeting information for the short link in JSON format `{[COUNTRY]: https://example.com }`.",
       ),
     publicStats: z
       .boolean()

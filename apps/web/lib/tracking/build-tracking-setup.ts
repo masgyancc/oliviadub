@@ -11,14 +11,10 @@ const KEY_PRESENT_FOOTER =
 const KEY_MISSING_FOOTER =
   "Generate a publishable key in Tracking settings before tracking conversion events. Do not invent a key.";
 
-const ATTRIBUTION_URL = "https://dub.co/docs/concepts/attribution";
-const SERVER_TRACKING_URL = "https://dub.co/docs/quickstart/server";
-const CLIENT_TRACKING_URL = "https://dub.co/docs/quickstart/client";
-
+// BrewCC: setup steps carry no external documentation links
 type IntegrationSlot = {
   id: string;
   title: string;
-  url: string;
   stackIds: string[];
 };
 
@@ -26,25 +22,21 @@ const INTEGRATION_SLOTS: IntegrationSlot[] = [
   {
     id: "stripe",
     title: "Stripe",
-    url: "https://dub.co/docs/integrations/stripe",
     stackIds: ["stripe-checkout", "stripe-payment-links", "stripe-customers"],
   },
   {
     id: "shopify",
     title: "Shopify",
-    url: "https://dub.co/docs/integrations/shopify",
     stackIds: ["shopify"],
   },
   {
     id: "gtm",
     title: "Google Tag Manager",
-    url: "https://dub.co/docs/integrations/google-tag-manager",
     stackIds: ["gtm"],
   },
   {
     id: "segment",
     title: "Segment",
-    url: "https://dub.co/docs/integrations/segment",
     stackIds: ["segment"],
   },
 ];
@@ -54,7 +46,6 @@ type TrackingSetupStepType = "attribution" | "tracking" | "integration";
 export type TrackingSetupStep = {
   type: TrackingSetupStepType;
   label: string;
-  url: string;
   guideKey: string | null;
   icon: StackItem["icon"] | null;
   iconProps?: StackItem["iconProps"];
@@ -72,10 +63,6 @@ export type TrackingSetup = {
   steps: TrackingSetupStep[];
   prompt: string;
 };
-
-function toDocUrl(step: TrackingSetupStep) {
-  return step.url.replace(/^https:\/\//, "");
-}
 
 function resolveIntegrationSteps(stack: string[]): TrackingSetupStep[] {
   const seen = new Set<string>();
@@ -98,7 +85,6 @@ function resolveIntegrationSteps(stack: string[]): TrackingSetupStep[] {
       steps.push({
         type: "integration",
         label: slot.title,
-        url: slot.url,
         guideKey: slot.id,
         icon: item?.icon ?? null,
         iconProps: item?.iconProps,
@@ -115,7 +101,6 @@ function resolveIntegrationSteps(stack: string[]): TrackingSetupStep[] {
     steps.push({
       type: "integration",
       label: item.title,
-      url: guide.url,
       guideKey: id,
       icon: item.icon,
       iconProps: item.iconProps,
@@ -132,9 +117,6 @@ function resolveTrackingSetupSteps({
   BuildTrackingSetupInput,
   "stack" | "publishableKey"
 >): TrackingSetupStep[] {
-  const trackingUrl = publishableKey
-    ? CLIENT_TRACKING_URL
-    : SERVER_TRACKING_URL;
   const trackingLabel = publishableKey
     ? "Client-side tracking"
     : "Server-side tracking";
@@ -143,14 +125,12 @@ function resolveTrackingSetupSteps({
     {
       type: "attribution",
       label: "Attribution",
-      url: ATTRIBUTION_URL,
       guideKey: null,
       icon: null,
     },
     {
       type: "tracking",
       label: trackingLabel,
-      url: trackingUrl,
       guideKey: null,
       icon: null,
     },
@@ -191,9 +171,9 @@ function composeTrackingSetupPrompt({
   ].filter(Boolean);
 
   return [
-    "Help me set up conversion tracking with Dub.co by referencing the following articles (and the linked articles within them):",
+    "Help me set up conversion tracking for my short links, covering these steps:",
     "",
-    ...steps.map((step) => `- ${toDocUrl(step)}`),
+    ...steps.map((step) => `- ${step.label}`),
     "",
     "Workspace:",
     ...workspaceLines,

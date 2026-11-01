@@ -6,13 +6,13 @@ export const trackOpenRequestSchema = z
     deepLink: parseUrlSchema
       .optional()
       .describe(
-        "The deep link that brought the user to the app. If left blank, Dub will fallback to probabilistic tracking by using the `dubDomain` parameter to check if there is an associated click event for the user's IP address. Learn more: https://d.to/ddl",
+        "The deep link that brought the user to the app. If left blank, Dub will fallback to probabilistic tracking by using the `dubDomain` parameter to check if there is an associated click event for the user's IP address.",
       ),
     dubDomain: z
       .string()
       .optional()
       .describe(
-        "Your deep link custom domain on Dub (e.g. `acme.link`). This is used in probabilistic tracking to check if there is an associated click event for the user's IP address. Learn more: https://d.to/ddl",
+        "Your deep link custom domain on Dub (e.g. `acme.link`). This is used in probabilistic tracking to check if there is an associated click event for the user's IP address.",
       ),
   })
   .superRefine((data, ctx) => {
@@ -30,7 +30,7 @@ export const trackOpenResponseSchema = z.object({
     .string()
     .nullable()
     .describe(
-      "The click ID of the associated open event (or the prior click that led the user to the app store for probabilistic tracking). Learn more: https://d.to/ddl",
+      "The click ID of the associated open event (or the prior click that led the user to the app store for probabilistic tracking).",
     ),
   link: z
     .object({
@@ -49,6 +49,6 @@ export const trackOpenResponseSchema = z.object({
     })
     .nullable()
     .describe(
-      "The deep link that brought the user to the app. This will be `null` if the open event was not associated with a link (e.g. a direct download from the app store). Learn more: https://d.to/ddl",
+      "The deep link that brought the user to the app. This will be `null` if the open event was not associated with a link (e.g. a direct download from the app store).",
     ),
 });

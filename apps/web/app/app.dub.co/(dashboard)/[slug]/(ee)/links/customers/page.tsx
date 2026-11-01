@@ -10,7 +10,6 @@ export default function CustomersPage() {
       titleInfo={{
         title:
           "Get deeper, real-time insights about your customers' demographics, purchasing behavior, and lifetime value (LTV).",
-        href: "https://dub.co/help/article/customer-insights",
       }}
       controls={<CustomersMenuPopover />}
     >

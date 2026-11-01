@@ -9,7 +9,6 @@ import {
 } from "@dub/ui";
 import { cn } from "@dub/utils";
 import { ArrowUpRight, ChevronDown, Copy } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import { IntegrationGuide } from "./integrations";
@@ -25,18 +24,17 @@ export const GuideActionButton = ({
 
   const [copied, copyToClipboard] = useCopyToClipboard();
 
-  const prompt = `Read from ${guide.url} so I can ask questions about it.`;
+  // BrewCC: guides have no external page, so the AI apps get the guide itself
+  const prompt = `Help me with this setup guide:\n\n${markdown}`;
 
   return (
     <div className="border-border-subtle flex h-8 items-center overflow-hidden rounded-lg border">
-      <Link href={guide.url} target="_blank" rel="noopener noreferrer">
-        <Button
-          text="Read full guide"
-          variant="secondary"
-          className="rounded-none border-0 px-3"
-          icon={<BookOpen className="size-3.5" />}
-        />
-      </Link>
+      <Button
+        text={guide.title}
+        variant="secondary"
+        className="pointer-events-none rounded-none border-0 px-3"
+        icon={<BookOpen className="size-3.5" />}
+      />
 
       <div className="h-8 w-px bg-neutral-200" />
 

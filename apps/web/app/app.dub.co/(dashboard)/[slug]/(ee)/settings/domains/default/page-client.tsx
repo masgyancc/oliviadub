@@ -63,14 +63,7 @@ export function DefaultDomains() {
     <div className="grid gap-5">
       <div className="rounded-lg bg-neutral-100 p-4">
         <p className="text-sm text-neutral-500">
-          Leverage default branded domains from BrewCC for specific links.{" "}
-          <Link
-            href="https://dub.co/help/article/default-dub-domains"
-            target="_blank"
-            className="underline transition-colors hover:text-neutral-800"
-          >
-            Learn more.
-          </Link>
+          Leverage default branded domains from BrewCC for specific links.
         </p>
       </div>
 

@@ -209,6 +209,16 @@ module.exports = withPlausibleProxy({
         source: "/_proxy/dub/track/:path*",
         destination: "https://api.dub.co/track/:path*",
       },
+      // BrewCC: upstream static images are served through our own host, so browsers
+      // never request them from a third-party domain
+      {
+        source: "/_proxy/assets/:path*",
+        destination: "https://assets.dub.co/:path*",
+      },
+      {
+        source: "/_proxy/files/:path*",
+        destination: "https://dubassets.com/:path*",
+      },
     ];
   },
 });

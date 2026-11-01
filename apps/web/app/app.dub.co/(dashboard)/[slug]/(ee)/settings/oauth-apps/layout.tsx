@@ -10,7 +10,6 @@ export default function OAuthAppsLayout({ children }: { children: ReactNode }) {
       titleInfo={{
         title:
           "Learn how to use OAuth applications to build integrations with BrewCC.",
-        href: "https://dub.co/docs/integrations/quickstart",
       }}
       controls={<CreateOAuthAppButton />}
     >

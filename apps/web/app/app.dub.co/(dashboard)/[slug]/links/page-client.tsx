@@ -312,7 +312,7 @@ const MoreLinkOptions = () => {
                   text="Import from Bitly"
                   icon={
                     <img
-                      src="https://assets.dub.co/misc/icons/bitly.svg"
+                      src="/_proxy/assets/misc/icons/bitly.svg"
                       alt="Bitly logo"
                       className="h-4 w-4"
                     />
@@ -334,7 +334,7 @@ const MoreLinkOptions = () => {
                   text="Import from Rebrandly"
                   icon={
                     <img
-                      src="https://assets.dub.co/misc/icons/rebrandly.svg"
+                      src="/_proxy/assets/misc/icons/rebrandly.svg"
                       alt="Rebrandly logo"
                       className="h-4 w-4"
                     />
@@ -356,7 +356,7 @@ const MoreLinkOptions = () => {
                   text="Import from Short.io"
                   icon={
                     <img
-                      src="https://assets.dub.co/misc/icons/short.svg"
+                      src="/_proxy/assets/misc/icons/short.svg"
                       alt="Short.io logo"
                       className="h-4 w-4"
                     />

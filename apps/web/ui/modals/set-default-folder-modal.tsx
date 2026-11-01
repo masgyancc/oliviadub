@@ -62,15 +62,7 @@ function SetDefaultFolderModal({
       <div className="bg-neutral-50 p-4 sm:p-6">
         <p className="text-sm text-neutral-800">
           This will make this folder the default folder for your links
-          dashboard.{" "}
-          <a
-            href="https://dub.co/help/article/link-folders#setting-a-default-folder"
-            className="cursor-help text-neutral-700 underline decoration-dotted underline-offset-2 hover:text-neutral-900"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Learn more.
-          </a>
+          dashboard.
         </p>
 
         <div className="scrollbar-hide mt-4 flex max-h-[190px] flex-col gap-2 overflow-y-auto rounded-2xl border border-neutral-200 p-2">

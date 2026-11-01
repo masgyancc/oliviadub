@@ -251,13 +251,9 @@ export async function DomainRenewalInvoice({
 
         <Text style={tw("text-sm text-neutral-600 mt-6")}>
           If you have any questions,{" "}
-          <Link href="https://dub.co/help" style={tw("text-neutral-900")}>
-            visit our help center
-          </Link>{" "}
+          visit our help center{" "}
           or{" "}
-          <Link href="https://dub.co/support" style={tw("text-neutral-900")}>
-            reach out to our support team
-          </Link>
+          reach out to our support team
           .
         </Text>
       </Page>

@@ -10,7 +10,6 @@ export default function TagsPage() {
       titleInfo={{
         title:
           "Learn how to use tags to organize your links and retrieve analytics for them.",
-        href: "https://dub.co/help/article/how-to-use-tags",
       }}
       controls={<TagsPageControls />}
     >

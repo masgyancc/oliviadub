@@ -2,7 +2,6 @@ import { AuroraGradient } from "@/ui/shared/aurora-gradient";
 import { Grid, Wordmark } from "@dub/ui";
 import { cn } from "@dub/utils";
 import { SignedInHint } from "app/app.dub.co/(onboarding)/signed-in-hint";
-import Link from "next/link";
 import { PropsWithChildren } from "react";
 
 export default function Layout({ children }: PropsWithChildren) {
@@ -29,9 +28,7 @@ export default function Layout({ children }: PropsWithChildren) {
       <div className="relative flex min-h-[100dvh] w-full flex-col items-center overflow-hidden md:justify-between">
         <div className="w-full px-4 pt-4 md:grow md:basis-0 md:px-0">
           <div className="flex justify-center pt-4">
-            <Link href="https://dub.co/home" target="_blank" className="block">
-              <Wordmark className="h-8" />
-            </Link>
+            <Wordmark className="h-8" />
           </div>
         </div>
 

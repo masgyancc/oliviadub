@@ -164,7 +164,7 @@ function LinkCloakingToggleBadge({
             <p>Your link will be successfully cloaked.</p>
           </div>
         ) : (
-          "Your link is not cloakable – make sure you have the right security headers set on your target URL. [Learn more](https://dub.co/help/article/link-cloaking#link-cloaking-with-security-headers)"
+          "Your link is not cloakable – make sure you have the right security headers set on your target URL."
         )
       }
     >

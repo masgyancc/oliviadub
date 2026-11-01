@@ -10,7 +10,7 @@ import { PLANS } from "./pricing-plans";
 
 export const PRICING_PLAN_COMPARE_FEATURES: {
   category: string;
-  href: string;
+  href?: string;
   features: {
     text:
       | string
@@ -34,7 +34,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
 }[] = [
   {
     category: "Links",
-    href: "https://dub.co/links",
     features: [
       {
         text: ({ plan, planPeriod = "monthly" }) => (
@@ -68,7 +67,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
             tags
           </>
         ),
-        href: "https://dub.co/help/article/how-to-use-tags",
       },
       {
         check: {
@@ -88,11 +86,9 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
       },
       {
         text: "Custom QR codes",
-        href: "https://dub.co/help/article/custom-qr-codes",
       },
       {
         text: "UTM builder + templates",
-        href: "https://dub.co/help/article/how-to-create-utm-templates",
       },
       {
         check: {
@@ -100,7 +96,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           default: true,
         },
         text: "Custom link previews",
-        href: "https://dub.co/help/article/custom-link-previews",
       },
       {
         check: {
@@ -108,7 +103,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           default: true,
         },
         text: "Deep links",
-        href: "https://dub.co/docs/concepts/deep-links/quickstart",
       },
       {
         check: {
@@ -116,7 +110,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           default: true,
         },
         text: "Link cloaking",
-        href: "https://dub.co/help/article/link-cloaking",
       },
 
       {
@@ -125,7 +118,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           default: true,
         },
         text: "Link expiration",
-        href: "https://dub.co/help/article/link-expiration",
       },
       {
         check: {
@@ -133,7 +125,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           default: true,
         },
         text: "Password protection",
-        href: "https://dub.co/help/article/password-protected-links",
       },
       {
         check: {
@@ -141,7 +132,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           default: true,
         },
         text: "Device targeting",
-        href: "https://dub.co/help/article/device-targeting",
       },
       {
         check: {
@@ -149,7 +139,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           default: true,
         },
         text: "Geo targeting",
-        href: "https://dub.co/help/article/geo-targeting",
       },
       {
         check: {
@@ -163,11 +152,9 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
   },
   {
     category: "Analytics",
-    href: "https://dub.co/analytics",
     features: [
       {
         text: "Advanced analytics",
-        href: "https://dub.co/help/article/dub-analytics",
       },
       {
         text: ({ plan, planPeriod = "monthly" }) => (
@@ -189,7 +176,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
             })}
           </>
         ),
-        href: "https://dub.co/help/article/dub-analytics-limits",
       },
       {
         text: ({ plan }) => (
@@ -206,7 +192,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           enterprise: true,
         },
         text: "Conversion tracking",
-        href: "https://dub.co/help/article/dub-conversions",
       },
       {
         check: {
@@ -216,7 +201,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           enterprise: true,
         },
         text: "Customer insights",
-        href: "https://dub.co/help/article/customer-insights",
       },
       {
         check: {
@@ -226,13 +210,11 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           enterprise: true,
         },
         text: "Real-time events stream",
-        href: "https://dub.co/help/article/real-time-events-stream",
       },
     ],
   },
   {
     category: "Domains",
-    href: "https://dub.co/help/category/custom-domains",
     features: [
       {
         text: ({ plan }) => (
@@ -259,21 +241,17 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
             Free <strong>.link</strong> domain
           </>
         ),
-        href: "https://dub.co/help/article/free-dot-link-domain",
       },
     ],
   },
   {
     category: "API",
-    href: "https://dub.co/docs/api-reference/introduction",
     features: [
       {
         text: "API Access",
-        href: "https://dub.co/docs/api-reference/introduction",
       },
       {
         text: "Native SDKs",
-        href: "https://dub.co/docs/sdks/overview",
       },
       {
         text: ({ id, plan }) => (
@@ -295,13 +273,11 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           enterprise: true,
         },
         text: "Event webhooks",
-        href: "https://dub.co/docs/webhooks/introduction",
       },
     ],
   },
   {
     category: "Workspace",
-    href: "https://dub.co/help/category/workspaces",
     features: [
       {
         text: ({ plan }) => (
@@ -324,7 +300,6 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           enterprise: true,
         },
         text: "Role-based access control",
-        href: "https://dub.co/help/article/folders-rbac",
       },
       {
         check: {
@@ -332,13 +307,11 @@ export const PRICING_PLAN_COMPARE_FEATURES: {
           enterprise: true,
         },
         text: "SAML/SSO",
-        href: "https://dub.co/help/category/saml-sso",
       },
     ],
   },
   {
     category: "Support",
-    href: "https://dub.co/contact/support",
     features: [
       {
         text: ({ id }) =>

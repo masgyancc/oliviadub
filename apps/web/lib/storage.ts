@@ -395,7 +395,12 @@ class StorageClient {
 export const storage = new StorageClient();
 
 export const isStored = (url: string) => {
-  return url.startsWith(R2_URL) || url.startsWith(OG_AVATAR_URL);
+  return (
+    url.startsWith(R2_URL) ||
+    url.startsWith(OG_AVATAR_URL) ||
+    // avatars saved before BrewCC switched to its own API host
+    url.startsWith("https://api.dub.co/og/avatar/")
+  );
 };
 
 export const isNotHostedImage = (imageString: string) => {

@@ -32,7 +32,7 @@ export function useMetatags({ enabled = true }: { enabled?: boolean } = {}) {
         "description",
         "This link is password protected. Please enter the password to view it.",
       );
-      setValue("image", "https://assets.dub.co/misc/password-protected.png");
+      setValue("image", "/_proxy/assets/misc/password-protected.png");
       return;
     }
 

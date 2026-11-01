@@ -10,13 +10,7 @@ export default function Domain() {
       description={
         <>
           Make your links stand out and{" "}
-          <a
-            href="https://dub.co/blog/custom-domains"
-            target="_blank"
-            className="cursor-help font-medium underline decoration-dotted underline-offset-2 transition-colors hover:text-neutral-700"
-          >
-            boost click-through rates by 30%
-          </a>
+          boost click-through rates by 30%
         </>
       }
       className="max-w-none [&>div:first-of-type]:max-w-[640px]"

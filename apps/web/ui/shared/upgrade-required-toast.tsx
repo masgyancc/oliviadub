@@ -25,7 +25,7 @@ export const UpgradeRequiredToast = ({
     ? `Upgrade to ${capitalize(planToUpgradeTo)}`
     : "Contact support";
 
-  const defaultCtaUrl = slug ? `/${slug}/upgrade` : "https://dub.co/pricing";
+  const defaultCtaUrl = slug ? `/${slug}/upgrade` : "/";
   const href = ctaUrl || defaultCtaUrl;
   const isExternal = href.startsWith("http");
 

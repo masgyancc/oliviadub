@@ -19,9 +19,6 @@ const isVerifiableHostname = (hostname: string) =>
   hostname !== "localhost" &&
   !hostname.startsWith("localhost:");
 
-const VERIFY_DOCS_HREF = "https://dub.co/docs/sdks/client-side/introduction";
-const VERIFY_SUPPORT_HREF = "https://dub.co/support";
-
 const ERROR_HEADLINE = {
   not_installed: "Script is not installed.",
   missing_attributes: "Script missing attributes.",
@@ -181,25 +178,7 @@ export function VerifyInstall({ hostnames }: { hostnames: string[] }) {
         {showError && resultForSelection?.status === "error" && (
           <HelperText tone="error">
             {getErrorHeadline(resultForSelection)} After correcting, try
-            verifying again and if the issue still persists, check out our{" "}
-            <a
-              href={VERIFY_DOCS_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-2"
-            >
-              docs
-            </a>{" "}
-            or{" "}
-            <a
-              href={VERIFY_SUPPORT_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-2"
-            >
-              contact support
-            </a>
-            .
+            verifying again.
           </HelperText>
         )}
 

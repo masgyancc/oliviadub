@@ -29,7 +29,7 @@ const querySchema = z.object({
     .string()
     .min(1, "dub_workspace_id is required")
     .describe(
-      "The Singular advertiser's workspace ID on BrewCC (see https://d.to/id).",
+      "The Singular advertiser's workspace ID on BrewCC.",
     )
     .transform((v) => normalizeWorkspaceId(v)),
 });

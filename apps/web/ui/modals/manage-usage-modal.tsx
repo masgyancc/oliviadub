@@ -217,18 +217,7 @@ function ManageUsageModalContent({ type }: ManageUsageModalProps) {
               </div>
             </div>
 
-            {suggestedPlan.name === "Enterprise" ? (
-              <Link
-                href="https://dub.co/contact/sales"
-                target="_blank"
-                className={cn(
-                  "flex h-8 w-full items-center justify-center rounded-lg text-center text-sm transition-all duration-200 ease-in-out",
-                  "hover:ring-border-subtle border border-black bg-black text-white shadow-sm hover:ring-4",
-                )}
-              >
-                Contact us
-              </Link>
-            ) : (
+            {suggestedPlan.name === "Enterprise" ? null : (
               <UpgradePlanButton
                 plan={suggestedPlan.name.toLowerCase()}
                 tier={suggestedPlanTier}
