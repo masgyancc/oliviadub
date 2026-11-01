@@ -1,4 +1,5 @@
 import { getSession } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { cn } from "@dub/utils";
 import { AccountStatus } from "@prisma/client";
 import Link from "next/link";
@@ -23,12 +24,28 @@ export default async function AdminUsersPage({
   const search = q?.trim().slice(0, 100);
 
   const session = await getSession();
-  const users = await getAdminUsers({
-    ...(status && { status }),
-    ...(search && {
-      OR: [{ email: { contains: search } }, { name: { contains: search } }],
-    }),
-  });
+  // search also matches the viewer's own private aliases
+  const aliasMatches = search
+    ? await prisma.adminUserAlias.findMany({
+        where: { adminId: session.user.id, alias: { contains: search } },
+        select: { userId: true },
+        take: 200,
+      })
+    : [];
+
+  const users = await getAdminUsers(
+    {
+      ...(status && { status }),
+      ...(search && {
+        OR: [
+          { email: { contains: search } },
+          { name: { contains: search } },
+          { id: { in: aliasMatches.map((a) => a.userId) } },
+        ],
+      }),
+    },
+    session.user.id,
+  );
 
   return (
     <div>
@@ -66,7 +83,7 @@ export default async function AdminUsersPage({
           <input
             name="q"
             defaultValue={search}
-            placeholder="Search name or email"
+            placeholder="Search name, email or alias"
             className="w-full rounded-md border border-neutral-300 px-3 py-1.5 text-sm sm:w-64"
           />
         </form>

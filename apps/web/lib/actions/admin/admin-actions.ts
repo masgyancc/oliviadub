@@ -186,6 +186,41 @@ export const updateUserRoleAction = masterAdminActionClient
     revalidatePath("/admin", "layout");
   });
 
+// Private alias: scoped to the acting admin, so other admins never see it.
+// Deliberately not written to AdminAuditLog, which every master admin can read.
+export const setUserAliasAction = masterAdminActionClient
+  .inputSchema(
+    z.object({
+      userId: z.string().min(1),
+      alias: z.string().trim().max(100),
+    }),
+  )
+  .action(async ({ parsedInput, ctx }) => {
+    const { userId, alias } = parsedInput;
+    const key = { adminId_userId: { adminId: ctx.user.id, userId } };
+
+    if (!alias) {
+      await prisma.adminUserAlias.deleteMany({
+        where: { adminId: ctx.user.id, userId },
+      });
+    } else {
+      const target = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { id: true },
+      });
+      if (!target) {
+        throw new Error("User not found.");
+      }
+      await prisma.adminUserAlias.upsert({
+        where: key,
+        create: { adminId: ctx.user.id, userId, alias },
+        update: { alias },
+      });
+    }
+
+    revalidatePath("/admin", "layout");
+  });
+
 export const adminDomainAction = masterAdminActionClient
   .inputSchema(
     z.object({

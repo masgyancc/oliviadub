@@ -14,3 +14,16 @@ model AdminAuditLog {
   @@index(targetUserId)
   @@index(createdAt)
 }
+
+// BrewCC: private note a master admin keeps about a user (e.g. who owns the email).
+// Only visible to the admin who wrote it; never returned by any user-facing API.
+model AdminUserAlias {
+  id        String   @id @default(cuid())
+  adminId   String // master admin who owns this alias
+  userId    String // user the alias describes
+  alias     String   @db.VarChar(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([adminId, userId])
+}

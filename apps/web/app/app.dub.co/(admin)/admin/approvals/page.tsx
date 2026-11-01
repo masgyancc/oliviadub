@@ -6,7 +6,10 @@ export const dynamic = "force-dynamic";
 
 export default async function PendingApprovalsPage() {
   const session = await getSession();
-  const users = await getAdminUsers({ status: "pending" });
+  const users = await getAdminUsers(
+    { status: "pending" },
+    session.user.id,
+  );
 
   return (
     <div>

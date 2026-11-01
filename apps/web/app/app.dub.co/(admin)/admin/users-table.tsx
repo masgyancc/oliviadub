@@ -1,6 +1,7 @@
 import { formatDate } from "@dub/utils";
 import type { AccountStatus, PlatformRole } from "@prisma/client";
 import { StatusPill } from "./status-pill";
+import { UserAlias } from "./user-alias";
 import { UserActions } from "./user-actions";
 
 export interface AdminUserRow {
@@ -12,6 +13,7 @@ export interface AdminUserRow {
   platformRole: PlatformRole;
   statusReason: string | null;
   workspaces: number;
+  alias: string | null; // the viewing admin's private alias
 }
 
 export function UsersTable({
@@ -53,7 +55,10 @@ export function UsersTable({
                 <div className="font-medium text-neutral-900">
                   {u.name || "—"}
                 </div>
-                <div className="text-neutral-500">{u.email}</div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-neutral-500">{u.email}</span>
+                  <UserAlias userId={u.id} alias={u.alias} />
+                </div>
                 {u.statusReason && (
                   <div className="mt-1 text-xs text-neutral-400">
                     Reason: {u.statusReason}
