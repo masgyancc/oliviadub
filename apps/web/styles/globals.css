@@ -96,6 +96,23 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 999px;
 }
 
+/*
+ * BrewCC dark mode (<html data-theme="dark">, see ui/theme). The whole UI is
+ * inverted with a hue-preserving filter, which darkens every page consistently
+ * without per-component dark styles. Media and QR codes are inverted back so
+ * photos, logos and scannable codes keep their real colors. A filter on the
+ * root element doesn't affect position: fixed (modals, toasts, popovers).
+ */
+html[data-theme="dark"] {
+  background-color: #fff;
+  filter: invert(1) hue-rotate(180deg) contrast(0.9);
+}
+
+html[data-theme="dark"] :is(img, video, picture, canvas, iframe),
+html[data-theme="dark"] svg:has(> path[shape-rendering="crispEdges"]) {
+  filter: invert(1) hue-rotate(180deg);
+}
+
 /* Override Sonner toast border radius from 8px to 10px (Tailwind rounded-2xl) */
 [data-sonner-toast] {
   border-radius: 10px !important;

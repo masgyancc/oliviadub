@@ -1,6 +1,7 @@
 "use client";
 
 import useUser from "@/lib/swr/use-user";
+import { ThemeSwitcher } from "@/ui/theme/theme-switcher";
 import { UserAvatar } from "@/ui/users/user-avatar";
 import { Icon, Popover, User } from "@dub/ui";
 import { Gear } from "@dub/ui/icons";
@@ -102,6 +103,9 @@ export function UserDropdown() {
               {...menuOption}
             />
           ))}
+          <div className="mt-1 border-t border-neutral-200 pt-1">
+            <ThemeSwitcher />
+          </div>
         </div>
       }
       align="start"
