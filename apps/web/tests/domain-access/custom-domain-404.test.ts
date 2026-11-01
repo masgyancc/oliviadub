@@ -97,6 +97,19 @@ describe("custom domain routing", () => {
     }
   });
 
+  test("brewcc.online (and www) opens the same path on the app", async () => {
+    const { APP_DOMAIN } = await import("@dub/utils");
+    for (const [url, path] of [
+      ["https://brewcc.online/", "/"],
+      ["https://brewcc.online/login", "/login"],
+      ["https://www.brewcc.online/register?ref=x", "/register?ref=x"],
+    ]) {
+      const res = await visit(url);
+      expect(res.status).toBe(308);
+      expect(res.headers.get("location")).toBe(`${APP_DOMAIN}${path}`);
+    }
+  });
+
   test("the app host still serves the app and its brand assets", async () => {
     const appHost = new URL(
       `https://${process.env.NEXT_PUBLIC_APP_DOMAIN || "app.dub.co"}`,

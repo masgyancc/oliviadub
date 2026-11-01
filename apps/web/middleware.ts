@@ -1,6 +1,11 @@
 import { logger } from "@/lib/axiom/server";
 import { transformMiddlewareRequest } from "@axiomhq/nextjs";
-import { API_HOSTNAMES, DEFAULT_REDIRECTS, isValidUrl } from "@dub/utils";
+import {
+  API_HOSTNAMES,
+  APP_DOMAIN,
+  DEFAULT_REDIRECTS,
+  isValidUrl,
+} from "@dub/utils";
 import { isAppHostname } from "@dub/utils/src/constants";
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { ApiMiddleware } from "./lib/middleware/api";
@@ -24,12 +29,21 @@ export const config = {
   ],
 };
 
+// BrewCC: brand domains that open the app instead of serving short links
+const BRAND_REDIRECT_DOMAINS = new Set(["brewcc.online"]);
+
 export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
-  const { domain, path, key, fullKey } = parse(req);
+  const { domain, path, key, fullKey, fullPath } = parse(req);
 
   // Axiom logging
   logger.info(...transformMiddlewareRequest(req));
   ev.waitUntil(logger.flush());
+
+  // BrewCC: brewcc.online is the brand domain, not a short-link domain; send every
+  // visit (/, /login, /register, …) to the same path on the app
+  if (BRAND_REDIRECT_DOMAINS.has(domain)) {
+    return NextResponse.redirect(new URL(fullPath, APP_DOMAIN), 308);
+  }
 
   // BrewCC: brand assets and legal pages are matched only so short-link domains can 404
   // them below; on the app and api hosts they're served as before
