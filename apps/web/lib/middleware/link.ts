@@ -30,6 +30,7 @@ import { cacheDeepLinkClickData } from "./utils/cache-deeplink-click-data";
 import { crawlBitly } from "./utils/crawl-bitly";
 import { createResponseWithCookies } from "./utils/create-response-with-cookies";
 import { detectBot } from "./utils/detect-bot";
+import { genericNotFound } from "./utils/generic-not-found";
 import { getFinalUrl } from "./utils/get-final-url";
 import { getIdentityHash } from "./utils/get-identity-hash";
 import { isAppsFlyerTrackingUrl } from "./utils/is-appsflyer-tracking-url";
@@ -61,9 +62,10 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
     key = key.slice(0, -1);
   }
 
-  // if key is empty string, set to _root (root domain link)
-  if (key === "") {
-    key = "_root";
+  // BrewCC: only valid slugs redirect. The bare domain, inspect mode (`slug+`) and
+  // unsupported keys get the neutral 404, which reveals nothing about the platform.
+  if (key === "" || inspectMode || isUnsupportedKey(key)) {
+    return genericNotFound();
   }
 
   const STATIC_PAGES_CACHE_HEADERS = {
@@ -73,18 +75,6 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
       key: originalKey || "_root",
     }),
   };
-
-  // we don't support .php links (too much bot traffic)
-  // hence we redirect to the root domain and add `dub-no-track` header to avoid tracking bot traffic
-  if (isUnsupportedKey(key)) {
-    return NextResponse.redirect(new URL("/?dub-no-track=1", req.url), {
-      headers: {
-        ...DUB_HEADERS,
-        "X-Robots-Tag": "googlebot: noindex",
-      },
-      status: 302,
-    });
-  }
 
   let { cachedLink, redisFailOver } = await linkCache.get({ domain, key });
 
@@ -107,12 +97,7 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
         return await crawlBitly(req, ev);
       }
 
-      return NextResponse.rewrite(new URL(`/${domain}/notfound`, req.url), {
-        headers: {
-          ...DUB_HEADERS,
-          ...STATIC_PAGES_CACHE_HEADERS,
-        },
-      });
+      return genericNotFound();
     }
 
     // format link to fit the RedisLinkProps interface
@@ -189,19 +174,6 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
     dubTestUrlValue: testUrl,
   };
 
-  // only show inspect modal if the link is not password protected
-  if (inspectMode && !password) {
-    return NextResponse.rewrite(
-      new URL(`/${domain}/${encodeURIComponent(key)}/inspect`, req.url),
-      {
-        headers: {
-          ...DUB_HEADERS,
-          ...(!shouldIndex && { "X-Robots-Tag": "googlebot: noindex" }),
-        },
-      },
-    );
-  }
-
   // if the link is password protected
   if (password) {
     const pw =
@@ -227,26 +199,9 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
     }
   }
 
-  // if the link is banned
-  if (workspaceId === LEGAL_WORKSPACE_ID) {
-    return NextResponse.rewrite(new URL(`/${domain}/banned`, req.url), {
-      headers: {
-        ...DUB_HEADERS,
-        ...STATIC_PAGES_CACHE_HEADERS,
-        "X-Robots-Tag": "googlebot: noindex",
-      },
-    });
-  }
-
-  // handle disabled links
-  if (disabledAt) {
-    return NextResponse.rewrite(new URL(`/${domain}/disabled`, req.url), {
-      headers: {
-        ...DUB_HEADERS,
-        ...STATIC_PAGES_CACHE_HEADERS,
-        "X-Robots-Tag": "googlebot: noindex",
-      },
-    });
+  // BrewCC: banned and disabled links aren't usable, so they get the neutral 404
+  if (workspaceId === LEGAL_WORKSPACE_ID || disabledAt) {
+    return genericNotFound();
   }
 
   // if the link has expired
@@ -260,13 +215,7 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
         status: 302,
       });
     } else {
-      return NextResponse.rewrite(new URL(`/${domain}/expired`, req.url), {
-        headers: {
-          ...DUB_HEADERS,
-          ...STATIC_PAGES_CACHE_HEADERS,
-          ...(!shouldIndex && { "X-Robots-Tag": "googlebot: noindex" }),
-        },
-      });
+      return genericNotFound();
     }
   }
 

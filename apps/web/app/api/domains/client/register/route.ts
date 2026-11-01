@@ -1,5 +1,6 @@
 import { claimDotLinkDomain } from "@/lib/api/domains/claim-dot-link-domain";
 import { withWorkspace } from "@/lib/auth";
+import { assertCanAddDomains } from "@/lib/brewcc/platform-settings";
 import { NextResponse } from "next/server";
 import * as z from "zod/v4";
 
@@ -16,6 +17,8 @@ const schema = z.object({
 export const POST = withWorkspace(
   async ({ searchParams, workspace, session }) => {
     const { domain } = schema.parse(searchParams);
+
+    await assertCanAddDomains(session.user.id);
 
     const response = await claimDotLinkDomain({
       domain,

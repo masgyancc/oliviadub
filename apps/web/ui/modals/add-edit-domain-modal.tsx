@@ -1,4 +1,5 @@
 import { clientAccessCheck } from "@/lib/client-access-check";
+import useAddDomainPermission from "@/lib/swr/use-add-domain-permission";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { DomainProps } from "@/lib/types";
 import { AddEditDomainForm } from "@/ui/domains/add-edit-domain-form";
@@ -54,6 +55,7 @@ function AddDomainButton({
   buttonProps?: Partial<ButtonProps>;
 }) {
   const { slug, plan, role, domainsLimit, exceededDomains } = useWorkspace();
+  const addPermission = useAddDomainPermission();
 
   const permissionsError = clientAccessCheck({
     action: "domains.write",
@@ -65,7 +67,10 @@ function AddDomainButton({
       <Button
         text="Add Domain"
         disabledTooltip={
-          exceededDomains ? (
+          // BrewCC: "Allow Users to Add Domains" is OFF
+          !addPermission.allowed ? (
+            addPermission.message || "Loading…"
+          ) : exceededDomains ? (
             <TooltipContent
               title={`You can only add up to ${domainsLimit} ${pluralize("domain", domainsLimit || 0)} on the ${capitalize(plan)} plan. Upgrade to add more domains`}
               cta="Upgrade"

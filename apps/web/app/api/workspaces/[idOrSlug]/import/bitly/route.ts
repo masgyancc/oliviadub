@@ -1,5 +1,6 @@
 import { createId } from "@/lib/api/create-id";
 import { addDomainToVercel } from "@/lib/api/domains/add-domain-vercel";
+import { assertCanAddDomains } from "@/lib/brewcc/platform-settings";
 import { isValidDomainFormat } from "@/lib/api/domains/is-valid-domain";
 import { DubApiError } from "@/lib/api/errors";
 import { bulkCreateLinks } from "@/lib/api/links";
@@ -90,6 +91,11 @@ export const POST = withWorkspace(
     const domainsNotInWorkspace = selectedDomains.filter(
       ({ domain }) => !domains?.find((d) => d.slug === domain),
     );
+
+    // BrewCC: importing would add these domains to the workspace
+    if (domainsNotInWorkspace.length > 0) {
+      await assertCanAddDomains(session.user.id);
+    }
 
     if (domainsNotInWorkspace.length > 0) {
       await Promise.allSettled([

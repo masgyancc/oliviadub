@@ -5,8 +5,8 @@ import { isAppHostname } from "@dub/utils/src/constants";
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { ApiMiddleware } from "./lib/middleware/api";
 import { AppMiddleware } from "./lib/middleware/app";
-import { CreateLinkMiddleware } from "./lib/middleware/create-link";
 import { LinkMiddleware } from "./lib/middleware/link";
+import { genericNotFound } from "./lib/middleware/utils/generic-not-found";
 import { parse } from "./lib/middleware/utils/parse";
 import { supportedWellKnownFiles } from "./lib/well-known";
 
@@ -20,7 +20,7 @@ export const config = {
      * 3. /_proxy/ (proxies for third-party services)
      * 4. Metadata files: favicon.ico, sitemap.xml, robots.txt, manifest.webmanifest
      */
-    "/((?!api/|_next/|_proxy/|legal/|brand/|favicon.ico|sitemap.xml|robots.txt|manifest.webmanifest).*)",
+    "/((?!api/|_next/|_proxy/|favicon.ico|sitemap.xml|robots.txt|manifest.webmanifest).*)",
   ],
 };
 
@@ -30,6 +30,16 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   // Axiom logging
   logger.info(...transformMiddlewareRequest(req));
   ev.waitUntil(logger.flush());
+
+  // BrewCC: brand assets and legal pages are matched only so short-link domains can 404
+  // them below; on the app and api hosts they're served as before
+  const isAppOrApi = isAppHostname(domain) || API_HOSTNAMES.has(domain);
+  if (
+    isAppOrApi &&
+    (path.startsWith("/brand/") || path.startsWith("/legal/"))
+  ) {
+    return NextResponse.next();
+  }
 
   // for app.dub.co
   if (isAppHostname(domain)) {
@@ -41,14 +51,14 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
     return ApiMiddleware(req);
   }
 
-  // for public stats pages (e.g. d.to/stats/try -> rewrite to [/domain]/[key]/stats)
-  if (path.startsWith("/stats/")) {
-    return NextResponse.rewrite(
-      new URL(
-        `/${domain}/${encodeURIComponent(path.replace("/stats/", ""))}/stats`,
-        req.url,
-      ),
-    );
+  // BrewCC: short-link domains never expose app pages or assets (public stats, brand
+  // files, legal pages), so visitors can't tell which platform serves the domain
+  if (
+    path.startsWith("/stats/") ||
+    path.startsWith("/brand/") ||
+    path.startsWith("/legal/")
+  ) {
+    return genericNotFound();
   }
 
   // for .well-known routes
@@ -66,8 +76,9 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
     return NextResponse.redirect(DEFAULT_REDIRECTS[key]);
   }
 
+  // BrewCC: `domain/https://…` would open the app's create-link flow; not on short domains
   if (isValidUrl(fullKey)) {
-    return CreateLinkMiddleware(req);
+    return genericNotFound();
   }
 
   return LinkMiddleware(req, ev);

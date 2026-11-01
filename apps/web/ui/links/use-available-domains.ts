@@ -1,7 +1,7 @@
 import useDomains from "@/lib/swr/use-domains";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { DomainProps } from "@/lib/types";
-import { DUB_DOMAINS, SHORT_DOMAIN, fetcher } from "@dub/utils";
+import { fetcher } from "@dub/utils";
 import { useMemo } from "react";
 import useSWR from "swr";
 
@@ -20,8 +20,12 @@ const sortDomains = (domains: any[], prioritySlug?: string) => {
 };
 
 /**
- * @param {string} [options.currentDomain] The current domain of a link being updated (useful when the link's current domain has been archived)
- * @param {boolean} [options.onboarding] Whether the user is on the onboarding page (we can assume the user doesn't have any custom domains yet, so just show the Dub default domains)
+ * BrewCC: short links are only created on verified custom domains (the workspace's own
+ * plus the shared pool). The default domains (lilac-orbit.com, brewcc.online) are never
+ * offered; an existing link keeps its current domain selectable while it's edited.
+ *
+ * @param {string} [options.currentDomain] The current domain of a link being updated
+ * @param {boolean} [options.onboarding] Onboarding: no workspace domains yet, so only shared ones
  * @returns {Array} An array of available domains for creating or updating a link.
  */
 export function useAvailableDomains(
@@ -33,24 +37,16 @@ export function useAvailableDomains(
 ) {
   const { currentDomain } = options;
 
-  const {
-    activeWorkspaceDomains,
-    activeDefaultDomains,
-    allDomains,
-    allWorkspaceDomains,
-    loading,
-    primaryDomain,
-  } = useDomains({
-    ignoreParams: true,
-    opts: options.search ? { search: options.search } : undefined,
-  });
+  const { activeWorkspaceDomains, allDomains, allWorkspaceDomains, loading } =
+    useDomains({
+      ignoreParams: true,
+      opts: options.search ? { search: options.search } : undefined,
+    });
 
   // BrewCC: verified custom domains contributed by other workspaces
   const { id: workspaceId } = useWorkspace();
-  const { data: sharedData } = useSWR<DomainProps[]>(
-    workspaceId && !options.onboarding
-      ? `/api/domains/shared?workspaceId=${workspaceId}`
-      : null,
+  const { data: sharedData, error: sharedError } = useSWR<DomainProps[]>(
+    workspaceId ? `/api/domains/shared?workspaceId=${workspaceId}` : null,
     fetcher,
     { dedupingInterval: 60000 },
   );
@@ -66,71 +62,50 @@ export function useAvailableDomains(
     [sharedData, options.search],
   );
 
-  const domains = useMemo(() => {
-    // Case 1: Onboarding - only show non-archived Dub domains
-    if (options.onboarding) {
-      return DUB_DOMAINS.filter((d) => !d.archived);
-    }
+  // unverified domains can't be used until their DNS is set up
+  const verifiedWorkspaceDomains = useMemo(
+    () =>
+      options.onboarding
+        ? []
+        : sortDomains(
+            (activeWorkspaceDomains || []).filter(({ verified }) => verified),
+          ).map((domain) => ({ ...domain, isWorkspaceDomain: true })),
+    [options.onboarding, activeWorkspaceDomains],
+  );
 
-    // Case 2: Current domain exists but is not in active domains
+  const domains = useMemo(() => {
+    const available = [...verifiedWorkspaceDomains, ...sharedDomains];
+
+    // keep the current domain of a link being edited selectable (archived, unverified
+    // or a default domain), so editing other fields doesn't force a domain change
     if (
       currentDomain &&
-      !activeWorkspaceDomains?.find(({ slug }) => slug === currentDomain) &&
-      !activeDefaultDomains.find(({ slug }) => slug === currentDomain)
+      !available.some(({ slug }) => slug === currentDomain)
     ) {
-      // If the current domain is not in active domains, try to find it in all domains
       const domain = allDomains.find(({ slug }) => slug === currentDomain);
-      if (!domain) {
-        // If domain not found at all, return all active domains
-        return [
-          ...sortDomains(activeWorkspaceDomains || []),
-          ...sharedDomains,
-          ...sortDomains(activeDefaultDomains, SHORT_DOMAIN),
-        ];
+      if (domain) {
+        available.push(domain);
       }
-
-      // If domain is found, add it to the appropriate section
-      const isDefaultDomain = activeDefaultDomains.some(
-        ({ id }) => id === domain.id,
-      );
-      return [
-        ...sortDomains(activeWorkspaceDomains || []),
-        ...(isDefaultDomain ? [] : [domain]),
-        ...sharedDomains,
-        ...sortDomains(activeDefaultDomains, SHORT_DOMAIN),
-        ...(isDefaultDomain ? [domain] : []),
-      ];
     }
 
-    // Default case: return active workspace domains first, then active default domains
-    return [
-      // Workspace domains first, sorted by primary status then alphabetically
-      ...sortDomains(activeWorkspaceDomains || []).map((domain) => ({
-        ...domain,
-        isWorkspaceDomain: true,
-      })),
-      // BrewCC: shared custom domains from other workspaces
-      ...sharedDomains,
-      // Default domains next, with dub.sh first, then alphabetically
-      ...sortDomains(activeDefaultDomains, SHORT_DOMAIN).map((domain) => ({
-        ...domain,
-        isWorkspaceDomain: false,
-      })),
-    ];
-  }, [
-    options.onboarding,
-    currentDomain,
-    allDomains,
-    activeWorkspaceDomains,
-    activeDefaultDomains,
-    sharedDomains,
-  ]);
+    return available;
+  }, [verifiedWorkspaceDomains, sharedDomains, currentDomain, allDomains]);
+
+  const primaryDomain = useMemo(
+    () =>
+      verifiedWorkspaceDomains.find(({ primary }) => primary)?.slug ||
+      verifiedWorkspaceDomains[0]?.slug ||
+      sharedDomains[0]?.slug,
+    [verifiedWorkspaceDomains, sharedDomains],
+  );
 
   return {
     domains,
     allWorkspaceDomains,
     activeWorkspaceDomains,
-    loading: options.onboarding ? false : loading,
-    primaryDomain: options.onboarding ? SHORT_DOMAIN : primaryDomain,
+    loading:
+      (options.onboarding ? false : loading) ||
+      Boolean(workspaceId && !sharedData && !sharedError),
+    primaryDomain,
   };
 }

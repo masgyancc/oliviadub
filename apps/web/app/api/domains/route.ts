@@ -1,5 +1,6 @@
 import { createId } from "@/lib/api/create-id";
 import { addDomainToVercel } from "@/lib/api/domains/add-domain-vercel";
+import { assertCanAddDomains } from "@/lib/brewcc/platform-settings";
 import { parseDomainJsonConfig } from "@/lib/api/domains/parse-domain-json-config";
 import { transformDomain } from "@/lib/api/domains/transform-domain";
 import { validateDomain } from "@/lib/api/domains/utils";
@@ -97,6 +98,9 @@ export const GET = withWorkspace(
 // POST /api/domains - add a domain
 export const POST = withWorkspace(
   async ({ req, workspace, session }) => {
+    // BrewCC: "Allow Users to Add Domains" (master admins always allowed)
+    await assertCanAddDomains(session.user.id);
+
     const body = await parseRequestBody(req);
     const {
       slug,

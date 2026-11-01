@@ -1,5 +1,6 @@
 import { claimDotLinkDomain } from "@/lib/api/domains/claim-dot-link-domain";
 import { DubApiError } from "@/lib/api/errors";
+import { assertCanAddDomains } from "@/lib/brewcc/platform-settings";
 import { parseRequestBody } from "@/lib/api/utils";
 import { withWorkspace } from "@/lib/auth";
 import { DOMAIN_REGISTRATION_ELIGIBLE_WORKSPACES } from "@/lib/dynadot/constants";
@@ -10,6 +11,8 @@ import { NextResponse } from "next/server";
 export const POST = withWorkspace(
   async ({ workspace, session, req }) => {
     const { domain } = registerDomainSchema.parse(await parseRequestBody(req));
+
+    await assertCanAddDomains(session.user.id);
 
     if (!DOMAIN_REGISTRATION_ELIGIBLE_WORKSPACES.includes(workspace.id)) {
       throw new DubApiError({

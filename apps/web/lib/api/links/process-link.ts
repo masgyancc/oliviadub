@@ -125,6 +125,25 @@ export async function processLink<T extends Record<string, any>>({
     domain = domains?.find((d) => d.primary)?.slug || SHORT_DOMAIN;
   }
 
+  // BrewCC: new short links only on verified custom domains. The default domains are
+  // internal; existing links on them keep working (edits that keep domain + key skip this).
+  if (!skipKeyChecks && key !== "_root") {
+    if (isDubDomain(domain)) {
+      return {
+        link: payload,
+        error: `${domain} can't be used for short links. Use a custom domain instead.`,
+        code: "forbidden",
+      };
+    }
+    if (domains.some((d) => d.slug === domain && !d.verified)) {
+      return {
+        link: payload,
+        error: `${domain} is not verified yet. Finish its DNS setup before creating links.`,
+        code: "forbidden",
+      };
+    }
+  }
+
   // free plan restrictions
   if (!workspace || workspace.plan === "free") {
     if (key === "_root" && url) {

@@ -27,3 +27,11 @@ model AdminUserAlias {
 
   @@unique([adminId, userId])
 }
+
+// BrewCC: global platform settings changed by master admins (key/value, e.g. allowUserDomains)
+model PlatformSetting {
+  key         String   @id @db.VarChar(100)
+  value       String   @db.Text
+  updatedById String?
+  updatedAt   DateTime @updatedAt
+}

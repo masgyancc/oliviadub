@@ -1,4 +1,5 @@
 import { addDomainToVercel } from "@/lib/api/domains/add-domain-vercel";
+import { assertCanAddDomains } from "@/lib/brewcc/platform-settings";
 import { getDomainOrThrow } from "@/lib/api/domains/get-domain-or-throw";
 import { markDomainAsDeleted } from "@/lib/api/domains/mark-domain-deleted";
 import { parseDomainJsonConfig } from "@/lib/api/domains/parse-domain-json-config";
@@ -119,6 +120,9 @@ export const PATCH = withWorkspace(
         workspaceId: workspace.id,
         userId: session.user.id,
       });
+
+      // BrewCC: renaming adds a new domain, so it follows "Allow Users to Add Domains"
+      await assertCanAddDomains(session.user.id);
 
       if (registeredDomain) {
         throw new DubApiError({

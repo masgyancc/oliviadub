@@ -11,6 +11,7 @@ const TABS = [
   { href: "/admin/domains", label: "Domains" },
   { href: "/admin/analytics", label: "Analytics" },
   { href: "/admin/audit-log", label: "Audit Log" },
+  { href: "/admin/settings", label: "Settings" },
 ];
 
 export function AdminNav() {

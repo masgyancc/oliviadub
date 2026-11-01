@@ -1,5 +1,6 @@
 import { createId } from "@/lib/api/create-id";
 import { addDomainToVercel } from "@/lib/api/domains/add-domain-vercel";
+import { canAddDomains } from "@/lib/brewcc/platform-settings";
 import { isValidDomainFormat } from "@/lib/api/domains/is-valid-domain";
 import { handleAndReturnErrorResponse } from "@/lib/api/errors";
 import { bulkCreateLinks, createLink, processLink } from "@/lib/api/links";
@@ -324,11 +325,15 @@ const processMappedLinks = async ({
     },
   });
 
-  const domainsNotInWorkspace = selectedDomains.filter(
-    (domain) =>
-      !domains.some((d) => d.slug === domain) &&
-      !DUB_DOMAINS_ARRAY.includes(domain),
-  );
+  // BrewCC: new domains are only created while the importer may add domains;
+  // otherwise their rows fail link validation instead
+  const domainsNotInWorkspace = (await canAddDomains(userId))
+    ? selectedDomains.filter(
+        (domain) =>
+          !domains.some((d) => d.slug === domain) &&
+          !DUB_DOMAINS_ARRAY.includes(domain),
+      )
+    : [];
 
   if (domainsNotInWorkspace.length > 0) {
     console.log(`Creating ${domainsNotInWorkspace.length} new domains.`);

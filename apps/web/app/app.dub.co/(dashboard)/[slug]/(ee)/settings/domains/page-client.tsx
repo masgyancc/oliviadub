@@ -1,6 +1,7 @@
 "use client";
 
 import { clientAccessCheck } from "@/lib/client-access-check";
+import useAddDomainPermission from "@/lib/swr/use-add-domain-permission";
 import useDomains from "@/lib/swr/use-domains";
 import useDomainsCount from "@/lib/swr/use-domains-count";
 import useWorkspace from "@/lib/swr/use-workspace";
@@ -115,7 +116,12 @@ export function CustomDomains() {
     role,
   });
 
-  const disabledTooltip = exceededDomains ? (
+  const addPermission = useAddDomainPermission();
+
+  // BrewCC: "Allow Users to Add Domains" is OFF
+  const disabledTooltip = !addPermission.allowed ? (
+    addPermission.message || "Loading…"
+  ) : exceededDomains ? (
     <TooltipContent
       title={`You can only add up to ${domainsLimit} ${pluralize(
         "domain",

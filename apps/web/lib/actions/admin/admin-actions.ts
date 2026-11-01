@@ -5,6 +5,10 @@ import { markDomainAsDeleted } from "@/lib/api/domains/mark-domain-deleted";
 import { removeDomainFromVercel } from "@/lib/api/domains/remove-domain-vercel";
 import { invalidateUserAccess } from "@/lib/auth/platform-access";
 import { upgradeOwnedWorkspacesToEnterprise } from "@/lib/brewcc/enterprise-plan";
+import {
+  getAllowUserDomains,
+  setAllowUserDomains,
+} from "@/lib/brewcc/platform-settings";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@dub/email";
 import { APP_DOMAIN } from "@dub/utils";
@@ -217,6 +221,30 @@ export const setUserAliasAction = masterAdminActionClient
         update: { alias },
       });
     }
+
+    revalidatePath("/admin", "layout");
+  });
+
+// "Allow Users to Add Domains": global, stored in PlatformSetting, applies immediately
+export const setAllowUserDomainsAction = masterAdminActionClient
+  .inputSchema(z.object({ enabled: z.boolean() }))
+  .action(async ({ parsedInput, ctx }) => {
+    const { enabled } = parsedInput;
+    const before = await getAllowUserDomains();
+
+    if (before === enabled) {
+      return;
+    }
+
+    await setAllowUserDomains(enabled, ctx.user.id);
+    await prisma.adminAuditLog.create({
+      data: {
+        actorId: ctx.user.id,
+        action: "settings.allow_user_domains",
+        fromValue: before ? "on" : "off",
+        toValue: enabled ? "on" : "off",
+      },
+    });
 
     revalidatePath("/admin", "layout");
   });
