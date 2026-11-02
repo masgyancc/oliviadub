@@ -55,9 +55,9 @@ Without the three required variables, the webhook returns 404 and the dashboard 
 Run this from your own terminal. The token stays on your machine:
 ```powershell
 $token = Read-Host "Bot token"; $secret = Read-Host "Webhook secret"
-Invoke-RestMethod -Method Post "https://api.telegram.org/bot$token/setWebhook" -Body @{ url = "https://app.lilac-orbit.com/api/telegram/webhook"; secret_token = $secret; allowed_updates = '["message","callback_query"]'; drop_pending_updates = "true" }
+Invoke-RestMethod -Method Post "https://api.telegram.org/bot$token/setWebhook" -Body @{ url = "https://app.brewcc.online/api/telegram/webhook"; secret_token = $secret; allowed_updates = '["message","callback_query"]'; drop_pending_updates = "true" }
 ```
-Check with `getWebhookInfo`. `app.lilac-orbit.com/api/*` is excluded from the Vercel Firewall challenge rule, so Telegram can reach the webhook.
+Check with `getWebhookInfo`. `app.brewcc.online/api/*` is excluded from the Vercel Firewall challenge rule, so Telegram can reach the webhook.
 
 ## 6. Security
 - Webhook: secret header checked with `timingSafeEqual` → 401 otherwise. Each `update_id` is processed once (Redis `SET NX`, 1 h).
