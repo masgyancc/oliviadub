@@ -5,6 +5,7 @@ import {
 import { TrackingPlatform, TrackingTag } from "@/lib/ads-tracking/types";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkProps } from "@/lib/types";
+import { SavedPixelPicker } from "@/ui/links/saved-pixel-picker";
 import { Button, Modal } from "@dub/ui";
 import { cn, fetcher, linkConstructor } from "@dub/utils";
 import {
@@ -68,6 +69,28 @@ function AdsTrackingModalInner({
     mutate,
     isLoading,
   } = useSWR<TagRow[]>(workspaceId ? `${base}${qs}` : null, fetcher);
+
+  // the user's saved pixels on this link; ticking one applies it right away
+  const { data: saved, mutate: mutateSaved } = useSWR<{
+    savedPixelIds: string[];
+  }>(workspaceId ? `${base}/saved${qs}` : null, fetcher);
+  const [savingPixels, setSavingPixels] = useState(false);
+
+  const toggleSaved = async (id: string, checked: boolean) => {
+    const currentIds = saved?.savedPixelIds ?? [];
+    const savedPixelIds = checked
+      ? [...new Set([...currentIds, id])]
+      : currentIds.filter((x) => x !== id);
+    setSavingPixels(true);
+    try {
+      await request(`${base}/saved${qs}`, "PUT", { savedPixelIds });
+      await Promise.all([mutateSaved(), mutate()]);
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setSavingPixels(false);
+    }
+  };
 
   // add form
   const [platform, setPlatform] = useState<TrackingPlatform>("meta");
@@ -164,8 +187,21 @@ function AdsTrackingModalInner({
       </div>
 
       <div className="max-h-[70vh] space-y-6 overflow-y-auto bg-neutral-50 p-4 sm:p-6">
+        {/* the user's saved pixels */}
+        <div className="space-y-2">
+          <h4 className="text-sm font-medium text-neutral-900">My pixels</h4>
+          <SavedPixelPicker
+            selectedIds={saved?.savedPixelIds ?? []}
+            onToggle={toggleSaved}
+            disabled={!saved || savingPixels}
+          />
+        </div>
+
         {/* existing tags */}
         <div className="space-y-2">
+          <h4 className="text-sm font-medium text-neutral-900">
+            Active on this link
+          </h4>
           {isLoading ? (
             <div className="h-12 animate-pulse rounded-lg bg-neutral-100" />
           ) : !tags?.length ? (

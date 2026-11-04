@@ -2,7 +2,7 @@ import { LinkFormData } from "./link-builder-provider";
 
 export function buildLinkBody({ data }: { data: LinkFormData }) {
   // @ts-ignore – exclude extra attributes from `data` object before sending to API
-  const { user, tags, tagId, folderId, ...rest } = data;
+  const { user, tags, tagId, folderId, trackingPixelIds, ...rest } = data;
 
   return {
     ...rest,

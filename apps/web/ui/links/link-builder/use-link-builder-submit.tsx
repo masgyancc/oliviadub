@@ -1,5 +1,6 @@
 import { mutatePrefix } from "@/lib/swr/mutate";
 import useWorkspace from "@/lib/swr/use-workspace";
+import { PixelFormData } from "@/ui/modals/link-builder/pixels-modal";
 import { UpgradeRequiredToast } from "@/ui/shared/upgrade-required-toast";
 import { Button, useCopyToClipboard } from "@dub/ui";
 import { useRouter } from "next/navigation";
@@ -46,6 +47,27 @@ export function useLinkBuilderSubmit({
 
         if (res.status === 200) {
           const data = await res.json();
+
+          // BrewCC: apply the saved pixels picked in the Pixels modal (if it was used)
+          const trackingPixelIds = (getValues() as PixelFormData)
+            .trackingPixelIds;
+          if (trackingPixelIds !== undefined && data.key !== "_root") {
+            const pixelRes = await fetch(
+              `/api/links/${data.id}/tracking/saved?workspaceId=${workspace.id}`,
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ savedPixelIds: trackingPixelIds }),
+              },
+            );
+            if (!pixelRes.ok) {
+              const { error } = await pixelRes.json().catch(() => ({}));
+              toast.error(
+                `Link saved, but pixels were not applied: ${error?.message || "unknown error"}`,
+              );
+            }
+          }
+
           onSuccess?.(data);
 
           // for editing links, if domain / key is changed, push to new url

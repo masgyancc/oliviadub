@@ -46,6 +46,7 @@ const publicSelect = {
   conversionLabel: true,
   name: true,
   enabled: true,
+  savedPixelId: true,
   createdAt: true,
   updatedAt: true,
 } as const;

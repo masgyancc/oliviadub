@@ -16,9 +16,28 @@ model LinkTrackingPixel {
   conversionLabel String           @default("") // Google Ads conversion label ("" when not set)
   name            String?
   enabled         Boolean          @default(true)
+  savedPixelId    String? // SavedTrackingPixel this tag was picked from (null when entered by hand)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
   @@unique([linkId, platform, pixelId, conversionLabel])
+  @@index(projectId)
+  @@index(savedPixelId)
+}
+
+// A user's own pixel library in a workspace, picked by checkbox in the link builder.
+// Private to the user who saved it: never listed for other users, even in the same workspace.
+model SavedTrackingPixel {
+  id              String           @id @default(cuid())
+  userId          String
+  projectId       String
+  platform        TrackingPlatform
+  pixelId         String
+  conversionLabel String           @default("")
+  name            String           @db.VarChar(60)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@unique([userId, projectId, platform, pixelId, conversionLabel], map: "SavedTrackingPixel_user_pixel_key")
   @@index(projectId)
 }

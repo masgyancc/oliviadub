@@ -3,6 +3,7 @@ import { MoreDropdown } from "@/ui/links/link-builder/more-dropdown";
 import { useABTestingModal } from "@/ui/modals/link-builder/ab-testing-modal";
 import { useExpirationModal } from "@/ui/modals/link-builder/expiration-modal";
 import { usePasswordModal } from "@/ui/modals/link-builder/password-modal";
+import { usePixelsModal } from "@/ui/modals/link-builder/pixels-modal";
 import { useTargetingModal } from "@/ui/modals/link-builder/targeting-modal";
 import { useUTMModal } from "@/ui/modals/link-builder/utm-modal";
 import { cn } from "@dub/utils";
@@ -20,6 +21,7 @@ export function LinkFeatureButtons({
   const { TargetingModal, TargetingButton } = useTargetingModal();
   const { PasswordModal, PasswordButton } = usePasswordModal();
   const { ABTestingModal, ABTestingButton } = useABTestingModal();
+  const { PixelsModal, PixelsButton } = usePixelsModal();
 
   return (
     <>
@@ -27,8 +29,10 @@ export function LinkFeatureButtons({
       <UTMModal />
       <TargetingModal />
       <ExpirationModal /> <ABTestingModal />
+      <PixelsModal />
       <div className={cn("flex min-w-0 items-center gap-2", className)}>
         <UTMButton />
+        <PixelsButton />
         <div className="contents max-[380px]:hidden">
           <TargetingButton />
         </div>
