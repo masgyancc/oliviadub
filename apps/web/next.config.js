@@ -166,7 +166,8 @@ module.exports = withPlausibleProxy({
             // Self-hosting: also allow the instance's own root domain
             // (derived from NEXT_PUBLIC_APP_DOMAIN), otherwise every
             // /api/* request (incl. NextAuth) is redirected to "/".
-            value: `.*(\\.dub\\.co|localhost|\\.${SELF_HOST_ROOT_DOMAIN_RE})`,
+            // Vercel Cron calls the deployment's *.vercel.app host, so allow it too.
+            value: `.*(\\.dub\\.co|localhost|\\.vercel\\.app|\\.${SELF_HOST_ROOT_DOMAIN_RE})`,
           },
         ],
         destination: "/",
