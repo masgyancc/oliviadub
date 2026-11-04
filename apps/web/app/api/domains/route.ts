@@ -183,7 +183,11 @@ export const POST = withWorkspace(
         vercelResponse.error &&
         vercelResponse.error.code !== "domain_already_in_use" // ignore this error
       ) {
-        return new Response(vercelResponse.error.message, { status: 422 });
+        // BrewCC: JSON error so the Add Domain form can show the reason
+        throw new DubApiError({
+          code: "unprocessable_entity",
+          message: `Couldn't register ${slug} with the hosting provider: ${vercelResponse.error.message}`,
+        });
       }
     }
 
