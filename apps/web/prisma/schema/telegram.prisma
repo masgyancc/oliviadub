@@ -8,6 +8,36 @@ model TelegramAccount {
   lastInteractionAt DateTime?
 }
 
+// A Telegram group connected to ONE workspace by its owner. Everything done in the group
+// runs as the owner and only inside that workspace.
+model TelegramGroup {
+  id          String   @id @default(cuid())
+  chatId      String   @unique // Telegram chat id of the group
+  title       String?
+  projectId   String // the only workspace this group can see
+  ownerUserId String // BrewCC user who connected the group
+  connectedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index(ownerUserId)
+  @@index(projectId)
+}
+
+// Telegram users allowed to use the bot in a group (the owner is always allowed)
+model TelegramGroupMember {
+  id               String    @id @default(cuid())
+  groupId          String
+  telegramId       String
+  telegramUsername String?
+  displayName      String?
+  status           String    @db.VarChar(16) // "pending" | "approved"
+  requestedAt      DateTime  @default(now())
+  approvedAt       DateTime?
+
+  @@unique([groupId, telegramId])
+  @@index(groupId)
+}
+
 // One-time token used to link a Telegram account from the dashboard (only the SHA-256 hash is stored)
 model TelegramLinkToken {
   id        String    @id @default(cuid())

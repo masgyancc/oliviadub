@@ -14,9 +14,11 @@ export interface TelegramUser {
 
 export interface TelegramMessage {
   message_id: number;
-  chat: { id: number; type: string };
+  chat: { id: number; type: string; title?: string };
   from?: TelegramUser;
   text?: string;
+  // a group upgraded to a supergroup gets a new chat id
+  migrate_to_chat_id?: number;
 }
 
 export interface TelegramCallbackQuery {

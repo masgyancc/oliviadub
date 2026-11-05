@@ -61,7 +61,7 @@ Check with `getWebhookInfo`. `app.brewcc.online/api/*` is excluded from the Verc
 
 ## 6. Security
 - Webhook: secret header checked with `timingSafeEqual` → 401 otherwise. Each `update_id` is processed once (Redis `SET NX`, 1 h).
-- Only private chats are answered, so links and stats never appear in groups.
+- Private chats work for every linked user. Groups work only once their owner connected them (see §9). Unconnected groups and channels get nothing.
 - Every update is re-authorized: the Telegram user id must be linked, and the BrewCC account must be **approved** right now. Pending, rejected, suspended and unlinked users get a short message and nothing else. A suspension takes effect within the 60 s access cache, or immediately, since admin actions invalidate it.
 - Every link action re-checks workspace membership, role permission (`links.read`, `links.write`, `analytics.read`), link ownership (`getLinkOrThrow` with the workspace id) and folder access. Callback data is never trusted. The workspace switch only accepts workspaces the user belongs to.
 - Delete requires two steps. The confirm callback is only accepted right after the warning step for the same link.
@@ -89,3 +89,15 @@ Main menu: List · Add · Edit · Delete · Tracking & Analytics · Switch works
 - [ ] Analytics numbers match the dashboard for the same range
 - [ ] Re-sent update (same `update_id`) is processed once; webhook without the secret → 401
 - [ ] Dashboard, existing links, admin panel, custom domains unaffected
+
+## 9. Groups
+A user shares the bot with a Telegram group for ONE of their workspaces.
+
+- **Connect:** dashboard → Settings → Telegram → **Connect a group** (pick the workspace) opens Telegram's "add to group" picker (`?startgroup=<token>`). The bot receives `/start <token>` in the group. The token is 32 random bytes in Redis (hashed key), valid 5 minutes, single use, and is only accepted from the owner's own linked Telegram account. A group already connected by another user can't be taken over. Re-connecting a group to another workspace resets its members.
+- **Access:** the owner always has access. Others type `/menu`, press **Request access**, and the owner approves or rejects with the buttons in the group, or on the dashboard. Approved members can do everything the bot offers. Every message and button press is checked again for the person who sent it.
+- **Isolation:** in a group the bot acts as the owner, locked to the group's workspace. The workspace switch is disabled and the workspace always comes from the group record. If the owner is suspended, leaves the workspace or disconnects their personal Telegram, the group stops working. Disconnect a group or remove members on the dashboard.
+- **Sessions:** flows are kept per member per group (`g<chatId>:<userId>`). Ordinary chat in the group is ignored. Only commands, button presses and messages from a member in the middle of a bot flow are handled.
+- **Privacy mode:** with BotFather's default privacy mode on, the bot only sees commands and **replies to its own messages**, so members reply to the bot's prompt when it asks for a URL or slug. Turning privacy mode off (`/setprivacy` → Disable) lets them type without replying; ordinary chat is still ignored.
+- **Supergroups:** when Telegram upgrades a group, the connection moves to the new chat id automatically.
+- **Rate limits:** 30 updates/min per Telegram user and 60/min per group.
+- Tables: `TelegramGroup`, `TelegramGroupMember` (migration `20261105_telegram_groups`, additive only).

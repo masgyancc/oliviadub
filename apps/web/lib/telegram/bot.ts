@@ -1,13 +1,13 @@
 import { DubApiError } from "@/lib/api/errors";
 import { PermissionAction } from "@/lib/api/rbac/permissions";
-import { ratelimit } from "@/lib/upstash";
-import { getUrlFromString, isValidUrl } from "@dub/utils";
 import {
   applyReplacement,
   MAX_LINKS_PER_RUN,
   previewReplacement,
   undoRun,
 } from "@/lib/bulk-replace/service";
+import { ratelimit } from "@/lib/upstash";
+import { getUrlFromString, isValidUrl } from "@dub/utils";
 import {
   Breakdown,
   getBreakdown,
@@ -32,6 +32,13 @@ import {
   resolveBotUser,
 } from "./context";
 import { esc, formatCount, shortLinkOf, truncate } from "./format";
+import {
+  connectGroup,
+  decideGroupMember,
+  migrateGroupChat,
+  requestGroupAccess,
+  resolveGroupAccess,
+} from "./groups";
 import { redeemTelegramLinkToken } from "./linking";
 import {
   createLinkFromBot,
@@ -62,9 +69,14 @@ import {
 type Reply = { text: string; keyboard?: InlineKeyboard };
 
 interface Ctx {
+  // session key for flows, filters and rate limits: the Telegram user id in private chats,
+  // "g<chatId>:<userId>" in groups so members of one group never share a flow
   telegramId: string;
   chatId: number;
+  // in private chats the linked user; in a group always the group's owner
   user: BotUser;
+  // set in groups: the only workspace the group can use
+  group?: { id: string; projectId: string };
 }
 
 const NOT_LINKED =
@@ -103,9 +115,13 @@ export async function handleUpdate(update: TelegramUpdate) {
     update.message?.chat.id ?? update.callback_query?.message?.chat.id;
   if (!from || !chatId) return;
 
-  // private chats only: links and analytics must not leak into groups
+  // groups only work once their owner connected them (see handleGroupUpdate);
+  // channels are ignored
   const chatType =
     update.message?.chat.type ?? update.callback_query?.message?.chat.type;
+  if (chatType === "group" || chatType === "supergroup") {
+    return handleGroupUpdate(update, chatId, from);
+  }
   if (chatType !== "private") return;
 
   const telegramId = String(from.id);
@@ -152,12 +168,16 @@ export async function handleUpdate(update: TelegramUpdate) {
   }
 
   const ctx: Ctx = { telegramId, chatId, user: resolved.user };
+  await dispatch(ctx, update, Boolean(startToken));
+}
 
+async function dispatch(ctx: Ctx, update: TelegramUpdate, justLinked = false) {
+  const { chatId } = ctx;
   try {
     if (update.callback_query) {
       await onCallback(ctx, update.callback_query);
     } else if (update.message) {
-      await onMessage(ctx, update.message, Boolean(startToken));
+      await onMessage(ctx, update.message, justLinked);
     }
   } catch (error) {
     // DubApiError messages are user-facing validation messages; anything else stays generic
@@ -172,9 +192,225 @@ export async function handleUpdate(update: TelegramUpdate) {
   }
 }
 
+// ───────────────────────────────── groups ─────────────────────────────────
+
+const GROUP_CONNECT_ERRORS = {
+  invalid:
+    "❌ Kode penghubung grup tidak valid atau sudah kedaluwarsa. Buat link baru dari dashboard BrewCC → Settings → Telegram.",
+  not_owner:
+    "❌ Hanya pemilik link penghubung yang bisa menghubungkan grup ini.",
+  owner_not_linked:
+    "❌ Hubungkan dulu akun Telegram pribadimu di dashboard BrewCC → Settings → Telegram.",
+  not_member: "❌ Kamu bukan lagi anggota workspace tersebut.",
+  taken:
+    "❌ Grup ini sudah terhubung ke akun BrewCC lain. Pemiliknya harus memutuskan dulu dari dashboard.",
+};
+
+const NOT_CONNECTED_GROUP =
+  "ℹ️ Grup ini belum terhubung ke BrewCC.\nPemilik akun: buka dashboard BrewCC → <b>Settings → Telegram</b> → <b>Connect a group</b>.";
+
+const displayNameOf = (from: TelegramCallbackQuery["from"]) =>
+  from.username ? `@${from.username}` : from.first_name || String(from.id);
+
+async function handleGroupUpdate(
+  update: TelegramUpdate,
+  chatId: number,
+  from: TelegramCallbackQuery["from"],
+) {
+  const fromId = String(from.id);
+  const chat = String(chatId);
+  const query = update.callback_query;
+  const message = update.message;
+
+  if (message?.migrate_to_chat_id) {
+    await migrateGroupChat(chat, String(message.migrate_to_chat_id));
+    return;
+  }
+
+  // "/menu@BrewccBot" → "/menu"
+  const text = (message?.text ?? "").trim().replace(/^(\/\w+)@\w+/, "$1");
+  const isCommand = /^\/(start|menu|cancel|connect)\b/.test(text);
+  const sessionKey = `g${chat}:${fromId}`;
+
+  // plain chat in the group is ignored unless this member is in the middle of a bot flow
+  if (message && !isCommand && !(await getFlow(sessionKey))) return;
+
+  const [perUser, perGroup] = await Promise.all([
+    ratelimit(30, "1 m").limit(`telegram:${fromId}`),
+    ratelimit(60, "1 m").limit(`telegram:group:${chat}`),
+  ]);
+  if (!perUser.success || !perGroup.success) {
+    if (query) {
+      await answerCallback(
+        query.id,
+        "Terlalu banyak permintaan, tunggu sebentar.",
+      );
+    }
+    return;
+  }
+
+  // connect: /start <token> (from the "add to group" link) or /connect <token>
+  const connectToken = text.match(/^\/(?:start|connect)\s+(\S+)$/)?.[1];
+  if (connectToken) {
+    const result = await connectGroup({
+      token: connectToken,
+      chatId: chat,
+      title: message?.chat.title,
+      fromTelegramId: fromId,
+    });
+    await sendMessage(
+      chatId,
+      result.ok
+        ? `✅ Grup terhubung ke workspace <b>${esc(result.workspaceName)}</b>.\n\nAnggota lain bisa ketik /menu lalu tekan <b>Minta akses</b>. Kamu (pemilik) yang menyetujui.\n\nℹ️ Saat bot meminta input, <b>balas (reply)</b> pesan bot.`
+        : GROUP_CONNECT_ERRORS[result.reason],
+      result.ok ? [[{ text: "📋 Buka menu", callback_data: "m" }]] : undefined,
+    );
+    return;
+  }
+
+  const access = await resolveGroupAccess({
+    chatId: chat,
+    fromTelegramId: fromId,
+  });
+
+  if (!access.ok) {
+    // not_connected / owner_inactive carry no group
+    if (!("group" in access)) {
+      const msg =
+        access.reason === "not_connected"
+          ? NOT_CONNECTED_GROUP
+          : "⛔ Akun BrewCC pemilik grup ini sedang tidak aktif atau sudah keluar dari workspace-nya.";
+      if (query) await answerCallback(query.id);
+      await sendMessage(chatId, msg);
+      return;
+    }
+
+    // request access
+    if (query?.data === "gr") {
+      const member = await requestGroupAccess({
+        groupId: access.group.id,
+        telegramId: fromId,
+        telegramUsername: from.username,
+        displayName: from.first_name,
+      });
+      await answerCallback(
+        query.id,
+        "Permintaan akses dikirim ke pemilik grup.",
+      );
+      if (member.status === "pending") {
+        await sendMessage(
+          chatId,
+          `🙋 <b>${esc(displayNameOf(from))}</b> meminta akses ke bot BrewCC di grup ini.\nHanya pemilik grup yang bisa menyetujui.`,
+          [
+            [
+              { text: "✅ Setujui", callback_data: `ga:${member.id}` },
+              { text: "❌ Tolak", callback_data: `gx:${member.id}` },
+            ],
+          ],
+        );
+      }
+      return;
+    }
+
+    const pending = access.reason === "pending";
+    if (query) {
+      await answerCallback(
+        query.id,
+        pending
+          ? "Permintaan aksesmu masih menunggu persetujuan pemilik grup."
+          : "Kamu belum punya akses. Ketik /menu lalu tekan Minta akses.",
+      );
+      return;
+    }
+    await sendMessage(
+      chatId,
+      pending
+        ? `⏳ ${esc(displayNameOf(from))}, permintaan aksesmu masih menunggu persetujuan pemilik grup.`
+        : `🔒 ${esc(displayNameOf(from))}, kamu belum punya akses ke bot BrewCC di grup ini.`,
+      pending ? undefined : [[{ text: "🙋 Minta akses", callback_data: "gr" }]],
+    );
+    return;
+  }
+
+  // approve / reject (owner only)
+  const decision = query?.data?.match(/^g([ax]):(.+)$/);
+  if (query && decision) {
+    if (!access.isOwner) {
+      await answerCallback(
+        query.id,
+        "Hanya pemilik grup yang bisa memutuskan.",
+      );
+      return;
+    }
+    const approve = decision[1] === "a";
+    const member = await decideGroupMember({
+      groupId: access.group.id,
+      memberId: decision[2],
+      approve,
+    });
+    await answerCallback(query.id);
+    const who = member?.telegramUsername
+      ? `@${member.telegramUsername}`
+      : member?.displayName || "Anggota";
+    if (query.message) {
+      await editMessage(
+        chatId,
+        query.message.message_id,
+        !member
+          ? "Permintaan ini sudah tidak berlaku."
+          : approve
+            ? `✅ <b>${esc(who)}</b> sekarang bisa memakai bot BrewCC di grup ini. Ketik /menu.`
+            : `❌ Permintaan akses <b>${esc(who)}</b> ditolak.`,
+      );
+    }
+    return;
+  }
+  if (query?.data === "gr") {
+    await answerCallback(query.id, "Kamu sudah punya akses. Ketik /menu.");
+    return;
+  }
+
+  const ctx: Ctx = {
+    telegramId: sessionKey,
+    chatId,
+    user: access.owner,
+    group: { id: access.group.id, projectId: access.group.projectId },
+  };
+  if (message) message.text = text; // without the @bot suffix
+  await dispatch(ctx, update);
+}
+
 // ───────────────────────────── workspace context ─────────────────────────────
 
 async function requireWorkspace(ctx: Ctx, permission: PermissionAction) {
+  // groups are locked to their connected workspace; the owner's other workspaces are never used
+  if (ctx.group) {
+    const loaded = await loadWorkspace(ctx.user.id, ctx.group.projectId);
+    if (!loaded) {
+      throw new DubApiError({
+        code: "not_found",
+        message: "Workspace grup ini tidak ditemukan.",
+      });
+    }
+    if (!can(loaded.permissions, permission)) {
+      throw new DubApiError({
+        code: "forbidden",
+        message:
+          "Peran pemilik grup di workspace ini tidak mengizinkan tindakan tersebut.",
+      });
+    }
+    return {
+      ...loaded,
+      workspaces: [
+        {
+          id: loaded.workspace.id,
+          slug: loaded.workspace.slug,
+          name: loaded.workspace.name,
+        },
+      ],
+    };
+  }
+
   const workspaces = await getUserWorkspaces(ctx.user.id);
   if (workspaces.length === 0) {
     throw new DubApiError({
@@ -211,7 +447,9 @@ async function requireWorkspace(ctx: Ctx, permission: PermissionAction) {
 async function mainMenu(ctx: Ctx): Promise<Reply> {
   const { workspace, workspaces } = await requireWorkspace(ctx, "links.read");
   return {
-    text: `👋 Halo <b>${esc(ctx.user.name || ctx.user.email)}</b>\nWorkspace: <b>${esc(workspace.name)}</b>\n\nPilih menu:`,
+    text: ctx.group
+      ? `👥 <b>BrewCC – grup</b>\nWorkspace: <b>${esc(workspace.name)}</b> (milik ${esc(ctx.user.name || ctx.user.email)})\n\nℹ️ Saat bot meminta input, <b>balas (reply)</b> pesan bot.\n\nPilih menu:`
+      : `👋 Halo <b>${esc(ctx.user.name || ctx.user.email)}</b>\nWorkspace: <b>${esc(workspace.name)}</b>\n\nPilih menu:`,
     keyboard: [
       [
         { text: "📋 List Shortlink", callback_data: "l:1" },
@@ -432,6 +670,8 @@ async function onCallback(ctx: Ctx, query: TelegramCallbackQuery) {
       return show(await mainMenu(ctx));
 
     case "ws":
+      // a group can't switch away from its connected workspace
+      if (ctx.group) return show(await mainMenu(ctx));
       if (arg1) {
         // only accept a workspace the user is a member of
         const workspaces = await getUserWorkspaces(ctx.user.id);
