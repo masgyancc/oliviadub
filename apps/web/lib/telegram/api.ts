@@ -80,6 +80,34 @@ export const sendMessage = (
     ...replyMarkup(keyboard),
   });
 
+// Opens the reply box for the mentioned / replied-to member only (selective). In groups with
+// privacy mode on, the bot only receives replies to its own messages, so text prompts use this.
+export const sendForceReply = (
+  chatId: number,
+  text: string,
+  {
+    replyToMessageId,
+    placeholder,
+  }: { replyToMessageId?: number; placeholder?: string } = {},
+) =>
+  call("sendMessage", {
+    chat_id: chatId,
+    text,
+    parse_mode: "HTML",
+    link_preview_options: { is_disabled: true },
+    ...(replyToMessageId && {
+      reply_parameters: {
+        message_id: replyToMessageId,
+        allow_sending_without_reply: true,
+      },
+    }),
+    reply_markup: {
+      force_reply: true,
+      selective: true,
+      ...(placeholder && { input_field_placeholder: placeholder }),
+    },
+  });
+
 export const editMessage = (
   chatId: number,
   messageId: number,

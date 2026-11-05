@@ -18,6 +18,7 @@ import {
   answerCallback,
   editMessage,
   InlineKeyboard,
+  sendForceReply,
   sendMessage,
   TelegramCallbackQuery,
   TelegramMessage,
@@ -75,8 +76,24 @@ interface Ctx {
   chatId: number;
   // in private chats the linked user; in a group always the group's owner
   user: BotUser;
-  // set in groups: the only workspace the group can use
+  // set in groups: the only workspace the group can use, and the member talking to the bot
   group?: { id: string; projectId: string };
+  member?: { id: number; name: string };
+}
+
+// a text prompt is any reply whose only action is "cancel"
+const isPrompt = (reply: Reply) =>
+  reply.keyboard?.length === 1 && reply.keyboard[0] === cancelRow;
+
+// In groups the bot (privacy mode) only sees replies to its own messages: open the reply
+// box for the member who is answering, so they can just type.
+async function askInGroup(ctx: Ctx, reply: Reply, replyToMessageId?: number) {
+  if (!ctx.group || !ctx.member || !isPrompt(reply)) return;
+  await sendForceReply(
+    ctx.chatId,
+    `✍️ <a href="tg://user?id=${ctx.member.id}">${esc(ctx.member.name)}</a>, balas di sini (atau /cancel untuk batal).`,
+    { replyToMessageId, placeholder: "Ketik jawabanmu…" },
+  );
 }
 
 const NOT_LINKED =
@@ -375,6 +392,7 @@ async function handleGroupUpdate(
     chatId,
     user: access.owner,
     group: { id: access.group.id, projectId: access.group.projectId },
+    member: { id: from.id, name: displayNameOf(from) },
   };
   if (message) message.text = text; // without the @bot suffix
   await dispatch(ctx, update);
@@ -659,6 +677,7 @@ async function onCallback(ctx: Ctx, query: TelegramCallbackQuery) {
   const show = async (reply: Reply) => {
     await answerCallback(query.id);
     await render(reply);
+    await askInGroup(ctx, reply);
   };
 
   const [action, arg1, arg2] = data.split(":");
@@ -1141,7 +1160,10 @@ async function onMessage(
   justLinked: boolean,
 ) {
   const text = (message.text ?? "").trim();
-  const reply = (r: Reply) => sendMessage(ctx.chatId, r.text, r.keyboard);
+  const reply = async (r: Reply) => {
+    await sendMessage(ctx.chatId, r.text, r.keyboard);
+    await askInGroup(ctx, r, message.message_id);
+  };
 
   if (justLinked || text === "/start" || text === "/menu") {
     await clearFlow(ctx.telegramId);
