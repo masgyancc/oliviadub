@@ -5,7 +5,8 @@ import { isDuplicateUpdate } from "@/lib/telegram/session";
 import { NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 
-export const maxDuration = 30;
+// bulk domain changes update up to 500 links in one update
+export const maxDuration = 300;
 
 const secretMatches = (provided: string | null) => {
   const expected = process.env.TELEGRAM_WEBHOOK_SECRET;

@@ -20,7 +20,13 @@ export type Flow =
       value?: string;
     }
   | { type: "search" }
-  | { type: "delete"; linkId: string };
+  | { type: "delete"; linkId: string }
+  | {
+      type: "bulk";
+      step: "old" | "new" | "confirm";
+      oldDomain?: string;
+      newDomain?: string;
+    };
 
 export type ListFilter = { search?: string; domain?: string };
 

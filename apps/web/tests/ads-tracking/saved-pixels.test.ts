@@ -82,13 +82,12 @@ beforeEach(() => {
 
 describe("saved pixels are private to their user", () => {
   test("list only returns the user's own pixels in the workspace", async () => {
-    await save("alice");
+    const own = await save("alice");
     await save("bob");
     await save("alice", META_2, "ws2");
 
     const list = await listSavedPixels("alice", "ws1");
-    expect(list).toHaveLength(1);
-    expect(list[0].userId).toBe("alice");
+    expect(list.map((p) => p.id)).toEqual([own.id]);
   });
 
   test("another user can't attach someone else's pixel", async () => {

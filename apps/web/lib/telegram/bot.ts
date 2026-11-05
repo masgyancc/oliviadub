@@ -2,7 +2,18 @@ import { DubApiError } from "@/lib/api/errors";
 import { PermissionAction } from "@/lib/api/rbac/permissions";
 import { ratelimit } from "@/lib/upstash";
 import { getUrlFromString, isValidUrl } from "@dub/utils";
-import { getClicksSummary, RANGE_LABELS } from "./analytics";
+import {
+  applyReplacement,
+  MAX_LINKS_PER_RUN,
+  previewReplacement,
+  undoRun,
+} from "@/lib/bulk-replace/service";
+import {
+  Breakdown,
+  getBreakdown,
+  getClicksSummary,
+  RANGE_LABELS,
+} from "./analytics";
 import {
   answerCallback,
   editMessage,
@@ -46,6 +57,7 @@ import {
 //   d:<linkId> detail · n add · nd:<i> add-domain · nc confirm add
 //   e:<linkId> edit · ef:<field>:<linkId> field · edd:<i> new domain · ec confirm edit
 //   x:<linkId> delete · xy:<linkId> confirm delete · a analytics · as:<linkId> link analytics · c cancel
+//   bd bulk domain change · bdy confirm · bdu:<runId> undo
 
 type Reply = { text: string; keyboard?: InlineKeyboard };
 
@@ -210,6 +222,7 @@ async function mainMenu(ctx: Ctx): Promise<Reply> {
         { text: "🗑 Delete Shortlink", callback_data: "l:1" },
       ],
       [{ text: "📊 Tracking & Analytics", callback_data: "a" }],
+      [{ text: "🔁 Bulk Domain Changer", callback_data: "bd" }],
       [
         ...(workspaces.length > 1
           ? [{ text: "🔁 Ganti workspace", callback_data: "ws" }]
@@ -327,6 +340,35 @@ function analyticsText(title: string, summary: Record<string, number>) {
     .join("\n")}`;
 }
 
+function breakdownText(title: string, rows: Breakdown) {
+  return `<b>${title}</b>\n${
+    rows.length
+      ? rows
+          .map(
+            (row, i) =>
+              `${i + 1}. ${esc(row.label)}: <b>${formatCount(row.clicks)}</b>`,
+          )
+          .join("\n")
+      : "Belum ada data."
+  }`;
+}
+
+async function analyticsReply(
+  title: string,
+  args: Parameters<typeof getClicksSummary>[0],
+) {
+  const [summary, regions, devices] = await Promise.all([
+    getClicksSummary(args),
+    getBreakdown({ ...args, groupBy: "regions" }),
+    getBreakdown({ ...args, groupBy: "devices" }),
+  ]);
+  return [
+    analyticsText(title, summary),
+    breakdownText("📍 Region (30 hari terakhir)", regions),
+    breakdownText("📱 Device (30 hari terakhir)", devices),
+  ].join("\n\n");
+}
+
 async function assertAnalyticsRate(ctx: Ctx) {
   const { success } = await ratelimit(10, "1 m").limit(
     `telegram:analytics:${ctx.telegramId}`,
@@ -370,11 +412,15 @@ const FIELD_LABELS = {
 async function onCallback(ctx: Ctx, query: TelegramCallbackQuery) {
   const data = query.data ?? "";
   const messageId = query.message?.message_id;
-  const show = async (reply: Reply) => {
-    await answerCallback(query.id);
+  // re-render the message without answering the callback again
+  const render = async (reply: Reply) => {
     if (messageId)
       await editMessage(ctx.chatId, messageId, reply.text, reply.keyboard);
     else await sendMessage(ctx.chatId, reply.text, reply.keyboard);
+  };
+  const show = async (reply: Reply) => {
+    await answerCallback(query.id);
+    await render(reply);
   };
 
   const [action, arg1, arg2] = data.split(":");
@@ -606,9 +652,12 @@ async function onCallback(ctx: Ctx, query: TelegramCallbackQuery) {
     case "a": {
       const { workspace } = await requireWorkspace(ctx, "analytics.read");
       await assertAnalyticsRate(ctx);
-      const summary = await getClicksSummary({ workspace });
+      const text = await analyticsReply(
+        `Klik workspace ${esc(workspace.name)}`,
+        { workspace },
+      );
       return show({
-        text: `${analyticsText(`Klik workspace ${esc(workspace.name)}`, summary)}\n\nUntuk analytics per shortlink, buka List → pilih link → Analytics.`,
+        text: `${text}\n\nUntuk analytics per shortlink, buka List → pilih link → Analytics.`,
         keyboard: [
           [{ text: "📋 Pilih shortlink", callback_data: "l:1" }],
           [{ text: "🔄 Refresh", callback_data: "a" }],
@@ -625,9 +674,11 @@ async function onCallback(ctx: Ctx, query: TelegramCallbackQuery) {
         linkId: arg1,
       });
       await assertAnalyticsRate(ctx);
-      const summary = await getClicksSummary({ workspace, linkId: link.id });
       return show({
-        text: analyticsText(esc(shortLinkOf(link)), summary),
+        text: await analyticsReply(esc(shortLinkOf(link)), {
+          workspace,
+          linkId: link.id,
+        }),
         keyboard: [
           [{ text: "🔄 Refresh", callback_data: `as:${link.id}` }],
           [{ text: "⬅️ Detail", callback_data: `d:${link.id}` }],
@@ -636,9 +687,179 @@ async function onCallback(ctx: Ctx, query: TelegramCallbackQuery) {
       });
     }
 
+    // ── bulk domain changer ──
+    case "bd": {
+      await requireWorkspace(ctx, "links.write");
+      await setFlow(ctx.telegramId, { type: "bulk", step: "old" });
+      return show({
+        text: "🔁 <b>Bulk Domain Changer</b>\nGanti domain tujuan di banyak shortlink sekaligus (hanya link yang kamu buat).\n\n1/2 Kirim <b>domain tujuan lama</b> (contoh: oldsite.com):",
+        keyboard: [cancelRow],
+      });
+    }
+
+    case "bdy": {
+      const flow = await getFlow(ctx.telegramId);
+      if (
+        flow?.type !== "bulk" ||
+        flow.step !== "confirm" ||
+        !flow.oldDomain ||
+        !flow.newDomain
+      ) {
+        return show(await mainMenu(ctx));
+      }
+      const { workspace } = await requireWorkspace(ctx, "links.write");
+      await assertBulkRate(ctx);
+      await clearFlow(ctx.telegramId);
+      await show({ text: "⏳ Sedang mengganti domain tujuan…" });
+
+      // re-read now; apply skips any link edited since the preview
+      const preview = await previewReplacement({
+        workspace,
+        userId: ctx.user.id,
+        oldDomain: flow.oldDomain,
+        newDomain: flow.newDomain,
+      });
+      if (preview.items.length === 0) {
+        return render({
+          text: "Tidak ada link yang cocok lagi.",
+          keyboard: [back],
+        });
+      }
+      const result = await applyReplacement({
+        workspace,
+        userId: ctx.user.id,
+        oldDomain: flow.oldDomain,
+        newDomain: flow.newDomain,
+        items: preview.items.map((i) => ({
+          linkId: i.linkId,
+          expectedUrl: i.oldUrl,
+        })),
+      });
+      return render({
+        text: [
+          "✅ <b>Selesai</b>",
+          `${esc(flow.oldDomain)} → ${esc(flow.newDomain)}`,
+          `Diganti: <b>${result.updated}</b>`,
+          result.skipped ? `Dilewati: ${result.skipped}` : null,
+          result.failed ? `Gagal: ${result.failed}` : null,
+          preview.matched > preview.items.length
+            ? `\nMasih ada ${preview.matched - preview.items.length} link lagi. Jalankan Bulk Domain Changer sekali lagi.`
+            : null,
+        ]
+          .filter(Boolean)
+          .join("\n"),
+        keyboard: [
+          ...(result.updated
+            ? [[{ text: "↩️ Undo", callback_data: `bdu:${result.runId}` }]]
+            : []),
+          back,
+        ],
+      });
+    }
+
+    case "bdu": {
+      const { workspace } = await requireWorkspace(ctx, "links.write");
+      await assertBulkRate(ctx);
+      const result = await undoRun({
+        workspace,
+        userId: ctx.user.id,
+        runId: arg1,
+      });
+      return show({
+        text: [
+          "↩️ <b>Undo selesai</b>",
+          `Dikembalikan: <b>${result.reverted}</b>`,
+          result.skipped
+            ? `Dilewati: ${result.skipped} (sudah diubah lagi setelahnya)`
+            : null,
+          result.failed ? `Gagal: ${result.failed}` : null,
+        ]
+          .filter(Boolean)
+          .join("\n"),
+        keyboard: [back],
+      });
+    }
+
     default:
       return show(await mainMenu(ctx));
   }
+}
+
+// same limit as the dashboard's bulk replace
+async function assertBulkRate(ctx: Ctx) {
+  const { success } = await ratelimit(5, "1 m").limit(
+    `bulk-replace:apply:${ctx.user.id}`,
+  );
+  if (!success) {
+    throw new DubApiError({
+      code: "rate_limit_exceeded",
+      message: "Terlalu banyak penggantian. Tunggu satu menit.",
+    });
+  }
+}
+
+async function bulkPreview(
+  ctx: Ctx,
+  oldDomain: string,
+  newDomain: string,
+): Promise<Reply> {
+  const { workspace } = await requireWorkspace(ctx, "links.write");
+  const preview = await previewReplacement({
+    workspace,
+    userId: ctx.user.id,
+    oldDomain,
+    newDomain,
+  });
+
+  if (preview.matched === 0) {
+    await clearFlow(ctx.telegramId);
+    return {
+      text: `Tidak ada shortlink milikmu yang tujuannya memakai <b>${esc(oldDomain)}</b> (dicek ${formatCount(preview.checked)} link).`,
+      keyboard: [back],
+    };
+  }
+
+  await setFlow(ctx.telegramId, {
+    type: "bulk",
+    step: "confirm",
+    oldDomain,
+    newDomain,
+  });
+
+  const count = preview.items.length;
+  const warnings = preview.items.filter((i) => i.otherTargetsWarning).length;
+  const sample = preview.items
+    .slice(0, 5)
+    .map(
+      (i) =>
+        `• <b>${esc(i.shortLink.replace(/^https?:\/\//, ""))}</b>\n  ${esc(truncate(i.oldUrl, 50))}\n  → ${esc(truncate(i.newUrl, 50))}`,
+    )
+    .join("\n");
+
+  return {
+    text: [
+      "🧾 <b>Preview Bulk Domain Changer</b>",
+      `${esc(oldDomain)} → ${esc(newDomain)}`,
+      `Cocok: <b>${formatCount(preview.matched)}</b> dari ${formatCount(preview.checked)} link milikmu`,
+      preview.matched > count
+        ? `Satu kali proses maksimal ${MAX_LINKS_PER_RUN} link.`
+        : null,
+      "",
+      sample,
+      count > 5 ? `…dan ${count - 5} link lainnya` : null,
+      warnings
+        ? `\n⚠️ ${warnings} link juga punya target iOS/Android/geo/A-B dengan domain lama. Yang diganti hanya URL tujuan utama.`
+        : null,
+    ]
+      .filter((line) => line !== null)
+      .join("\n"),
+    keyboard: [
+      [
+        { text: `✅ Ganti ${count} link`, callback_data: "bdy" },
+        { text: "✖️ Batal", callback_data: "c" },
+      ],
+    ],
+  };
 }
 
 async function editPreview(
@@ -738,6 +959,25 @@ async function onMessage(
       return reply(addPreview(next));
     }
     return reply(addPreview(flow));
+  }
+
+  if (flow.type === "bulk") {
+    const domain = value.slice(0, 300);
+    if (flow.step === "old") {
+      await setFlow(ctx.telegramId, {
+        ...flow,
+        oldDomain: domain,
+        step: "new",
+      });
+      return reply({
+        text: `Domain lama: <b>${esc(domain)}</b>\n\n2/2 Kirim <b>domain tujuan baru</b> (contoh: newsite.com):`,
+        keyboard: [cancelRow],
+      });
+    }
+    if (flow.step === "new" && flow.oldDomain) {
+      return reply(await bulkPreview(ctx, flow.oldDomain, domain));
+    }
+    return reply(await mainMenu(ctx));
   }
 
   if (flow.type === "edit" && flow.field && flow.field !== "domain") {

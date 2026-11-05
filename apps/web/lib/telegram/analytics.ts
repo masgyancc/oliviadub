@@ -2,6 +2,7 @@ import { getAnalytics } from "@/lib/analytics/get-analytics";
 import { WorkspaceWithUsers } from "@/lib/types";
 import { parseAnalyticsQuery } from "@/lib/zod/schemas/analytics";
 import { TZDate } from "@date-fns/tz";
+import { COUNTRIES, REGIONS } from "@dub/utils";
 import { format, subDays } from "date-fns";
 import { TELEGRAM_TIMEZONE } from "./config";
 
@@ -62,6 +63,52 @@ export async function getClicks({
   })) as { clicks?: number } | undefined;
 
   return response?.clicks ?? 0;
+}
+
+export type Breakdown = { label: string; clicks: number }[];
+
+export const BREAKDOWN_RANGE: Range = "30d";
+const BREAKDOWN_TOP = 5;
+
+// top regions / devices by clicks over BREAKDOWN_RANGE
+export async function getBreakdown({
+  workspace,
+  linkId,
+  groupBy,
+}: {
+  workspace: WorkspaceWithUsers;
+  linkId?: string;
+  groupBy: "regions" | "devices";
+}): Promise<Breakdown> {
+  const params = parseAnalyticsQuery({
+    event: "clicks",
+    groupBy,
+    timezone: TELEGRAM_TIMEZONE,
+    ...rangeParams(BREAKDOWN_RANGE),
+    ...(linkId && { linkId }),
+  });
+
+  const rows = ((await getAnalytics({
+    ...params,
+    workspaceId: workspace.id,
+  })) ?? []) as {
+    region?: string;
+    country?: string;
+    device?: string;
+    clicks?: number;
+  }[];
+
+  return rows
+    .filter((row) => (row.clicks ?? 0) > 0)
+    .sort((a, b) => (b.clicks ?? 0) - (a.clicks ?? 0))
+    .slice(0, BREAKDOWN_TOP)
+    .map((row) => ({
+      label:
+        groupBy === "regions"
+          ? `${REGIONS[row.region ?? ""] || row.region || "Unknown"}, ${COUNTRIES[row.country ?? ""] || row.country || "?"}`
+          : row.device || "Unknown",
+      clicks: row.clicks ?? 0,
+    }));
 }
 
 export async function getClicksSummary(args: {
