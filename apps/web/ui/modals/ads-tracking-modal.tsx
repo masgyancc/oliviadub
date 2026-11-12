@@ -188,6 +188,12 @@ function AdsTrackingModalInner({
             pretty: true,
           })}
         </p>
+        <p className="pt-2 text-xs text-neutral-500">
+          The short link redirects instantly (302) and never fires these pixels.
+          Install the same pixel IDs on the destination page: it sends one
+          PageView per pixel and all conversions. fbclid, ttclid, gclid and UTM
+          parameters are passed on to it.
+        </p>
       </div>
 
       <div className="max-h-[70vh] space-y-6 overflow-y-auto bg-neutral-50 p-4 sm:p-6">
@@ -204,14 +210,13 @@ function AdsTrackingModalInner({
         {/* existing tags */}
         <div className="space-y-2">
           <h4 className="text-sm font-medium text-neutral-900">
-            Active on this link
+            Pixels on this link
           </h4>
           {isLoading ? (
             <div className="h-12 animate-pulse rounded-lg bg-neutral-100" />
           ) : !tags?.length ? (
             <p className="text-sm text-neutral-500">
-              No tracking yet. Visitors are redirected instantly. Once you add a
-              tag, they pass through a short page (about 1 s) that fires it.
+              No pixels saved on this link yet.
             </p>
           ) : (
             tags.map((tag) => (

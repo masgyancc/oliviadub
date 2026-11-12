@@ -64,8 +64,11 @@ function PixelsModalInner({
     <div className="px-5 py-4">
       <h3 className="text-lg font-medium">Pixels</h3>
       <p className="mt-1 text-sm text-neutral-500">
-        Tick the pixels to fire when someone opens this link. Your saved pixels
-        are only visible to you.
+        Tick the pixels used by this link's destination page. The short link
+        redirects instantly and doesn't fire them: install the same pixels on
+        the destination page, which sends PageView and conversions. fbclid,
+        ttclid, gclid and UTM parameters are passed on. Your saved pixels are
+        only visible to you.
       </p>
 
       <div className="mt-4 max-h-[55vh] overflow-y-auto">
@@ -112,7 +115,7 @@ function PixelsButton({
 
   useLinkBuilderKeyboardShortcut("i", () => setShowPixelsModal(true));
 
-  // root domain links don't redirect through the tracking page
+  // root domain links don't take pixel settings
   if (key === "_root") return null;
 
   return (

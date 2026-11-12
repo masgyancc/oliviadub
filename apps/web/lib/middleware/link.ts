@@ -1,4 +1,3 @@
-import { getActiveTrackingTags } from "@/lib/ads-tracking/cache";
 import { recordClick as recordClickJob } from "@/lib/tinybird";
 import { formatRedisLink } from "@/lib/upstash";
 import {
@@ -287,24 +286,10 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
   const isBot = detectBot(req);
   const ua = userAgent(req);
 
-  // BrewCC Ads Tracking: links with enabled tags go through a short interstitial page that
-  // fires the ad pixels, then redirects to the same final URL. Bots and links without tags
-  // keep the direct 302. The click has already been recorded by the branch calling this.
-  const adsTrackingResponse = async (finalUrl: string) => {
-    if (isBot || !workspaceId) return null;
-    const tags = await getActiveTrackingTags({ linkId, workspaceId });
-    if (tags.length === 0) return null;
-    return createResponseWithCookies(
-      NextResponse.rewrite(
-        new URL(
-          `/ads-tracking/${workspaceId}/${linkId}/${encodeURIComponent(finalUrl)}`,
-          req.url,
-        ),
-        { headers: { ...DUB_HEADERS, "X-Robots-Tag": "noindex" } },
-      ),
-      cookieData,
-    );
-  };
+  // BrewCC Ads Tracking: pixels saved on a link are configuration only. Every link redirects
+  // with a direct 302 (no interstitial page) and fires nothing on the short-link domain; the
+  // destination page runs the pixels and sends PageView/conversions itself. Ad click ids
+  // (fbclid, ttclid, gclid) and UTM parameters are passed on by getFinalUrl.
 
   const { country } =
     process.env.VERCEL === "1" && geolocation(req)
@@ -448,9 +433,6 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
         cookieData,
       );
     }
-    const trackedResponse = await adsTrackingResponse(finalUrl);
-    if (trackedResponse) return trackedResponse;
-
     return createResponseWithCookies(
       NextResponse.redirect(finalUrl, {
         headers: {
@@ -517,9 +499,6 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
       );
     }
 
-    const trackedResponse = await adsTrackingResponse(finalUrl);
-    if (trackedResponse) return trackedResponse;
-
     return createResponseWithCookies(
       NextResponse.redirect(finalUrl, {
         headers: {
@@ -550,9 +529,6 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
       }),
     );
 
-    const trackedResponse = await adsTrackingResponse(finalUrl);
-    if (trackedResponse) return trackedResponse;
-
     return createResponseWithCookies(
       NextResponse.redirect(finalUrl, {
         headers: {
@@ -582,9 +558,6 @@ export async function LinkMiddleware(req: NextRequest, ev: NextFetchEvent) {
         shouldCacheClickId,
       }),
     );
-
-    const trackedResponse = await adsTrackingResponse(finalUrl);
-    if (trackedResponse) return trackedResponse;
 
     return createResponseWithCookies(
       NextResponse.redirect(finalUrl, {

@@ -82,6 +82,30 @@ describe("custom domain routing", () => {
     expect(res.headers.get("location")).toBe("https://example.com/x");
   });
 
+  test("a link with pixels still redirects with a direct 302 and keeps ad click ids", async () => {
+    const { getActiveTrackingTags } = await import("@/lib/ads-tracking/cache");
+    vi.mocked(getActiveTrackingTags).mockResolvedValue([
+      { platform: "meta", pixelId: "123456789012345", conversionLabel: "" },
+    ] as any);
+
+    const res = await visit(
+      "https://meluncur.cc/abc123?fbclid=AbC&ttclid=T1&gclid=G1&utm_source=fb",
+    );
+    expect(res.status).toBe(302);
+    // no rewrite to a pixel page on the short-link domain
+    expect(res.headers.get("x-middleware-rewrite")).toBeNull();
+    const location = new URL(res.headers.get("location")!);
+    expect(location.origin + location.pathname).toBe("https://example.com/x");
+    for (const [k, v] of [
+      ["fbclid", "AbC"],
+      ["ttclid", "T1"],
+      ["gclid", "G1"],
+      ["utm_source", "fb"],
+    ]) {
+      expect(location.searchParams.get(k)).toBe(v);
+    }
+  });
+
   test("app pages, assets and helpers are not reachable through a custom domain", async () => {
     for (const path of [
       "/login",
