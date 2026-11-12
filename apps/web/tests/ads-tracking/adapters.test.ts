@@ -25,13 +25,43 @@ fbq('track', 'PageView');</script>
     ]);
   });
 
-  test("renders only validated ids", () => {
+  test("sends PageView with the destination as the page URL", () => {
     const { src, init } = metaAdapter.render([
       { pixelId: "123456789012345", conversionLabel: "" },
+      { pixelId: "223456789012345", conversionLabel: "" },
     ]);
-    expect(src).toBe("https://connect.facebook.net/en_US/fbevents.js");
-    expect(init).toContain(`fbq('init',"123456789012345");`);
-    expect(init).toContain("fbq('track','PageView');");
+    expect(src).toBeUndefined();
+
+    // run the snippet against a fake redirect page
+    const requests: { src: string; referrerPolicy: string }[] = [];
+    class FakeImage {
+      referrerPolicy = "";
+      set src(value: string) {
+        requests.push({ src: value, referrerPolicy: this.referrerPolicy });
+      }
+    }
+    new Function("window", "document", "location", "Image", init)(
+      { __brewDest: "https://landing.example.com/promo?a=1" },
+      { referrer: "https://m.facebook.com/" },
+      { search: "?fbclid=AbC123&x=1" },
+      FakeImage,
+    );
+
+    expect(requests).toHaveLength(2);
+    const url = new URL(requests[0].src);
+    expect(url.origin + url.pathname).toBe("https://www.facebook.com/tr/");
+    expect(url.searchParams.get("id")).toBe("123456789012345");
+    expect(url.searchParams.get("ev")).toBe("PageView");
+    // the landing page, not the short link
+    expect(url.searchParams.get("dl")).toBe(
+      "https://landing.example.com/promo?a=1",
+    );
+    expect(url.searchParams.get("rl")).toBe("https://m.facebook.com/");
+    expect(url.searchParams.get("fbc")).toMatch(/^fb\.1\.\d+\.AbC123$/);
+    expect(requests[0].referrerPolicy).toBe("no-referrer");
+    expect(new URL(requests[1].src).searchParams.get("id")).toBe(
+      "223456789012345",
+    );
   });
 });
 
@@ -97,7 +127,11 @@ describe("google ads adapter", () => {
     expect(src).toBe(
       "https://www.googletagmanager.com/gtag/js?id=AW-222222222",
     );
-    expect(init).toContain(`gtag('config',"AW-222222222");`);
-    expect(init).toContain(`send_to:"AW-222222222/AbCdEfGhIj-kl"`);
+    expect(init).toContain(
+      `gtag('config',"AW-222222222",{page_location:window.__brewDest});`,
+    );
+    expect(init).toContain(
+      `send_to:"AW-222222222/AbCdEfGhIj-kl",page_location:window.__brewDest`,
+    );
   });
 });

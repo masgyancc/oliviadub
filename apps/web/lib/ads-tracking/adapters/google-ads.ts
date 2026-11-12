@@ -58,12 +58,16 @@ export const googleAdsAdapter: TrackingAdapter = {
       src: `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(ids[0])}`,
       init: [
         "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());",
-        ...ids.map((id) => `gtag('config',${JSON.stringify(id)});`),
+        // page_location: report the link's destination, not the short link
+        ...ids.map(
+          (id) =>
+            `gtag('config',${JSON.stringify(id)},{page_location:window.__brewDest});`,
+        ),
         ...tags
           .filter((t) => t.conversionLabel)
           .map(
             (t) =>
-              `gtag('event','conversion',{send_to:${JSON.stringify(`${t.pixelId}/${t.conversionLabel}`)}});`,
+              `gtag('event','conversion',{send_to:${JSON.stringify(`${t.pixelId}/${t.conversionLabel}`)},page_location:window.__brewDest});`,
           ),
       ].join(""),
     };

@@ -57,18 +57,24 @@ export default async function AdsTrackingPage(props: {
       });
       return valid.length ? adapter.render(valid) : null;
     })
-    .filter((r): r is { src: string; init: string } => r !== null);
+    .filter((r): r is { src?: string; init: string } => r !== null);
 
   return (
     <>
       {/* fallback if JavaScript is blocked or slow */}
       <meta httpEquiv="refresh" content={`3; url=${href}`} />
+      {/* the page URL the tags report: the link's destination, not the short link */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `window.__brewDest=${inlineJson(href)};`,
+        }}
+      />
       {rendered.map(({ init }, i) => (
         <script key={`init-${i}`} dangerouslySetInnerHTML={{ __html: init }} />
       ))}
-      {rendered.map(({ src }, i) => (
-        <script key={`src-${i}`} async src={src} />
-      ))}
+      {rendered.map(({ src }, i) =>
+        src ? <script key={`src-${i}`} async src={src} /> : null,
+      )}
       <script
         dangerouslySetInnerHTML={{
           __html: `setTimeout(function(){window.location.replace(${inlineJson(href)})},${REDIRECT_DELAY_MS});`,

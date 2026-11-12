@@ -33,14 +33,19 @@ export const metaAdapter: TrackingAdapter = {
     return [...ids].map((pixelId) => ({ pixelId, conversionLabel: "" }));
   },
 
+  // PageView sent as Meta's pixel request with the destination as the page URL (dl), the
+  // same request the AMP integration sends: Events Manager shows the landing page, not the
+  // short link. fbclid from the ad click is passed on as fbc for attribution.
   render(tags: TrackingTag[]) {
+    const ids = JSON.stringify([...new Set(tags.map((t) => t.pixelId))]);
     return {
-      src: "https://connect.facebook.net/en_US/fbevents.js",
-      init: [
-        "!function(f){if(f.fbq)return;var n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[]}(window);",
-        ...tags.map((t) => `fbq('init',${JSON.stringify(t.pixelId)});`),
-        "fbq('track','PageView');",
-      ].join(""),
+      init:
+        "(function(dest){var e=encodeURIComponent,now=Date.now(),ref=document.referrer||''," +
+        "m=location.search.match(/[?&]fbclid=([^&#]+)/)," +
+        "fbc=m?'fb.1.'+now+'.'+decodeURIComponent(m[1]):'';" +
+        `${ids}.forEach(function(id){var img=new Image();img.referrerPolicy='no-referrer';` +
+        "img.src='https://www.facebook.com/tr/?id='+id+'&ev=PageView&dl='+e(dest)+'&rl='+e(ref)" +
+        "+'&if=false&ts='+now+(fbc?'&fbc='+e(fbc):'');});})(window.__brewDest);",
     };
   },
 };
