@@ -4,14 +4,14 @@ import { Prisma } from "@prisma/client";
 import * as z from "zod/v4";
 import { TRACKING_ADAPTERS, TRACKING_PLATFORMS } from "./adapters";
 import { invalidateTrackingTags } from "./cache";
-import { MAX_TAGS_PER_LINK } from "./service";
+import { MAX_SAVED_PIXELS, MAX_TAGS_PER_LINK } from "./service";
 import { TrackingPlatform } from "./types";
 
 // A user's saved pixels ("my pixels"), picked by checkbox in the link builder.
 // Every query is scoped by userId AND projectId: a saved pixel is never listed for,
 // or attachable by, any other user, even a member of the same workspace.
 
-export const MAX_SAVED_PIXELS = 100;
+export { MAX_SAVED_PIXELS };
 
 const platformSchema = z.enum(
   TRACKING_PLATFORMS as [TrackingPlatform, ...TrackingPlatform[]],
@@ -169,7 +169,10 @@ export async function setLinkSavedPixels({
   savedPixelIds: string[];
 }) {
   const wanted = await prisma.savedTrackingPixel.findMany({
-    where: { id: { in: [...new Set(savedPixelIds)] }, ...owner(userId, workspaceId) },
+    where: {
+      id: { in: [...new Set(savedPixelIds)] },
+      ...owner(userId, workspaceId),
+    },
   });
   if (wanted.length !== new Set(savedPixelIds).size) {
     throw new DubApiError({

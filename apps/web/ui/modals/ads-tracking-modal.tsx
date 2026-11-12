@@ -16,7 +16,7 @@ import {
   useState,
 } from "react";
 import { toast } from "sonner";
-import useSWR from "swr";
+import useSWR, { mutate as globalMutate } from "swr";
 
 interface TagRow {
   id: string;
@@ -63,6 +63,8 @@ function AdsTrackingModalInner({
   const { id: workspaceId } = useWorkspace();
   const base = `/api/links/${link.id}/tracking`;
   const qs = `?workspaceId=${workspaceId}`;
+  // same key as SavedPixelPicker's list
+  const pixelsKey = `/api/tracking-pixels?workspaceId=${workspaceId}`;
 
   const {
     data: tags,
@@ -135,9 +137,10 @@ function AdsTrackingModalInner({
           ? { pixelId, conversionLabel: conversionLabel || undefined }
           : { code }),
       });
-      toast.success("Tracking added.");
+      toast.success("Tracking added and saved to My pixels.");
       resetForm();
-      mutate();
+      // the new pixel shows up (ticked) in My pixels too
+      await Promise.all([mutate(), mutateSaved(), globalMutate(pixelsKey)]);
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
@@ -148,7 +151,8 @@ function AdsTrackingModalInner({
   const update = async (tag: TagRow, data: Partial<TagRow>) => {
     try {
       await request(`${base}/${tag.id}${qs}`, "PATCH", data);
-      mutate();
+      // changing a tag's id detaches it from its My pixels entry
+      await Promise.all([mutate(), mutateSaved()]);
       return true;
     } catch (e) {
       toast.error((e as Error).message);
@@ -323,6 +327,11 @@ function AdsTrackingModalInner({
             maxLength={60}
             className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
           />
+
+          <p className="text-xs text-neutral-500">
+            It's also saved to My pixels, so you can tick it for other links in
+            Create link → Pixels.
+          </p>
 
           <Button
             text="Add tracking"

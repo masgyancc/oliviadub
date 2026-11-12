@@ -34,10 +34,15 @@ const table = (rows: Row[]) => ({
     return row;
   }),
   updateMany: vi.fn(async ({ where, data }: any) => {
-    rows.filter((r) => matches(r, where)).forEach((r) => Object.assign(r, data));
+    rows
+      .filter((r) => matches(r, where))
+      .forEach((r) => Object.assign(r, data));
   }),
   delete: vi.fn(async ({ where }: any) => {
-    rows.splice(rows.findIndex((r) => r.id === where.id), 1);
+    rows.splice(
+      rows.findIndex((r) => r.id === where.id),
+      1,
+    );
   }),
   deleteMany: vi.fn(async ({ where }: any) => {
     for (const r of rows.filter((r) => matches(r, where)))
@@ -64,6 +69,8 @@ const {
   listSavedPixels,
   setLinkSavedPixels,
 } = await import("@/lib/ads-tracking/saved-pixels");
+
+const { createTrackingTags } = await import("@/lib/ads-tracking/service");
 
 const META = "123456789012345";
 const META_2 = "223456789012345";
@@ -106,7 +113,11 @@ describe("saved pixels are private to their user", () => {
   test("another user can't delete someone else's pixel", async () => {
     const alicePixel = await save("alice");
     await expect(
-      deleteSavedPixel({ id: alicePixel.id, userId: "bob", workspaceId: "ws1" }),
+      deleteSavedPixel({
+        id: alicePixel.id,
+        userId: "bob",
+        workspaceId: "ws1",
+      }),
     ).rejects.toThrow("not found");
     expect(saved).toHaveLength(1);
   });
@@ -165,6 +176,42 @@ describe("attaching saved pixels to a link", () => {
     expect(tags.map((t) => t.id)).toContain("manual");
     expect(tags.some((t) => t.savedPixelId === bobPixel.id)).toBe(true);
     expect(tags.some((t) => t.savedPixelId === a.id)).toBe(false);
+  });
+
+  test("a pixel added in Ads Tracking also lands in My pixels", async () => {
+    await createTrackingTags({
+      linkId: "link1",
+      workspaceId: "ws1",
+      userId: "alice",
+      input: { mode: "manual", platform: "meta", pixelId: META },
+    });
+
+    const mine = await listSavedPixels("alice", "ws1");
+    expect(mine).toHaveLength(1);
+    expect(mine[0].name).toBe(`Meta Pixel ${META}`);
+    expect(tags[0].savedPixelId).toBe(mine[0].id);
+    // ticked in the link builder for this link, and offered for every other link
+    expect(
+      await getLinkSavedPixelIds({
+        linkId: "link1",
+        userId: "alice",
+        workspaceId: "ws1",
+      }),
+    ).toEqual([mine[0].id]);
+    // another user's list stays private
+    expect(await listSavedPixels("bob", "ws1")).toHaveLength(0);
+  });
+
+  test("adding a pixel that is already in My pixels reuses it", async () => {
+    const a = await save("alice");
+    await createTrackingTags({
+      linkId: "link2",
+      workspaceId: "ws1",
+      userId: "alice",
+      input: { mode: "manual", platform: "meta", pixelId: META, name: "x" },
+    });
+    expect(saved).toHaveLength(1);
+    expect(tags[0].savedPixelId).toBe(a.id);
   });
 
   test("deleting a saved pixel keeps it firing on links that use it", async () => {
