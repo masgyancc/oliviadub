@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatedSizeContainer, Button, useLocalStorage } from "@dub/ui";
+import { AnimatedSizeContainer, Button } from "@dub/ui";
 import { useSearchParams } from "next/navigation";
 import {
   ComponentType,
@@ -8,7 +8,6 @@ import {
   SetStateAction,
   createContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { toast } from "sonner";
@@ -35,6 +34,10 @@ export const errorCodes = {
     "Account has been locked due to too many login attempts. Please contact support to unlock your account.",
   "too-many-login-attempts": "Too many login attempts. Please try again later.",
   "email-not-verified": "Please verify your email address.",
+  "session-expired":
+    "You were signed out after 1 hour without activity. Please log in again.",
+  "captcha-failed":
+    "Please complete the security check (CAPTCHA) and try again.",
   "require-saml-sso":
     "Your organization requires authentication through your company's identity provider.",
   EmailSignin:
@@ -85,16 +88,20 @@ export default function LoginForm({
     undefined,
   );
 
-  const [lastUsedAuthMethodLive, setLastUsedAuthMethod] = useLocalStorage<
-    AuthMethod | undefined
-  >("last-used-auth-method", undefined);
-  const { current: lastUsedAuthMethod } = useRef<AuthMethod | undefined>(
-    lastUsedAuthMethodLive,
-  );
+  // BrewCC: the last used sign-in method isn't remembered or suggested anymore
+  // (shared or public computers); every login starts from the same choices
+  const setLastUsedAuthMethod: Dispatch<
+    SetStateAction<AuthMethod | undefined>
+  > = () => {};
+  useEffect(() => {
+    try {
+      localStorage.removeItem("last-used-auth-method");
+    } catch {
+      // storage unavailable
+    }
+  }, []);
 
-  const [authMethod, setAuthMethod] = useState<AuthMethod | undefined>(
-    authMethods.find((m) => m === lastUsedAuthMethodLive) ?? "email",
-  );
+  const [authMethod, setAuthMethod] = useState<AuthMethod | undefined>("email");
 
   useEffect(() => {
     const error = searchParams?.get("error");
@@ -165,17 +172,6 @@ export default function LoginForm({
                   <AuthMethodComponent {...currentAuthProvider?.props} />
                 )}
 
-                {!showEmailPasswordOnly &&
-                  authMethod === lastUsedAuthMethod && (
-                    <div className="text-center text-xs">
-                      <span className="text-neutral-500">
-                        You signed in with{" "}
-                        {lastUsedAuthMethod.charAt(0).toUpperCase() +
-                          lastUsedAuthMethod.slice(1)}{" "}
-                        last time
-                      </span>
-                    </div>
-                  )}
                 <AuthMethodsSeparator />
               </div>
             )}

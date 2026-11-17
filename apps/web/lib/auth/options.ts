@@ -28,7 +28,13 @@ import {
   incrementLoginAttempts,
 } from "./lock-account";
 import { validatePassword } from "./password";
+import {
+  isPastMaxAge,
+  loginStartedAt,
+  SESSION_IDLE_TIMEOUT_SECONDS,
+} from "./session-policy";
 import { trackDubLead } from "./track-dub-lead";
+import { verifyTurnstile } from "./turnstile";
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
@@ -111,12 +117,19 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       allowDangerousEmailAccountLinking: true,
+      // BrewCC: always ask which account to use instead of signing in silently
+      authorization: { params: { prompt: "select_account" } },
     }),
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
       issuer: "https://github.com/login/oauth",
       allowDangerousEmailAccountLinking: true,
+      // BrewCC: always ask which account to use instead of signing in silently
+      authorization: {
+        url: "https://github.com/login/oauth/authorize",
+        params: { scope: "read:user user:email", prompt: "select_account" },
+      },
     }),
     {
       id: "saml",
@@ -254,6 +267,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { type: "email" },
         password: { type: "password" },
+        turnstileToken: { type: "text" },
       },
       async authorize(credentials, req) {
         if (!credentials) {
@@ -264,6 +278,15 @@ export const authOptions: NextAuthOptions = {
 
         if (!email || !password) {
           throw new Error("no-credentials");
+        }
+
+        // BrewCC: CAPTCHA (Cloudflare Turnstile), when configured
+        const forwardedFor = req?.headers?.["x-forwarded-for"];
+        const ip =
+          (typeof forwardedFor === "string" && forwardedFor.split(",")[0]) ||
+          null;
+        if (!(await verifyTurnstile(credentials.turnstileToken, ip))) {
+          throw new Error("captcha-failed");
         }
 
         await assertRateLimit({
@@ -339,7 +362,8 @@ export const authOptions: NextAuthOptions = {
   ],
   // @ts-ignore
   adapter: CustomPrismaAdapter(prisma),
-  session: { strategy: "jwt" },
+  // BrewCC: the session expires after an hour without activity (see session-policy)
+  session: { strategy: "jwt", maxAge: SESSION_IDLE_TIMEOUT_SECONDS },
   cookies: {
     sessionToken: {
       name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
@@ -519,6 +543,14 @@ export const authOptions: NextAuthOptions = {
     }) => {
       if (user) {
         token.user = user;
+        // BrewCC: start of this login, for the 7-day limit
+        token.loginAt = Date.now();
+      }
+
+      // BrewCC: a login is valid at most SESSION_MAX_AGE_MS, active or not
+      token.loginAt = loginStartedAt(token);
+      if (isPastMaxAge(token.loginAt as number)) {
+        return {};
       }
 
       // refresh the user's data if they update their name / email

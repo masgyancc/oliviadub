@@ -6,10 +6,15 @@ import { signUpSchema } from "@/lib/zod/schemas/auth";
 import { PasswordRequirements } from "@/ui/shared/password-requirements";
 import { Button, Input, useMediaQuery } from "@dub/ui";
 import { useAction } from "next-safe-action/hooks";
-import { FormEvent, useCallback, useState } from "react";
+import { FormEvent, useCallback, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod/v4";
+import {
+  TURNSTILE_SITE_KEY,
+  TurnstileHandle,
+  TurnstileWidget,
+} from "../turnstile-widget";
 import { useRegisterContext } from "./context";
 
 type SignUpProps = z.infer<typeof signUpSchema>;
@@ -21,6 +26,9 @@ export const SignUpEmail = () => {
     useRegisterContext();
 
   const [showPassword, setShowPassword] = useState(false);
+  // BrewCC: CAPTCHA token (Turnstile, when configured)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captcha = useRef<TurnstileHandle>(null);
 
   const form = useForm<SignUpProps>({
     defaultValues: {
@@ -61,9 +69,23 @@ export const SignUpEmail = () => {
         return;
       }
 
-      handleSubmit(async (data) => await executeAsync(data))(e);
+      if (TURNSTILE_SITE_KEY && !captchaToken) {
+        e.preventDefault();
+        toast.error("Please complete the security check (CAPTCHA) first.");
+        return;
+      }
+
+      handleSubmit(async (data) => {
+        const result = await executeAsync({
+          ...data,
+          ...(captchaToken && { turnstileToken: captchaToken }),
+        });
+        // a CAPTCHA token works once; get a fresh one for the next try
+        captcha.current?.reset();
+        return result;
+      })(e);
     },
-    [getValues, showPassword, handleSubmit, executeAsync],
+    [getValues, showPassword, handleSubmit, executeAsync, captchaToken],
   );
 
   return (
@@ -101,6 +123,9 @@ export const SignUpEmail = () => {
               <PasswordRequirements />
             </FormProvider>
           </label>
+        )}
+        {showPassword && (
+          <TurnstileWidget ref={captcha} onToken={setCaptchaToken} />
         )}
         <Button
           type="submit"

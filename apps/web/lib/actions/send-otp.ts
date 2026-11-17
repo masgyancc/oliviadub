@@ -11,6 +11,7 @@ import { flattenValidationErrors } from "next-safe-action";
 import * as z from "zod/v4";
 import { generateOTP } from "../auth";
 import { EMAIL_OTP_EXPIRY_IN } from "../auth/constants";
+import { verifyTurnstile } from "../auth/turnstile";
 import { isGenericEmail } from "../email/is-generic-email";
 import { emailSchema, passwordSchema } from "../zod/schemas/auth";
 import { throwIfAuthenticated } from "./auth/throw-if-authenticated";
@@ -19,6 +20,8 @@ import { actionClient } from "./safe-action";
 const schema = z.object({
   email: emailSchema,
   password: passwordSchema.optional(),
+  // BrewCC: Cloudflare Turnstile token (required once the CAPTCHA is configured)
+  turnstileToken: z.string().max(4096).optional(),
 });
 
 // Send OTP to email to verify account
@@ -29,7 +32,13 @@ export const sendOtpAction = actionClient
   })
   .use(throwIfAuthenticated)
   .action(async ({ parsedInput }) => {
-    const { email } = parsedInput;
+    const { email, turnstileToken } = parsedInput;
+
+    if (!(await verifyTurnstile(turnstileToken, await getIP()))) {
+      throw new Error(
+        "Please complete the security check (CAPTCHA) and try again.",
+      );
+    }
 
     await assertRateLimit({
       policy: RATELIMIT_POLICIES.signupOtpSend,

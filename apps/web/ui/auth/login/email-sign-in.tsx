@@ -6,8 +6,13 @@ import { signIn } from "next-auth/react";
 import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { toast } from "sonner";
+import {
+  TURNSTILE_SITE_KEY,
+  TurnstileHandle,
+  TurnstileWidget,
+} from "../turnstile-widget";
 import { errorCodes, LoginFormContext } from "./login-form";
 
 export const EmailSignIn = ({ next }: { next?: string }) => {
@@ -17,6 +22,11 @@ export const EmailSignIn = ({ next }: { next?: string }) => {
   const { isMobile } = useMediaQuery();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // BrewCC: CAPTCHA token for password login (Turnstile, when configured)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captcha = useRef<TurnstileHandle>(null);
+  const captchaMissing =
+    Boolean(TURNSTILE_SITE_KEY) && Boolean(password) && !captchaToken;
 
   const {
     showPasswordField,
@@ -93,12 +103,23 @@ export const EmailSignIn = ({ next }: { next?: string }) => {
 
           const provider = password && hasPassword ? "credentials" : "email";
 
+          if (provider === "credentials" && captchaMissing) {
+            setClickedMethod(undefined);
+            toast.error(errorCodes["captcha-failed"]);
+            return;
+          }
+
           const response = await signIn(provider, {
             email,
             redirect: false,
             callbackUrl: finalNext || "/workspaces",
             ...(password && { password }),
+            ...(provider === "credentials" &&
+              captchaToken && { turnstileToken: captchaToken }),
           });
+
+          // a CAPTCHA token works once; get a fresh one for the next try
+          if (provider === "credentials") captcha.current?.reset();
 
           if (!response) {
             return;
@@ -181,6 +202,10 @@ export const EmailSignIn = ({ next }: { next?: string }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </label>
+        )}
+
+        {showPasswordField && (
+          <TurnstileWidget ref={captcha} onToken={setCaptchaToken} />
         )}
 
         <Button
